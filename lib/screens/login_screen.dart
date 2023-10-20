@@ -2,6 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return LoginScreenState();
@@ -22,13 +24,18 @@ class LoginScreenState extends State<LoginScreen> {
       child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 30),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              SizedBox(
+                width: 400,
+                height: 350,
+                child: Image.asset('lib/assets/images/background.png'),
+              ),
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 15),
               ),
               const Text(
                 "Say hello to your English tutors",
+                textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
@@ -39,8 +46,9 @@ class LoginScreenState extends State<LoginScreen> {
               ),
               const Text(
                 "Become fluent faster through one on one video chat lessons tailored to your goals.",
+                textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 17,
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
               ),
@@ -189,13 +197,8 @@ class LoginScreenState extends State<LoginScreen> {
                   )
                 ],
               )),
-              SizedBox(
-                width: 400,
-                height: 400,
-                child: IconButton(
-                  icon: Image.asset('lib/assets/images/background.png'),
-                  onPressed: () {},
-                ),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 20),
               ),
             ],
           )),

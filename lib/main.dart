@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/screen/login_screen.dart';
+import 'package:my_app/screens/tutor_list_screen.dart';
+import 'package:my_app/widgets/app_bar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,25 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
-            appBar: AppBar(
-                backgroundColor: Colors.white,
-                title: Row(children: [
-                  SizedBox(
-                    width: 50,
-                    height: 50,
-                    child: IconButton(
-                      icon: Image.asset('lib/assets/icons/logo.png'),
-                      onPressed: () {},
-                    ),
-                  ),
-                  const Text(
-                    'LetTutor',
-                    style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue),
-                  ),
-                ])),
-            body: LoginScreen()));
+            appBar: AppBarWidget().build(context),
+            body: const TutorListScreen()));
   }
 }
