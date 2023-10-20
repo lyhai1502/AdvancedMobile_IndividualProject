@@ -1,10 +1,29 @@
 import 'package:flutter/material.dart';
 
-class AppBarWidget extends StatelessWidget {
-  const AppBarWidget({super.key});
+// ignore: must_be_immutable
+class AppBarWidget extends StatefulWidget implements PreferredSizeWidget {
+  AppBarWidget({Key? key})
+      : preferredSize = const Size.fromHeight(60.0),
+        super(key: key);
+  @override
+  State<StatefulWidget> createState() {
+    return AppBarWidgetState();
+  }
 
   @override
-  PreferredSizeWidget build(BuildContext context) {
+  Size preferredSize;
+}
+
+class AppBarWidgetState extends State<AppBarWidget> {
+  bool _isEnglishLanguage = true;
+  final bool _isLogin = true;
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return AppBar(
         backgroundColor: Colors.white,
         title:
@@ -26,14 +45,32 @@ class AppBarWidget extends StatelessWidget {
                   color: Colors.blue),
             ),
           ]),
-          SizedBox(
-            width: 50,
-            height: 50,
-            child: IconButton(
-              icon: Image.asset('lib/assets/icons/united-kingdom.png'),
-              onPressed: () {},
+          Row(children: [
+            SizedBox(
+              width: 50,
+              height: 50,
+              child: IconButton(
+                icon: _isEnglishLanguage
+                    ? Image.asset('lib/assets/icons/united-kingdom.png')
+                    : Image.asset('lib/assets/icons/vietnam.png'),
+                onPressed: () {
+                  setState(() {
+                    _isEnglishLanguage = !_isEnglishLanguage;
+                  });
+                },
+              ),
             ),
-          ),
+            _isLogin
+                ? SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: IconButton(
+                      icon: Image.asset('lib/assets/icons/menu.png'),
+                      onPressed: () {},
+                    ),
+                  )
+                : const SizedBox.shrink(),
+          ]),
         ]));
   }
 }

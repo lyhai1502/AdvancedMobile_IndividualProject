@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class CardExample extends StatelessWidget {
-  const CardExample({super.key});
+class TutorListItemWidget extends StatelessWidget {
+  const TutorListItemWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -83,25 +83,41 @@ class CardExample extends StatelessWidget {
                   "I am passionate about running and fitness, I often compete in trail/mountain running events and I love pushing myself. I am training to one day take part in ultra-endurance events. I also enjoy watching rugby on the weekends, reading and watching podcasts on Youtube. My most memorable life experience",
                   style: TextStyle(fontSize: 15, color: Colors.black),
                 ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(Icons.monitor_heart_sharp),
-                    ElevatedButton(
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(RoundedRectangleBorder(
-                              side: const BorderSide(color: Colors.blue),
-                              borderRadius: BorderRadius.circular(15.0),
-                            )),
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.white),
-                            foregroundColor:
-                                MaterialStateProperty.all(Colors.blue)),
-                        onPressed: () {},
-                        child: const Text('Reset filter'))
+                    IconButton(
+                      onPressed: () {},
+                      icon: Image.asset('lib/assets/icons/heart.png'),
+                    ),
+                    ElevatedButton.icon(
+                      style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            side: const BorderSide(color: Colors.blue),
+                            borderRadius: BorderRadius.circular(15.0),
+                          )),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.white),
+                          foregroundColor:
+                              MaterialStateProperty.all(Colors.blue)),
+                      onPressed: () {},
+                      icon: const Icon(
+                        // <-- Icon
+                        Icons.task,
+                        size: 24.0,
+                      ),
+                      label: const Text('Book'), // <-- Text
+                    ),
                   ],
-                )
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                ),
               ],
             )),
       ),

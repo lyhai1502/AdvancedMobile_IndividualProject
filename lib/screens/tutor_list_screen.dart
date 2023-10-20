@@ -112,7 +112,7 @@ class TutorListScreenState extends State<TutorListScreen> {
           // ignore: unused_local_variable
           for (String item in items)
             const Card(
-              child: CardExample(),
+              child: TutorListItemWidget(),
             )
         ])
       ]),

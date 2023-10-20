@@ -22,7 +22,7 @@ class LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 30),
+          margin: const EdgeInsets.all(30),
           child: Column(
             children: [
               SizedBox(
@@ -197,9 +197,6 @@ class LoginScreenState extends State<LoginScreen> {
                   )
                 ],
               )),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 20),
-              ),
             ],
           )),
     );
