@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/screens/course_detail.dart';
+import 'package:my_app/screens/course_learn_detail.dart';
 import 'package:my_app/screens/course_list.dart';
 import 'package:my_app/screens/history_screen.dart';
 import 'package:my_app/screens/schedule_screen.dart';
@@ -17,6 +18,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         home:
-            Scaffold(appBar: AppBarWidget(), body: CourseDetailScreenWidget()));
+            Scaffold(appBar: AppBarWidget(), body: CourseLearnDetailScreen()));
   }
 }

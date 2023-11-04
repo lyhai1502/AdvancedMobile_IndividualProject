@@ -33,7 +33,10 @@ class AppBarWidgetState extends State<AppBarWidget> {
               width: 50,
               height: 50,
               child: IconButton(
-                icon: Image.asset('lib/assets/icons/logo.png'),
+                icon: Image.asset(
+                  'lib/assets/icons/logo.png',
+                  color: Colors.blue,
+                ),
                 onPressed: () {},
               ),
             ),

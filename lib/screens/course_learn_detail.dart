@@ -10,18 +10,19 @@ import 'package:multi_dropdown/widgets/hint_text.dart';
 import 'package:multi_dropdown/widgets/selection_chip.dart';
 import 'package:multi_dropdown/widgets/single_selected_item.dart';
 import 'package:my_app/screens/login_screen.dart';
+import 'package:my_app/widgets/list_select.dart';
 
-class CourseDetailScreen extends StatefulWidget {
-  const CourseDetailScreen({super.key});
-
+class CourseLearnDetailScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return CourseDetailScreenState();
+    return CourseLearnScreenState();
   }
 }
 
-class CourseDetailScreenState extends State<CourseDetailScreen> {
+class CourseLearnScreenState extends State<CourseLearnDetailScreen> {
+  int selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -30,81 +31,52 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
         margin: const EdgeInsets.all(20),
         child:
             Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          Card(
-            elevation: 0,
-            shape: const RoundedRectangleBorder(
-              side: BorderSide(color: Colors.grey),
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-            ),
-            child: SizedBox(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: SizedBox(
-                      height: 200,
-                      width: 300,
-                      child: Image.asset('lib/assets/images/bg.png'),
+          SizedBox(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset('lib/assets/images/bg.png'),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                ),
+                const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Life In The Internet Age",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5),
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(30),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Life In The Internet Age",
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 5),
-                        ),
-                        const Text(
-                          "Let's discuss how technology is changing the way we live",
-                          style: TextStyle(
-                            color: Colors.black54,
-                            fontSize: 15,
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 15),
-                        ),
-                        Row(children: [
-                          Expanded(
-                              child: ElevatedButton(
-                                  onPressed: () {},
-                                  style: ButtonStyle(
-                                      textStyle: MaterialStateProperty.all(
-                                          const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold)),
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              Colors.blue),
-                                      foregroundColor:
-                                          MaterialStateProperty.all(
-                                              Colors.white)),
-                                  child: Text('Discover'.toUpperCase())))
-                        ]),
-                      ],
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 5),
                     ),
-                  )
-                ],
-              ),
+                    Text(
+                      "Let's discuss how technology is changing the way we live",
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 15,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
           ),
           const Text(
-            "Overview",
+            "List Topics",
             style: TextStyle(
                 fontSize: 25, fontWeight: FontWeight.bold, color: Colors.black),
           ),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
+          ),
+          ListSelectWidget(),
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
           ),

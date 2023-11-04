@@ -10,7 +10,9 @@ import 'package:multi_dropdown/widgets/hint_text.dart';
 import 'package:multi_dropdown/widgets/selection_chip.dart';
 import 'package:multi_dropdown/widgets/single_selected_item.dart';
 
-class CourseScreenWidget extends StatefulWidget {
+class CourseListScreen extends StatefulWidget {
+  const CourseListScreen({super.key});
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -18,7 +20,7 @@ class CourseScreenWidget extends StatefulWidget {
   }
 }
 
-class CourseScreenWidgetState extends State<CourseScreenWidget> {
+class CourseScreenWidgetState extends State<CourseListScreen> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
