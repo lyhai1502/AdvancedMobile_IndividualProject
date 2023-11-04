@@ -24,7 +24,7 @@ class CourseScreenWidgetState extends State<CourseScreenWidget> {
     // TODO: implement build
     return SingleChildScrollView(
       child: Container(
-        margin: const EdgeInsets.all(30),
+        margin: const EdgeInsets.all(20),
         child:
             Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Row(
@@ -168,67 +168,75 @@ class CourseScreenWidgetState extends State<CourseScreenWidget> {
                       Column(
                         children: [
                           for (var i = 0; i < 9; i++)
-                            Card(
-                              margin: const EdgeInsets.only(top: 20),
-                              elevation: 0,
-                              shape: const RoundedRectangleBorder(
-                                side: BorderSide(color: Colors.grey),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12)),
-                              ),
-                              child: SizedBox(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Center(
-                                      child: SizedBox(
-                                        height: 200,
-                                        width: 300,
-                                        child: Image.asset(
-                                            'lib/assets/images/bg.png'),
+                            GestureDetector(
+                              onTap: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text('Gesture Detected!')));
+                              },
+                              child: Card(
+                                margin: const EdgeInsets.only(top: 20),
+                                elevation: 0,
+                                shape: const RoundedRectangleBorder(
+                                  side: BorderSide(color: Colors.grey),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(12)),
+                                ),
+                                child: SizedBox(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Center(
+                                        child: SizedBox(
+                                          height: 200,
+                                          width: 300,
+                                          child: Image.asset(
+                                              'lib/assets/images/bg.png'),
+                                        ),
                                       ),
-                                    ),
-                                    const Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 5),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.all(30),
-                                      child: const Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Life In The Internet Age",
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 5),
-                                          ),
-                                          Text(
-                                            "Let's discuss how technology is changing the way we live",
-                                            style: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 15,
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 15),
-                                          ),
-                                          Text(
-                                            "Intermediate • 9  Lessons",
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ],
+                                      const Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 5),
                                       ),
-                                    )
-                                  ],
+                                      Container(
+                                        margin: EdgeInsets.all(30),
+                                        child: const Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Life In The Internet Age",
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 5),
+                                            ),
+                                            Text(
+                                              "Let's discuss how technology is changing the way we live",
+                                              style: TextStyle(
+                                                color: Colors.black54,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 15),
+                                            ),
+                                            Text(
+                                              "Intermediate • 9  Lessons",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
