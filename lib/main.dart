@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/screens/course_detail.dart';
 import 'package:my_app/screens/course_learn_detail.dart';
-import 'package:my_app/screens/course_list.dart';
-import 'package:my_app/screens/history_screen.dart';
-import 'package:my_app/screens/schedule_screen.dart';
-import 'package:my_app/screens/tutor_detail_screen.dart';
+import 'package:my_app/screens/login_screen.dart';
+import 'package:my_app/screens/tutor_list_screen.dart';
 import 'package:my_app/widgets/app_bar.dart';
 
 void main() {
@@ -17,7 +14,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home:
-            Scaffold(appBar: AppBarWidget(), body: CourseLearnDetailScreen()));
+        home: Scaffold(appBar: AppBarWidget(), body: const TutorListScreen()));
   }
 }

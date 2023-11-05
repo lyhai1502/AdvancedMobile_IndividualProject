@@ -1,15 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:multi_dropdown/enum/app_enums.dart';
-import 'package:multi_dropdown/models/chip_config.dart';
-import 'package:multi_dropdown/models/network_config.dart';
-import 'package:multi_dropdown/models/value_item.dart';
-import 'package:multi_dropdown/multiselect_dropdown.dart';
-import 'package:multi_dropdown/widgets/hint_text.dart';
-import 'package:multi_dropdown/widgets/selection_chip.dart';
-import 'package:multi_dropdown/widgets/single_selected_item.dart';
-import 'package:my_app/screens/login_screen.dart';
 
 class CourseDetailScreen extends StatefulWidget {
   const CourseDetailScreen({super.key});
@@ -51,7 +41,7 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
                     padding: EdgeInsets.symmetric(vertical: 5),
                   ),
                   Container(
-                    margin: EdgeInsets.all(30),
+                    margin: const EdgeInsets.all(30),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -237,7 +227,7 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
                 GestureDetector(
                   onTap: () {
                     ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Gesture Detected!')));
+                        const SnackBar(content: Text('Gesture Detected!')));
                   },
                   child: Card(
                     elevation: 0,
@@ -250,7 +240,7 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            margin: EdgeInsets.all(30),
+                            margin: const EdgeInsets.all(30),
                             child: const Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [

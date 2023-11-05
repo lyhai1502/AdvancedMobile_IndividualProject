@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ListSelectWidget extends StatefulWidget {
+  const ListSelectWidget({super.key});
+
   @override
   ListSelectState createState() => ListSelectState();
 }
@@ -11,7 +13,7 @@ class ListSelectState extends State<ListSelectWidget> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: 10,
       itemBuilder: (context, index) {
@@ -19,8 +21,8 @@ class ListSelectState extends State<ListSelectWidget> {
         return ListTile(
           title: Row(
             children: [
-              Text('$index.   ', style: TextStyle(fontWeight: FontWeight.bold)),
-              Text(
+              Text('$index.   ', style: const TextStyle(fontWeight: FontWeight.bold)),
+              const Text(
                 'The Internet',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),

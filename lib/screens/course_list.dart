@@ -1,14 +1,6 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:multi_dropdown/enum/app_enums.dart';
-import 'package:multi_dropdown/models/chip_config.dart';
-import 'package:multi_dropdown/models/network_config.dart';
-import 'package:multi_dropdown/models/value_item.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
-import 'package:multi_dropdown/widgets/hint_text.dart';
-import 'package:multi_dropdown/widgets/selection_chip.dart';
-import 'package:multi_dropdown/widgets/single_selected_item.dart';
 
 class CourseListScreen extends StatefulWidget {
   const CourseListScreen({super.key});
@@ -173,7 +165,7 @@ class CourseScreenWidgetState extends State<CourseListScreen> {
                             GestureDetector(
                               onTap: () {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
+                                    const SnackBar(
                                         content: Text('Gesture Detected!')));
                               },
                               child: Card(
@@ -202,7 +194,7 @@ class CourseScreenWidgetState extends State<CourseListScreen> {
                                             EdgeInsets.symmetric(vertical: 5),
                                       ),
                                       Container(
-                                        margin: EdgeInsets.all(30),
+                                        margin: const EdgeInsets.all(30),
                                         child: const Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -244,8 +236,8 @@ class CourseScreenWidgetState extends State<CourseListScreen> {
                             ),
                         ],
                       ),
-                      Text("It's rainy here"),
-                      Text("It's sunny here"),
+                      const Text("It's rainy here"),
+                      const Text("It's sunny here"),
                     ],
                   ),
                 )
