@@ -128,7 +128,8 @@ class LoginScreenState extends State<LoginScreen> {
               Row(children: [
                 Expanded(
                     child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () =>
+                            Navigator.pushNamed(context, '/TutorList'),
                         style: ButtonStyle(
                             textStyle: MaterialStateProperty.all(
                                 const TextStyle(
