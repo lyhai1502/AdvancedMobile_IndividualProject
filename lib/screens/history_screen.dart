@@ -38,7 +38,9 @@ class HistoryScreenState extends State<HistoryScreen> {
             const Text(
               "History",
               style: TextStyle(
-                  fontSize: 25, fontWeight: FontWeight.bold, color: Colors.black),
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
             ),
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 10),
@@ -75,7 +77,8 @@ class HistoryScreenState extends State<HistoryScreen> {
                               padding: const EdgeInsets.all(10),
                               color: Colors.white,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   SizedBox(
                                     height: 100,
@@ -84,7 +87,8 @@ class HistoryScreenState extends State<HistoryScreen> {
                                         'lib/assets/icons/facebook.png'),
                                   ),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       const Text(
                                         "Name",
@@ -186,7 +190,8 @@ class HistoryScreenState extends State<HistoryScreen> {
                                             ),
                                             child: const Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Text(
                                                   "Request for lesson",
@@ -217,7 +222,8 @@ class HistoryScreenState extends State<HistoryScreen> {
                                             ),
                                             child: const Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Text(
                                                   "Review from tutor",
@@ -247,7 +253,8 @@ class HistoryScreenState extends State<HistoryScreen> {
                                       TableRow(children: [
                                         TableCell(
                                             child: Container(
-                                                padding: const EdgeInsets.all(10),
+                                                padding:
+                                                    const EdgeInsets.all(10),
                                                 child: Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
@@ -267,10 +274,12 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                                         .bold,
                                                                 color: Colors
                                                                     .blueAccent),
-                                                            text: 'Add a rating',
+                                                            text:
+                                                                'Add a rating',
                                                             recognizer:
                                                                 TapGestureRecognizer()
-                                                                  ..onTap = () {},
+                                                                  ..onTap =
+                                                                      () {},
                                                           )
                                                         ])),
                                                     RichText(
@@ -290,7 +299,8 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                             text: 'Report',
                                                             recognizer:
                                                                 TapGestureRecognizer()
-                                                                  ..onTap = () {},
+                                                                  ..onTap =
+                                                                      () {},
                                                           )
                                                         ]))
                                                   ],

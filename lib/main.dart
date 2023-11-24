@@ -8,7 +8,6 @@ import 'package:my_app/screens/schedule_screen.dart';
 import 'package:my_app/screens/tutor_detail_screen.dart';
 import 'package:my_app/screens/tutor_list_screen.dart';
 import 'package:my_app/widgets/app_bar.dart';
-import 'package:my_app/widgets/menu.dart';
 
 void main() {
   runApp(const MyApp());
