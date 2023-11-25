@@ -1,21 +1,28 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/model/user.dart';
 import 'package:my_app/widgets/app_bar.dart';
+import 'package:form_field_validator/form_field_validator.dart';
+import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return LoginScreenState();
+    return RegisterScreenState();
   }
 }
 
-class LoginScreenState extends State<LoginScreen> {
+class RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController passwordConfirmController =
+      TextEditingController();
+
+  final _formkey = GlobalKey<FormState>();
+  final GlobalKey<FlutterPwValidatorState> validatorKey =
+      GlobalKey<FlutterPwValidatorState>();
 
   bool _isObscured = false;
 
@@ -31,19 +38,22 @@ class LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       appBar: AppBarWidget(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.pop(context),
+        child: const Icon(Icons.arrow_back),
+      ),
       body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.all(30),
-          child: Column(
-            children: [
-              _buildHeader(),
-              _buildTextFields(),
-              _buildForgotPasswordLink(),
-              _buildLoginButton(),
-              _buildContinueWithText(),
-              _buildSocialButtons(),
-              _buildSignUpLink(),
-            ],
+        child: Form(
+          key: _formkey,
+          child: Container(
+            margin: const EdgeInsets.all(30),
+            child: Column(
+              children: [
+                _buildHeader(),
+                _buildTextFields(),
+                _buildRegisterButton(userList),
+              ],
+            ),
           ),
         ),
       ),
@@ -99,8 +109,9 @@ class LoginScreenState extends State<LoginScreen> {
         ),
         _buildPasswordField(),
         const Padding(
-          padding: EdgeInsets.symmetric(vertical: 15),
+          padding: EdgeInsets.symmetric(vertical: 8),
         ),
+        _buildPasswordConfirmField(),
       ],
     );
   }
@@ -117,14 +128,22 @@ class LoginScreenState extends State<LoginScreen> {
             color: Colors.grey,
           ),
         ),
-        TextField(
+        TextFormField(
+          validator: MultiValidator([
+            RequiredValidator(errorText: 'Enter email address'),
+            EmailValidator(errorText: 'Please correct email filled'),
+          ]),
           controller: emailController,
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
             ),
             hintText: hintText,
+            errorStyle: const TextStyle(fontSize: 15.0),
           ),
+          onChanged: (value) {
+            _formkey.currentState!.validate();
+          },
         ),
       ],
     );
@@ -163,25 +182,60 @@ class LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
+        FlutterPwValidator(
+          key: validatorKey,
+          controller: passwordController,
+          minLength: 8,
+          uppercaseCharCount: 1,
+          numericCharCount: 1,
+          specialCharCount: 1,
+          width: 400,
+          height: 150,
+          onSuccess: () {},
+          onFail: () {},
+        ),
       ],
     );
   }
 
-  Widget _buildForgotPasswordLink() {
-    return RichText(
-      text: TextSpan(
-        text: 'Forgot Password?',
-        recognizer: TapGestureRecognizer()..onTap = () {},
-        style: const TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
-          color: Colors.blueAccent,
+  Widget _buildPasswordConfirmField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Password Confirm'.toUpperCase(),
+          style: const TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+            color: Colors.grey,
+          ),
         ),
-      ),
+        TextField(
+          controller: passwordConfirmController,
+          obscureText: _isObscured,
+          enableSuggestions: false,
+          autocorrect: false,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            suffixIcon: IconButton(
+              icon: !_isObscured
+                  ? const Icon(Icons.visibility)
+                  : const Icon(Icons.visibility_off),
+              onPressed: () {
+                setState(() {
+                  _isObscured = !_isObscured;
+                });
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 
-  Widget _buildLoginButton() {
+  Widget _buildRegisterButton(List<User> userList) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
       child: Row(
@@ -189,7 +243,10 @@ class LoginScreenState extends State<LoginScreen> {
           Expanded(
             child: ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/TutorList');
+                userList.add(User.createUser(
+                    emailController.text, passwordController.text));
+                print(userList);
+                Navigator.pushNamed(context, '/Login');
               },
               style: ButtonStyle(
                 textStyle: MaterialStateProperty.all(
@@ -198,77 +255,11 @@ class LoginScreenState extends State<LoginScreen> {
                 backgroundColor: MaterialStateProperty.all(Colors.blue),
                 foregroundColor: MaterialStateProperty.all(Colors.white),
               ),
-              child: Text('Login'.toUpperCase()),
+              child: Text('Register'.toUpperCase()),
             ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildContinueWithText() {
-    return const Column(
-      children: [
-        Text('Or continue with'),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 5),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSocialButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildSocialButton('lib/assets/icons/facebook.png', () {}),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 5),
-        ),
-        _buildSocialButton('lib/assets/icons/google.png', () {}),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 5),
-        ),
-        _buildSocialButton('lib/assets/icons/phone.png', () {}),
-      ],
-    );
-  }
-
-  Widget _buildSocialButton(String iconPath, VoidCallback onPressed) {
-    return SizedBox(
-      width: 60,
-      height: 60,
-      child: IconButton(
-        icon: Image.asset(iconPath),
-        onPressed: onPressed,
-      ),
-    );
-  }
-
-  Widget _buildSignUpLink() {
-    return Column(
-      children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 5),
-        ),
-        RichText(
-          text: TextSpan(
-            style: const TextStyle(color: Colors.black),
-            children: [
-              const TextSpan(text: 'Not a member yet?   '),
-              TextSpan(
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent,
-                ),
-                text: 'Sign up',
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () => Navigator.pushNamed(context, '/Register'),
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }

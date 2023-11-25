@@ -91,7 +91,7 @@ class TutorListItemWidget extends StatelessWidget {
                   children: [
                     IconButton(
                       onPressed: () {},
-                      icon: Image.asset('lib/assets/icons/heart.png'),
+                      icon: Icon(Icons.favorite),
                     ),
                     ElevatedButton.icon(
                       style: ButtonStyle(
