@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/model/user.dart';
+import 'package:my_app/repository/user_repository.dart';
 import 'package:my_app/widgets/app_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +28,7 @@ class LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<User> userList = context.watch<List<User>>();
+    UserRepository userRepository = context.watch<UserRepository>();
 
     return Scaffold(
       appBar: AppBarWidget(),
@@ -39,7 +40,7 @@ class LoginScreenState extends State<LoginScreen> {
               _buildHeader(),
               _buildTextFields(),
               _buildForgotPasswordLink(),
-              _buildLoginButton(),
+              _buildLoginButton(userRepository),
               _buildContinueWithText(),
               _buildSocialButtons(),
               _buildSignUpLink(),
@@ -181,7 +182,7 @@ class LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildLoginButton() {
+  Widget _buildLoginButton(UserRepository userRepository) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
       child: Row(
@@ -189,7 +190,10 @@ class LoginScreenState extends State<LoginScreen> {
           Expanded(
             child: ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/TutorList');
+                if (userRepository.isLoginSucess(
+                    emailController.text, passwordController.text)) {
+                  Navigator.pushNamed(context, '/TutorList');
+                }
               },
               style: ButtonStyle(
                 textStyle: MaterialStateProperty.all(

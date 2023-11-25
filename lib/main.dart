@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/model/user.dart';
+import 'package:my_app/repository/user_repository.dart';
 import 'package:my_app/screens/course_detail.dart';
 import 'package:my_app/screens/course_learn_detail.dart';
 import 'package:my_app/screens/course_list.dart';
@@ -28,12 +29,12 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-  final List<User> userList = [];
+  final UserRepository userRepository = UserRepository();
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return MultiProvider(
-      providers: [Provider(create: (context) => userList)],
+      providers: [Provider(create: (context) => userRepository)],
       child: MaterialApp(routes: {
         '/Login': (context) => LoginScreen(),
         '/Register': (context) => RegisterScreen(),

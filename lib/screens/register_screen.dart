@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/model/user.dart';
+import 'package:my_app/repository/user_repository.dart';
 import 'package:my_app/widgets/app_bar.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
@@ -34,7 +35,7 @@ class RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<User> userList = context.watch<List<User>>();
+    UserRepository userRepository = context.watch<UserRepository>();
 
     return Scaffold(
       appBar: AppBarWidget(),
@@ -51,7 +52,7 @@ class RegisterScreenState extends State<RegisterScreen> {
               children: [
                 _buildHeader(),
                 _buildTextFields(),
-                _buildRegisterButton(userList),
+                _buildRegisterButton(userRepository),
               ],
             ),
           ),
@@ -235,7 +236,7 @@ class RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildRegisterButton(List<User> userList) {
+  Widget _buildRegisterButton(UserRepository userRepository) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
       child: Row(
@@ -243,9 +244,9 @@ class RegisterScreenState extends State<RegisterScreen> {
           Expanded(
             child: ElevatedButton(
               onPressed: () {
-                userList.add(User.createUser(
+                userRepository.add(User.createUser(
                     emailController.text, passwordController.text));
-                print(userList);
+                print(userRepository.list);
                 Navigator.pushNamed(context, '/Login');
               },
               style: ButtonStyle(
