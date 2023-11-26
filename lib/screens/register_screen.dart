@@ -1,7 +1,7 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/model/user.dart';
 import 'package:my_app/repository/user_repository.dart';
-import 'package:my_app/widgets/app_bar.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'package:provider/provider.dart';
@@ -22,10 +22,13 @@ class RegisterScreenState extends State<RegisterScreen> {
       TextEditingController();
 
   final _formkey = GlobalKey<FormState>();
-  final GlobalKey<FlutterPwValidatorState> validatorKey =
+  final GlobalKey<FlutterPwValidatorState> _validatorKey =
       GlobalKey<FlutterPwValidatorState>();
 
   bool _isObscured = false;
+  bool _isEmailValid = false;
+  bool _isPasswordValid = false;
+  bool _isConfirmPassword = true;
 
   @override
   void initState() {
@@ -38,23 +41,17 @@ class RegisterScreenState extends State<RegisterScreen> {
     UserRepository userRepository = context.watch<UserRepository>();
 
     return Scaffold(
-      appBar: AppBarWidget(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pop(context),
-        child: const Icon(Icons.arrow_back),
+      appBar: AppBar(
+        title: const Text('Register'),
       ),
       body: SingleChildScrollView(
-        child: Form(
-          key: _formkey,
-          child: Container(
-            margin: const EdgeInsets.all(30),
-            child: Column(
-              children: [
-                _buildHeader(),
-                _buildTextFields(),
-                _buildRegisterButton(userRepository),
-              ],
-            ),
+        child: Container(
+          margin: const EdgeInsets.all(30),
+          child: Column(
+            children: [
+              _buildTextFields(),
+              _buildRegisterButton(userRepository),
+            ],
           ),
         ),
       ),
@@ -129,22 +126,25 @@ class RegisterScreenState extends State<RegisterScreen> {
             color: Colors.grey,
           ),
         ),
-        TextFormField(
-          validator: MultiValidator([
-            RequiredValidator(errorText: 'Enter email address'),
-            EmailValidator(errorText: 'Please correct email filled'),
-          ]),
-          controller: emailController,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
+        Form(
+          key: _formkey,
+          child: TextFormField(
+            validator: MultiValidator([
+              RequiredValidator(errorText: 'Enter email address'),
+              EmailValidator(errorText: 'Please correct email filled'),
+            ]),
+            controller: emailController,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              hintText: hintText,
+              errorStyle: const TextStyle(fontSize: 15.0),
             ),
-            hintText: hintText,
-            errorStyle: const TextStyle(fontSize: 15.0),
+            onChanged: (value) {
+              _isEmailValid = _formkey.currentState!.validate();
+            },
           ),
-          onChanged: (value) {
-            _formkey.currentState!.validate();
-          },
         ),
       ],
     );
@@ -159,7 +159,7 @@ class RegisterScreenState extends State<RegisterScreen> {
           style: const TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.bold,
-            color: Colors.grey,
+            color: Color.fromARGB(255, 165, 153, 153),
           ),
         ),
         TextField(
@@ -184,7 +184,7 @@ class RegisterScreenState extends State<RegisterScreen> {
           ),
         ),
         FlutterPwValidator(
-          key: validatorKey,
+          key: _validatorKey,
           controller: passwordController,
           minLength: 8,
           uppercaseCharCount: 1,
@@ -192,8 +192,12 @@ class RegisterScreenState extends State<RegisterScreen> {
           specialCharCount: 1,
           width: 400,
           height: 150,
-          onSuccess: () {},
-          onFail: () {},
+          onSuccess: () {
+            _isPasswordValid = true;
+          },
+          onFail: () {
+            _isPasswordValid = false;
+          },
         ),
       ],
     );
@@ -216,6 +220,15 @@ class RegisterScreenState extends State<RegisterScreen> {
           obscureText: _isObscured,
           enableSuggestions: false,
           autocorrect: false,
+          onChanged: (value) {
+            setState(() {
+              if (value == passwordController.text) {
+                _isConfirmPassword = true;
+              } else {
+                _isConfirmPassword = false;
+              }
+            });
+          },
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
@@ -232,6 +245,13 @@ class RegisterScreenState extends State<RegisterScreen> {
             ),
           ),
         ),
+        const Padding(padding: EdgeInsets.all(5)),
+        !_isConfirmPassword
+            ? const Text(
+                'Your confirm password is incorrect',
+                style: TextStyle(color: Colors.red, fontSize: 15),
+              )
+            : const Text(''),
       ],
     );
   }
@@ -244,10 +264,27 @@ class RegisterScreenState extends State<RegisterScreen> {
           Expanded(
             child: ElevatedButton(
               onPressed: () {
-                userRepository.add(User.createUser(
-                    emailController.text, passwordController.text));
-                print(userRepository.list);
-                Navigator.pushNamed(context, '/Login');
+                if (userRepository.isUserExisted(emailController.text)) {
+                  CoolAlert.show(
+                    context: context,
+                    type: CoolAlertType.warning,
+                    text: 'Your email is existed!',
+                  );
+                } else if (_isEmailValid &&
+                    _isPasswordValid &&
+                    _isConfirmPassword) {
+                  userRepository.add(User.createUser(
+                      emailController.text, passwordController.text));
+                  CoolAlert.show(
+                    confirmBtnText: 'OK',
+                    context: context,
+                    type: CoolAlertType.success,
+                    text: 'Register successfully!',
+                    onConfirmBtnTap: () {
+                      Navigator.pop(context);
+                    },
+                  );
+                }
               },
               style: ButtonStyle(
                 textStyle: MaterialStateProperty.all(

@@ -5,16 +5,16 @@ import 'package:my_app/repository/user_repository.dart';
 import 'package:my_app/widgets/app_bar.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class ResetPasswordScreen extends StatefulWidget {
+  const ResetPasswordScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return LoginScreenState();
+    return ResetPasswordScreenState();
   }
 }
 
-class LoginScreenState extends State<LoginScreen> {
+class ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -31,62 +31,20 @@ class LoginScreenState extends State<LoginScreen> {
     UserRepository userRepository = context.watch<UserRepository>();
 
     return Scaffold(
-      appBar: AppBarWidget(),
+      appBar: AppBar(
+        title: const Text('Reset password'),
+      ),
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.all(30),
           child: Column(
             children: [
-              _buildHeader(),
               _buildTextFields(),
-              _buildForgotPasswordLink(),
               _buildLoginButton(userRepository),
-              _buildContinueWithText(),
-              _buildSocialButtons(),
-              _buildSignUpLink(),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Column(
-      children: [
-        SizedBox(
-          width: 400,
-          height: 350,
-          child: Image.asset('lib/assets/images/background.png'),
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 15),
-        ),
-        const Text(
-          "Say hello to your English tutors",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 40,
-            fontWeight: FontWeight.bold,
-            color: Colors.blue,
-          ),
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 15),
-        ),
-        const Text(
-          "Become fluent faster through one on one video chat lessons tailored to your goals.",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 15),
-        ),
-      ],
     );
   }
 
@@ -168,23 +126,6 @@ class LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildForgotPasswordLink() {
-    return RichText(
-      text: TextSpan(
-        text: 'Forgot password?',
-        recognizer: TapGestureRecognizer()
-          ..onTap = () {
-            Navigator.pushNamed(context, '/ResetPassword');
-          },
-        style: const TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
-          color: Colors.blueAccent,
-        ),
-      ),
-    );
-  }
-
   Widget _buildLoginButton(UserRepository userRepository) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
@@ -224,70 +165,5 @@ class LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
-  Widget _buildContinueWithText() {
-    return const Column(
-      children: [
-        Text('Or continue with'),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 5),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSocialButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildSocialButton('lib/assets/icons/facebook.png', () {}),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 5),
-        ),
-        _buildSocialButton('lib/assets/icons/google.png', () {}),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 5),
-        ),
-        _buildSocialButton('lib/assets/icons/phone.png', () {}),
-      ],
-    );
-  }
-
-  Widget _buildSocialButton(String iconPath, VoidCallback onPressed) {
-    return SizedBox(
-      width: 60,
-      height: 60,
-      child: IconButton(
-        icon: Image.asset(iconPath),
-        onPressed: onPressed,
-      ),
-    );
-  }
-
-  Widget _buildSignUpLink() {
-    return Column(
-      children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 5),
-        ),
-        RichText(
-          text: TextSpan(
-            style: const TextStyle(color: Colors.black),
-            children: [
-              const TextSpan(text: 'Not a member yet?   '),
-              TextSpan(
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent,
-                ),
-                text: 'Sign up',
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () => Navigator.pushNamed(context, '/Register'),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+  
 }

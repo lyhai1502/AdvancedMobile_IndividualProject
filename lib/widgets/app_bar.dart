@@ -16,7 +16,7 @@ class AppBarWidget extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class AppBarWidgetState extends State<AppBarWidget> {
-  final bool _isLogin = true;
+  final bool _isLogin = false;
   @override
   void initState() {
     super.initState();
@@ -45,7 +45,7 @@ class AppBarWidgetState extends State<AppBarWidget> {
                 fontSize: 25, fontWeight: FontWeight.bold, color: Colors.blue),
           ),
           Expanded(child: Container()),
-          _isLogin ? PopUpMenuWidget() : const SizedBox.shrink(),
+          _isLogin ? const PopUpMenuWidget() : const SizedBox.shrink(),
         ]));
   }
 }
