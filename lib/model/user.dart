@@ -1,14 +1,16 @@
 class User {
-  final String userId;
-  final String email;
-  final String password;
-  User({required this.userId, required this.email, required this.password});
+  String userId = '';
+  String email = '';
+  String password = '';
+  User();
 
   static User createUser(String userEmail, String userPassword) {
-    return User(
-        userId: DateTime.now().millisecondsSinceEpoch.toString(),
-        email: userEmail,
-        password: userPassword);
+    User user = User();
+    user.userId = DateTime.now().millisecondsSinceEpoch.toString();
+    user.email = userEmail;
+    user.password = userPassword;
+
+    return user;
   }
 
   @override

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/model/user.dart';
 import 'package:my_app/widgets/menu.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class AppBarWidget extends StatefulWidget implements PreferredSizeWidget {
@@ -16,7 +18,6 @@ class AppBarWidget extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class AppBarWidgetState extends State<AppBarWidget> {
-  final bool _isLogin = false;
   @override
   void initState() {
     super.initState();
@@ -24,6 +25,8 @@ class AppBarWidgetState extends State<AppBarWidget> {
 
   @override
   Widget build(BuildContext context) {
+    String userLoginId = context.watch<String>();
+
     return AppBar(
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
@@ -45,7 +48,7 @@ class AppBarWidgetState extends State<AppBarWidget> {
                 fontSize: 25, fontWeight: FontWeight.bold, color: Colors.blue),
           ),
           Expanded(child: Container()),
-          _isLogin ? const PopUpMenuWidget() : const SizedBox.shrink(),
+          userLoginId != '' ? const PopUpMenuWidget() : const SizedBox.shrink(),
         ]));
   }
 }

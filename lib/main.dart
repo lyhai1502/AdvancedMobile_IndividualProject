@@ -11,7 +11,6 @@ import 'package:my_app/screens/reset_password_screen.dart';
 import 'package:my_app/screens/schedule_screen.dart';
 import 'package:my_app/screens/tutor_detail_screen.dart';
 import 'package:my_app/screens/tutor_list_screen.dart';
-import 'package:my_app/widgets/app_bar.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -30,12 +29,17 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-  final UserRepository userRepository = UserRepository();
+  final UserRepository? userRepository = UserRepository();
+  final String? userLoginId = '';
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return MultiProvider(
-      providers: [Provider(create: (context) => userRepository)],
+      providers: [
+        Provider(create: (context) => userRepository),
+        Provider(create: (context) => userLoginId)
+      ],
       child: MaterialApp(
           theme: ThemeData(
               primarySwatch: Colors.blue,
@@ -59,7 +63,7 @@ class MyAppState extends State<MyApp> {
             '/Schedule': (context) => ScheduleScreen(),
             '/History': (context) => HistoryScreen(),
           },
-          home: LoginScreen()),
+          home: TutorListScreen()),
     );
   }
 }

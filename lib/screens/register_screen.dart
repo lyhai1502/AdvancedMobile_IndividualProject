@@ -58,44 +58,6 @@ class RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildHeader() {
-    return Column(
-      children: [
-        SizedBox(
-          width: 400,
-          height: 350,
-          child: Image.asset('lib/assets/images/background.png'),
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 15),
-        ),
-        const Text(
-          "Say hello to your English tutors",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 40,
-            fontWeight: FontWeight.bold,
-            color: Colors.blue,
-          ),
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 15),
-        ),
-        const Text(
-          "Become fluent faster through one on one video chat lessons tailored to your goals.",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 15),
-        ),
-      ],
-    );
-  }
 
   Widget _buildTextFields() {
     return Column(

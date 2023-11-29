@@ -1,6 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_dropdown/models/value_item.dart';
+import 'package:multi_dropdown/multiselect_dropdown.dart';
+import 'package:my_app/model/teacher.dart';
+import 'package:my_app/repository/teacher_repository.dart';
 import 'package:my_app/widgets/app_bar.dart';
 import 'package:my_app/widgets/tutor_list_item.dart';
+import 'package:provider/provider.dart';
 
 class TutorListScreen extends StatefulWidget {
   const TutorListScreen({Key? key}) : super(key: key);
@@ -29,12 +35,74 @@ class TutorListScreenState extends State<TutorListScreen> {
 
   String _selectedFilterItem = 'All';
 
+  int sortFavorite = 0;
+
+  final TeacherRepository teacherRepository = TeacherRepository();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarWidget(),
-      body: SingleChildScrollView(
-        child: _buildTutorList(),
+    teacherRepository.add(Teacher.createTeacher(
+        'name',
+        'avatarUrl',
+        5,
+        'nation',
+        'description',
+        'education',
+        [],
+        ["hello", "hello2"],
+        'interests',
+        'experience',
+        'videoUrl',
+        100));
+    teacherRepository.add(Teacher.createTeacher(
+        'name2',
+        'avatarUrl',
+        3,
+        'nation',
+        'description',
+        'education',
+        [],
+        [],
+        'interests',
+        'experience',
+        'videoUrl',
+        67));
+    teacherRepository.add(Teacher.createTeacher(
+        'nam3',
+        'avatarUrl',
+        2,
+        'nation',
+        'description',
+        'education',
+        [],
+        [],
+        'interests',
+        'experience',
+        'videoUrl',
+        88));
+    teacherRepository.add(Teacher.createTeacher(
+        'name4',
+        'avatarUrl',
+        4,
+        'nation',
+        'description',
+        'education',
+        [],
+        [],
+        'interests',
+        'experience',
+        'videoUrl',
+        12));
+
+    return MultiProvider(
+      providers: [
+        Provider(create: (context) => teacherRepository),
+      ],
+      child: Scaffold(
+        appBar: AppBarWidget(),
+        body: SingleChildScrollView(
+          child: _buildTutorList(),
+        ),
       ),
     );
   }
@@ -46,7 +114,34 @@ class TutorListScreenState extends State<TutorListScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildHeaderText(),
-          _buildSearchField(),
+          _buildSearchTextField(),
+          _buildSelectDropDown(
+            hint: 'Sort by rating',
+            options: <ValueItem>[
+              ValueItem(label: 'Ascending rating', value: 'ascending'),
+              ValueItem(label: 'Descending rating', value: 'descending'),
+            ],
+            selectionType: SelectionType.single,
+            onOptionSelected: (options) {
+              setState(() {
+                teacherRepository.sortTeacherByRating(options.first.value);
+              });
+            },
+          ),
+          _buildSelectDropDown(
+            hint: 'Sort by favorite',
+            options: <ValueItem>[
+              ValueItem(label: 'Ascending rating', value: 'ascending'),
+              ValueItem(label: 'Descending rating', value: 'descending'),
+            ],
+            selectionType: SelectionType.single,
+            onOptionSelected: (options) {
+              setState(() {
+                teacherRepository
+                    .sortTeacherByFavoriteNumber(options.first.value);
+              });
+            },
+          ),
           _buildFilterButtons(),
           _buildResetFilterButton(),
           _buildRecommendTutors(),
@@ -56,9 +151,9 @@ class TutorListScreenState extends State<TutorListScreen> {
   }
 
   Widget _buildHeaderText() {
-    return Column(
+    return const Column(
       children: [
-        const Text(
+        Text(
           'Find a tutor',
           style: TextStyle(
             fontSize: 30,
@@ -66,24 +161,37 @@ class TutorListScreenState extends State<TutorListScreen> {
             color: Colors.black,
           ),
         ),
-        const Padding(
+        Padding(
           padding: EdgeInsets.symmetric(vertical: 5),
         ),
       ],
     );
   }
 
-  Widget _buildSearchField() {
-    return SizedBox(
-      height: 35,
-      width: 200,
-      child: TextField(
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          labelText: 'Enter tutor name',
-        ),
+  Widget _buildSearchTextField() {
+    return const CupertinoSearchTextField(
+      placeholder: 'Search tutor name',
+    );
+  }
+
+  Widget _buildSelectDropDown({
+    required String hint,
+    required List<ValueItem> options,
+    required SelectionType selectionType,
+    required onOptionSelected,
+  }) {
+    return Padding(
+      padding: EdgeInsets.only(top: 10),
+      child: MultiSelectDropDown(
+        hint: hint,
+        showClearIcon: false,
+        hintStyle: const TextStyle(fontSize: 15, color: Colors.black45),
+        onOptionSelected: onOptionSelected,
+        options: options,
+        selectionType: selectionType,
+        dropdownHeight: 100,
+        optionTextStyle: const TextStyle(fontSize: 15),
+        selectedOptionIcon: const Icon(Icons.check_circle),
       ),
     );
   }
@@ -171,21 +279,12 @@ class TutorListScreenState extends State<TutorListScreen> {
             color: Colors.black,
           ),
         ),
-        Column(
-          children: [
-            for (String item in items) _buildTutorCard(item),
-          ],
-        ),
+        _buildTutorListCard(),
       ],
     );
   }
 
-  Widget _buildTutorCard(String item) {
-    return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, '/TutorDetail'),
-      child: const Card(
-        child: TutorListItemWidget(),
-      ),
-    );
+  Widget _buildTutorListCard() {
+    return TutorListItemWidget();
   }
 }

@@ -1,6 +1,7 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/model/user.dart';
 import 'package:my_app/repository/user_repository.dart';
 import 'package:my_app/widgets/app_bar.dart';
 import 'package:provider/provider.dart';
@@ -28,8 +29,8 @@ class LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    UserRepository userRepository = context.watch<UserRepository>();
-
+    UserRepository? userRepository = context.watch<UserRepository>();
+    String userLoginId = context.watch<String>();
     return Scaffold(
       appBar: AppBarWidget(),
       body: SingleChildScrollView(
@@ -39,8 +40,8 @@ class LoginScreenState extends State<LoginScreen> {
             children: [
               _buildHeader(),
               _buildTextFields(),
+              _buildLoginButton(userRepository, userLoginId),
               _buildForgotPasswordLink(),
-              _buildLoginButton(userRepository),
               _buildContinueWithText(),
               _buildSocialButtons(),
               _buildSignUpLink(),
@@ -99,9 +100,6 @@ class LoginScreenState extends State<LoginScreen> {
           padding: EdgeInsets.symmetric(vertical: 8),
         ),
         _buildPasswordField(),
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 15),
-        ),
       ],
     );
   }
@@ -185,7 +183,7 @@ class LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildLoginButton(UserRepository userRepository) {
+  Widget _buildLoginButton(UserRepository userRepository, String? userLoginId) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
       child: Row(
@@ -195,6 +193,10 @@ class LoginScreenState extends State<LoginScreen> {
               onPressed: () {
                 if (userRepository.isLoginSucess(
                     emailController.text, passwordController.text)) {
+                  userLoginId = userRepository
+                      .getUserByEmail(emailController.text)
+                      ?.userId;
+                  print(userLoginId);
                   Navigator.pushNamed(context, '/TutorList');
                   CoolAlert.show(
                     confirmBtnText: 'OK',
@@ -204,6 +206,7 @@ class LoginScreenState extends State<LoginScreen> {
                   );
                 } else {
                   CoolAlert.show(
+                    confirmBtnText: 'OK',
                     context: context,
                     type: CoolAlertType.warning,
                     text: 'Your email or password is incorrect',
@@ -226,14 +229,9 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildContinueWithText() {
-    return const Column(
-      children: [
-        Text('Or continue with'),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 5),
-        ),
-      ],
-    );
+    return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 10),
+        child: Text('Or continue with'));
   }
 
   Widget _buildSocialButtons() {

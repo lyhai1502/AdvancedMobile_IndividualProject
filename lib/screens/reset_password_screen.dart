@@ -1,8 +1,6 @@
 import 'package:cool_alert/cool_alert.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/repository/user_repository.dart';
-import 'package:my_app/widgets/app_bar.dart';
 import 'package:provider/provider.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
@@ -40,7 +38,7 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
           child: Column(
             children: [
               _buildTextFields(),
-              _buildLoginButton(userRepository),
+              _buildSendEmailButton(userRepository),
             ],
           ),
         ),
@@ -49,19 +47,7 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   Widget _buildTextFields() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildTextField('Email', 'mail@example.com'),
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 8),
-        ),
-        _buildPasswordField(),
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 15),
-        ),
-      ],
-    );
+    return _buildTextField('Email', 'mail@example.com');
   }
 
   Widget _buildTextField(String label, String hintText) {
@@ -89,44 +75,7 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
     );
   }
 
-  Widget _buildPasswordField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Password'.toUpperCase(),
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            color: Colors.grey,
-          ),
-        ),
-        TextField(
-          controller: passwordController,
-          obscureText: _isObscured,
-          enableSuggestions: false,
-          autocorrect: false,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            suffixIcon: IconButton(
-              icon: !_isObscured
-                  ? const Icon(Icons.visibility)
-                  : const Icon(Icons.visibility_off),
-              onPressed: () {
-                setState(() {
-                  _isObscured = !_isObscured;
-                });
-              },
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildLoginButton(UserRepository userRepository) {
+  Widget _buildSendEmailButton(UserRepository userRepository) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
       child: Row(
@@ -134,22 +83,8 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
           Expanded(
             child: ElevatedButton(
               onPressed: () {
-                if (userRepository.isLoginSucess(
-                    emailController.text, passwordController.text)) {
-                  Navigator.pushNamed(context, '/TutorList');
-                  CoolAlert.show(
-                    confirmBtnText: 'OK',
-                    context: context,
-                    type: CoolAlertType.success,
-                    text: 'Login successfully!',
-                  );
-                } else {
-                  CoolAlert.show(
-                    context: context,
-                    type: CoolAlertType.warning,
-                    text: 'Your email or password is incorrect',
-                  );
-                }
+                _sendResetEmail();
+                // Navigator.pushNamed(context, '/TutorList');
               },
               style: ButtonStyle(
                 textStyle: MaterialStateProperty.all(
@@ -158,12 +93,13 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 backgroundColor: MaterialStateProperty.all(Colors.blue),
                 foregroundColor: MaterialStateProperty.all(Colors.white),
               ),
-              child: Text('Login'.toUpperCase()),
+              child: Text('Send email'),
             ),
           ),
         ],
       ),
     );
   }
-  
+
+  void _sendResetEmail() {}
 }
