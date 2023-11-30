@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
-import 'package:my_app/model/teacher.dart';
 import 'package:my_app/repository/teacher_repository.dart';
 import 'package:my_app/widgets/app_bar.dart';
 import 'package:my_app/widgets/fliter_button_list.dart';
@@ -25,7 +24,7 @@ class TutorListScreenState extends State<TutorListScreen> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider(create: (context) => teacherRepository),
+        ChangeNotifierProvider(create: (context) => teacherRepository),
       ],
       child: Scaffold(
         appBar: AppBarWidget(),
@@ -94,7 +93,7 @@ class TutorListScreenState extends State<TutorListScreen> {
     return CupertinoSearchTextField(
       placeholder: 'Search tutor name/country',
       controller: searchTutorController,
-      onSubmitted: (value) {
+      onChanged: (value) {
         setState(() {
           teacherRepository.findByNameOrNation(searchTutorController.text);
         });
@@ -109,7 +108,7 @@ class TutorListScreenState extends State<TutorListScreen> {
     required onOptionSelected,
   }) {
     return Padding(
-      padding: const EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: MultiSelectDropDown(
         hint: hint,
         showClearIcon: false,

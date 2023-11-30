@@ -67,6 +67,9 @@ flutter:
   assets:
     - lib/assets/
     - lib/assets/icons/
+    - lib/assets/icons/teacher/
+    - lib/assets/icons/teacher/avatar/
+    - lib/assets/icons/teacher/country/
     - lib/assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see

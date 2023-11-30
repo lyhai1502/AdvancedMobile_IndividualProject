@@ -21,20 +21,20 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
     TeacherRepository teacherRepository = context.watch<TeacherRepository>();
 
     // TODO: implement build
-    return Column(children: [
-      for (Teacher teacher in (teacherRepository.filter.isEmpty &&
-              teacherRepository.filterName == ''
-          ? teacherRepository.list
-          : teacherRepository.filter))
-        Center(
-          child: GestureDetector(
+    return Center(
+      child: Column(children: [
+        for (Teacher teacher in (teacherRepository.filter.isEmpty &&
+                teacherRepository.filterName == 'All'
+            ? teacherRepository.list
+            : teacherRepository.filter))
+          GestureDetector(
             onTap: () => Navigator.pushNamed(context, '/TutorDetail'),
             child: Card(
               child: Container(
                 padding: const EdgeInsets.all(15),
                 child: Column(
                   children: [
-                    _buildAvatar(),
+                    _buildAvatar(teacher.avatarUrl),
                     _buildName(teacher.name),
                     _buildNation(teacher.nation),
                     _buildRating(teacher.rating),
@@ -49,17 +49,17 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
               ),
             ),
           ),
-        ),
-    ]);
+      ]),
+    );
   }
 
-  Widget _buildAvatar() {
+  Widget _buildAvatar(String avatarUrl) {
     return SizedBox(
       width: 80,
       height: 80,
       child: IconButton(
         onPressed: () {},
-        icon: Image.asset('lib/assets/icons/facebook.png'),
+        icon: Image.asset(avatarUrl),
       ),
     );
   }
@@ -76,6 +76,7 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
   }
 
   Widget _buildNation(String nation) {
+    String nationUrl = nation.toLowerCase();
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Row(
@@ -84,7 +85,9 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
           SizedBox(
             width: 20,
             height: 20,
-            child: Image.asset('lib/assets/icons/vietnam.png'),
+            child: Image.asset(
+              'lib/assets/icons/teacher/country/${nationUrl}.png',
+            ),
           ),
           const Padding(
             padding: EdgeInsets.only(right: 5),

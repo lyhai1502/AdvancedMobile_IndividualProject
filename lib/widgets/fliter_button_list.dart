@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/repository/teacher_repository.dart';
 import 'package:provider/provider.dart';
 
 class FilterButtonList extends StatefulWidget {
@@ -28,15 +29,17 @@ class FilterButtonListState extends State<FilterButtonList> {
   String selectSpecialitiesFilter = 'All';
   @override
   Widget build(BuildContext context) {
+    TeacherRepository teacherRepository = context.watch<TeacherRepository>();
     // TODO: implement build
     return Wrap(
       children: [
-        for (String item in specialitiesFilters) _buildFilterButton(item),
+        for (String item in specialitiesFilters)
+          _buildFilterButton(item, teacherRepository),
       ],
     );
   }
 
-  Widget _buildFilterButton(String item) {
+  Widget _buildFilterButton(String item, TeacherRepository teacherRepository) {
     return Container(
       padding: const EdgeInsets.only(right: 10),
       child: ElevatedButton(
@@ -56,6 +59,7 @@ class FilterButtonListState extends State<FilterButtonList> {
         onPressed: () {
           setState(() {
             selectSpecialitiesFilter = item;
+            teacherRepository.filterSpecialities(selectSpecialitiesFilter);
           });
         },
         child: Text(item),
