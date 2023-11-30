@@ -55,7 +55,6 @@ class MyAppState extends State<MyApp> {
             '/Register': (context) => const RegisterScreen(),
             '/ResetPassword': (context) => const ResetPasswordScreen(),
             '/TutorList': (context) => const TutorListScreen(),
-            '/TutorDetail': (context) => const TutorDetailScreen(),
             '/CourseList': (context) => const CourseListScreen(),
             '/CourseDetail': (context) => const CourseDetailScreen(),
             '/CourseLearnDetail': (context) => const CourseLearnDetailScreen(),

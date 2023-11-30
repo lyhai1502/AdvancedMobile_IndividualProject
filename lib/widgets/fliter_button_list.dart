@@ -35,6 +35,7 @@ class FilterButtonListState extends State<FilterButtonList> {
       children: [
         for (String item in specialitiesFilters)
           _buildFilterButton(item, teacherRepository),
+        _buildResetFilterButton(teacherRepository),
       ],
     );
   }
@@ -64,6 +65,28 @@ class FilterButtonListState extends State<FilterButtonList> {
         },
         child: Text(item),
       ),
+    );
+  }
+
+  Widget _buildResetFilterButton(TeacherRepository teacherRepository) {
+    return ElevatedButton(
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            side: const BorderSide(color: Colors.blue),
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+        ),
+        backgroundColor: MaterialStateProperty.all(Colors.white),
+        foregroundColor: MaterialStateProperty.all(Colors.blue),
+      ),
+      onPressed: () {
+        setState(() {
+          selectSpecialitiesFilter = 'All';
+          teacherRepository.filterSpecialities(selectSpecialitiesFilter);
+        });
+      },
+      child: const Text('Reset filter'),
     );
   }
 }

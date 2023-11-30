@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/model/teacher.dart';
 import 'package:my_app/repository/teacher_repository.dart';
+import 'package:my_app/screens/tutor_detail_screen.dart';
+import 'package:my_app/widgets/custom_button.dart';
+import 'package:my_app/widgets/rating.dart';
 import 'package:provider/provider.dart';
 
 class TutorListItemWidget extends StatefulWidget {
@@ -19,37 +22,50 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
   @override
   Widget build(BuildContext context) {
     TeacherRepository teacherRepository = context.watch<TeacherRepository>();
+    Teacher teacherClicked = Teacher();
 
     // TODO: implement build
-    return Center(
-      child: Column(children: [
-        for (Teacher teacher in (teacherRepository.filter.isEmpty &&
-                teacherRepository.filterName == 'All'
-            ? teacherRepository.list
-            : teacherRepository.filter))
-          GestureDetector(
-            onTap: () => Navigator.pushNamed(context, '/TutorDetail'),
-            child: Card(
-              child: Container(
-                padding: const EdgeInsets.all(15),
-                child: Column(
-                  children: [
-                    _buildAvatar(teacher.avatarUrl),
-                    _buildName(teacher.name),
-                    _buildNation(teacher.nation),
-                    _buildRating(teacher.rating),
-                    _buildSpecialties(teacher.specialities),
-                    _buildDescription(teacher.description),
-                    _buildButtons(teacher),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 5),
-                    ),
-                  ],
+    return MultiProvider(
+      providers: [
+        Provider(create: (context) => teacherClicked),
+      ],
+      child: Center(
+        child: Column(children: [
+          for (Teacher teacher in (teacherRepository.filter.isEmpty &&
+                  teacherRepository.filterName == 'All'
+              ? teacherRepository.list
+              : teacherRepository.filter))
+            GestureDetector(
+              onTap: () {
+                teacherClicked = teacher;
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            TutorDetailScreen(teacher: teacher)));
+              },
+              child: Card(
+                child: Container(
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
+                    children: [
+                      _buildAvatar(teacher.avatarUrl),
+                      _buildName(teacher.name),
+                      _buildNation(teacher.nation),
+                      RatingWidget(rating: teacher.rating),
+                      _buildSpecialities(teacher.specialities),
+                      _buildDescription(teacher.description),
+                      _buildButtons(teacher),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 5),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-      ]),
+        ]),
+      ),
     );
   }
 
@@ -86,7 +102,7 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
             width: 20,
             height: 20,
             child: Image.asset(
-              'lib/assets/icons/teacher/country/${nationUrl}.png',
+              'lib/assets/icons/teacher/country/$nationUrl.png',
             ),
           ),
           const Padding(
@@ -98,42 +114,13 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
     );
   }
 
-  Widget _buildRating(int rating) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          for (var i = 0; i < rating; i++)
-            const Icon(Icons.star, size: 20, color: Colors.amberAccent),
-          for (var j = rating; j < 5; j++) const Icon(Icons.star, size: 20),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSpecialties(List<String> specialities) {
+  Widget _buildSpecialities(List<String> specialities) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Wrap(
         children: [
           for (String item in specialities)
-            Container(
-              padding: const EdgeInsets.only(right: 8),
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                  ),
-                  backgroundColor: MaterialStateProperty.all(Colors.lightBlue),
-                  foregroundColor: MaterialStateProperty.all(Colors.white),
-                ),
-                onPressed: () {},
-                child: Text(item.toString()),
-              ),
-            ),
+            CustomButtonWidget(content: item)
         ],
       ),
     );

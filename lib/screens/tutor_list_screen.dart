@@ -64,7 +64,6 @@ class TutorListScreenState extends State<TutorListScreen> {
             },
           ),
           _buildFilterButtons(),
-          _buildResetFilterButton(),
           _buildRecommendTutors(),
         ],
       ),
@@ -135,29 +134,12 @@ class TutorListScreenState extends State<TutorListScreen> {
             color: Colors.black,
           ),
         ),
-        FilterButtonList()
+        FilterButtonList(),
       ],
     );
   }
 
-  Widget _buildResetFilterButton() {
-    return ElevatedButton(
-      style: ButtonStyle(
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            side: const BorderSide(color: Colors.blue),
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-        ),
-        backgroundColor: MaterialStateProperty.all(Colors.white),
-        foregroundColor: MaterialStateProperty.all(Colors.blue),
-      ),
-      onPressed: () {
-        setState(() {});
-      },
-      child: const Text('Reset filter'),
-    );
-  }
+
 
   Widget _buildRecommendTutors() {
     return Column(
