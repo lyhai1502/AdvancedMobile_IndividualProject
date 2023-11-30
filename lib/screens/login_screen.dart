@@ -1,7 +1,6 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/model/user.dart';
 import 'package:my_app/repository/user_repository.dart';
 import 'package:my_app/widgets/app_bar.dart';
 import 'package:provider/provider.dart';
@@ -196,7 +195,6 @@ class LoginScreenState extends State<LoginScreen> {
                   userLoginId = userRepository
                       .getUserByEmail(emailController.text)
                       ?.userId;
-                  print(userLoginId);
                   Navigator.pushNamed(context, '/TutorList');
                   CoolAlert.show(
                     confirmBtnText: 'OK',

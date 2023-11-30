@@ -4,6 +4,8 @@ import 'package:my_app/repository/teacher_repository.dart';
 import 'package:provider/provider.dart';
 
 class TutorListItemWidget extends StatefulWidget {
+  const TutorListItemWidget({super.key});
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -20,7 +22,10 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
 
     // TODO: implement build
     return Column(children: [
-      for (Teacher teacher in teacherRepository.list)
+      for (Teacher teacher in (teacherRepository.filter.isEmpty &&
+              teacherRepository.filterName == ''
+          ? teacherRepository.list
+          : teacherRepository.filter))
         Center(
           child: GestureDetector(
             onTap: () => Navigator.pushNamed(context, '/TutorDetail'),
@@ -33,7 +38,7 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
                     _buildName(teacher.name),
                     _buildNation(teacher.nation),
                     _buildRating(teacher.rating),
-                    _buildSpecialties(teacher.specialties),
+                    _buildSpecialties(teacher.specialities),
                     _buildDescription(teacher.description),
                     _buildButtons(teacher),
                     const Padding(
@@ -104,12 +109,12 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
     );
   }
 
-  Widget _buildSpecialties(List<String> specialties) {
+  Widget _buildSpecialties(List<String> specialities) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Wrap(
         children: [
-          for (String item in specialties)
+          for (String item in specialities)
             Container(
               padding: const EdgeInsets.only(right: 8),
               child: ElevatedButton(
@@ -133,10 +138,10 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
 
   Widget _buildDescription(String description) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       child: Text(
         description,
-        style: TextStyle(fontSize: 15, color: Colors.black),
+        style: const TextStyle(fontSize: 15, color: Colors.black),
       ),
     );
   }

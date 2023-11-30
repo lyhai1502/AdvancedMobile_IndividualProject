@@ -1,4 +1,3 @@
-import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/repository/user_repository.dart';
 import 'package:provider/provider.dart';
@@ -15,14 +14,6 @@ class ResetPasswordScreen extends StatefulWidget {
 class ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
-  bool _isObscured = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _isObscured = true;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +84,7 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 backgroundColor: MaterialStateProperty.all(Colors.blue),
                 foregroundColor: MaterialStateProperty.all(Colors.white),
               ),
-              child: Text('Send email'),
+              child: const Text('Send email'),
             ),
           ),
         ],

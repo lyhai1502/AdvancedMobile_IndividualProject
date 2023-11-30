@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_dropdown/models/value_item.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:my_app/model/teacher.dart';
 import 'package:my_app/repository/teacher_repository.dart';
 import 'package:my_app/widgets/app_bar.dart';
+import 'package:my_app/widgets/fliter_button_list.dart';
 import 'package:my_app/widgets/tutor_list_item.dart';
 import 'package:provider/provider.dart';
 
@@ -18,82 +18,11 @@ class TutorListScreen extends StatefulWidget {
 }
 
 class TutorListScreenState extends State<TutorListScreen> {
-  final List<String> items = [
-    'All',
-    'English for kids',
-    'English for business',
-    'Conversational',
-    'STARTERS',
-    'MOVERS',
-    'FLYERS',
-    'KET',
-    'PET',
-    'IELTS',
-    'TOEFL',
-    'TOEIC'
-  ];
-
-  String _selectedFilterItem = 'All';
-
-  int sortFavorite = 0;
-
   final TeacherRepository teacherRepository = TeacherRepository();
+  final TextEditingController searchTutorController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    teacherRepository.add(Teacher.createTeacher(
-        'name',
-        'avatarUrl',
-        5,
-        'nation',
-        'description',
-        'education',
-        [],
-        ["hello", "hello2"],
-        'interests',
-        'experience',
-        'videoUrl',
-        100));
-    teacherRepository.add(Teacher.createTeacher(
-        'name2',
-        'avatarUrl',
-        3,
-        'nation',
-        'description',
-        'education',
-        [],
-        [],
-        'interests',
-        'experience',
-        'videoUrl',
-        67));
-    teacherRepository.add(Teacher.createTeacher(
-        'nam3',
-        'avatarUrl',
-        2,
-        'nation',
-        'description',
-        'education',
-        [],
-        [],
-        'interests',
-        'experience',
-        'videoUrl',
-        88));
-    teacherRepository.add(Teacher.createTeacher(
-        'name4',
-        'avatarUrl',
-        4,
-        'nation',
-        'description',
-        'education',
-        [],
-        [],
-        'interests',
-        'experience',
-        'videoUrl',
-        12));
-
     return MultiProvider(
       providers: [
         Provider(create: (context) => teacherRepository),
@@ -116,29 +45,22 @@ class TutorListScreenState extends State<TutorListScreen> {
           _buildHeaderText(),
           _buildSearchTextField(),
           _buildSelectDropDown(
-            hint: 'Sort by rating',
+            hint: 'Sort by rating/favorite',
             options: <ValueItem>[
-              ValueItem(label: 'Ascending rating', value: 'ascending'),
-              ValueItem(label: 'Descending rating', value: 'descending'),
-            ],
-            selectionType: SelectionType.single,
-            onOptionSelected: (options) {
-              setState(() {
-                teacherRepository.sortTeacherByRating(options.first.value);
-              });
-            },
-          ),
-          _buildSelectDropDown(
-            hint: 'Sort by favorite',
-            options: <ValueItem>[
-              ValueItem(label: 'Ascending rating', value: 'ascending'),
-              ValueItem(label: 'Descending rating', value: 'descending'),
+              const ValueItem(
+                  label: 'Ascending rating', value: 'ascendingRating'),
+              const ValueItem(
+                  label: 'Descending rating', value: 'descendingRating'),
+              const ValueItem(
+                  label: 'Ascending favorite', value: 'ascendingFavorite'),
+              const ValueItem(
+                  label: 'Descending favorite', value: 'descendingFavorite'),
             ],
             selectionType: SelectionType.single,
             onOptionSelected: (options) {
               setState(() {
                 teacherRepository
-                    .sortTeacherByFavoriteNumber(options.first.value);
+                    .sortTeacherByRatingAndFavorite(options.first.value);
               });
             },
           ),
@@ -169,8 +91,14 @@ class TutorListScreenState extends State<TutorListScreen> {
   }
 
   Widget _buildSearchTextField() {
-    return const CupertinoSearchTextField(
-      placeholder: 'Search tutor name',
+    return CupertinoSearchTextField(
+      placeholder: 'Search tutor name/country',
+      controller: searchTutorController,
+      onSubmitted: (value) {
+        setState(() {
+          teacherRepository.findByNameOrNation(searchTutorController.text);
+        });
+      },
     );
   }
 
@@ -181,7 +109,7 @@ class TutorListScreenState extends State<TutorListScreen> {
     required onOptionSelected,
   }) {
     return Padding(
-      padding: EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.only(top: 10),
       child: MultiSelectDropDown(
         hint: hint,
         showClearIcon: false,
@@ -189,7 +117,7 @@ class TutorListScreenState extends State<TutorListScreen> {
         onOptionSelected: onOptionSelected,
         options: options,
         selectionType: selectionType,
-        dropdownHeight: 100,
+        dropdownHeight: 200,
         optionTextStyle: const TextStyle(fontSize: 15),
         selectedOptionIcon: const Icon(Icons.check_circle),
       ),
@@ -208,39 +136,8 @@ class TutorListScreenState extends State<TutorListScreen> {
             color: Colors.black,
           ),
         ),
-        Wrap(
-          children: [
-            for (String item in items) _buildFilterButton(item),
-          ],
-        ),
+        FilterButtonList()
       ],
-    );
-  }
-
-  Widget _buildFilterButton(String item) {
-    return Container(
-      padding: const EdgeInsets.only(right: 8),
-      child: ElevatedButton(
-        style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-          ),
-          backgroundColor: _selectedFilterItem == item
-              ? MaterialStateProperty.all(Colors.blue)
-              : MaterialStateProperty.all(Colors.white54),
-          foregroundColor: _selectedFilterItem == item
-              ? MaterialStateProperty.all(Colors.white)
-              : MaterialStateProperty.all(Colors.black),
-        ),
-        onPressed: () {
-          setState(() {
-            _selectedFilterItem = item;
-          });
-        },
-        child: Text(item),
-      ),
     );
   }
 
@@ -257,9 +154,7 @@ class TutorListScreenState extends State<TutorListScreen> {
         foregroundColor: MaterialStateProperty.all(Colors.blue),
       ),
       onPressed: () {
-        setState(() {
-          _selectedFilterItem = 'All';
-        });
+        setState(() {});
       },
       child: const Text('Reset filter'),
     );

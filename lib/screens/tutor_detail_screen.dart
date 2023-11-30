@@ -133,18 +133,18 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _buildActionIconButton(Icon(Icons.favorite), 'Favorite'),
-        _buildActionIconButton(Icon(Icons.report), 'Report'),
+        _buildActionIconButton(const Icon(Icons.favorite), 'Favorite'),
+        _buildActionIconButton(const Icon(Icons.report), 'Report'),
       ],
     );
   }
 
-  Widget _buildActionIconButton(Icon _icon, String label) {
+  Widget _buildActionIconButton(Icon icon, String label) {
     return Column(
       children: [
         IconButton(
           onPressed: () {},
-          icon: _icon,
+          icon: icon,
         ),
         Text(
           label,

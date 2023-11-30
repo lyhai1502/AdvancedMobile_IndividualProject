@@ -1,5 +1,3 @@
-import 'dart:math';
-
 class Teacher {
   String id = '';
   String name = '';
@@ -10,7 +8,7 @@ class Teacher {
 
   String education = '';
   List<String> languages = [];
-  List<String> specialties = [];
+  List<String> specialities = [];
   String interests = '';
   String experience = '';
   String videoUrl = '';
@@ -40,7 +38,7 @@ class Teacher {
     teacher.nation = nation;
     teacher.education = education;
     teacher.languages = languages;
-    teacher.specialties = specicalties;
+    teacher.specialities = specicalties;
     teacher.interests = interests;
     teacher.experience = experience;
     teacher.videoUrl = videoUrl;
@@ -53,6 +51,6 @@ class Teacher {
   @override
   String toString() {
     // TODO: implement toString
-    return 'id: $id, name: $name';
+    return 'name: $name';
   }
 }

@@ -27,28 +27,28 @@ class PopUpMenuWidgetState extends State<PopUpMenuWidget> {
         });
       },
       itemBuilder: (BuildContext context) => <PopupMenuEntry<SampleItem>>[
-        PopupMenuItem<SampleItem>(
+        const PopupMenuItem<SampleItem>(
           value: SampleItem.Profile,
           child: Text('Profile'),
         ),
         PopupMenuItem<SampleItem>(
           value: SampleItem.Tutor,
-          child: Text('Tutor'),
+          child: const Text('Tutor'),
           onTap: () => Navigator.pushNamed(context, '/TutorList'),
         ),
         PopupMenuItem<SampleItem>(
           value: SampleItem.Course,
-          child: Text('Course'),
+          child: const Text('Course'),
           onTap: () => Navigator.pushNamed(context, '/CourseList'),
         ),
         PopupMenuItem<SampleItem>(
           value: SampleItem.Schedule,
-          child: Text('Schedule'),
+          child: const Text('Schedule'),
           onTap: () => Navigator.pushNamed(context, '/Schedule'),
         ),
         PopupMenuItem<SampleItem>(
           value: SampleItem.History,
-          child: Text('History'),
+          child: const Text('History'),
           onTap: () => Navigator.pushNamed(context, '/History'),
         ),
       ],

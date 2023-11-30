@@ -3,7 +3,7 @@ import 'package:my_app/widgets/app_bar.dart';
 import 'package:my_app/widgets/list_select.dart';
 
 class CourseLearnDetailScreen extends StatefulWidget {
-  const CourseLearnDetailScreen({Key? key});
+  const CourseLearnDetailScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -34,7 +34,7 @@ class CourseLearnScreenState extends State<CourseLearnDetailScreen> {
               const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
               _buildListTopics(),
               const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-              ListSelectWidget(),
+              const ListSelectWidget(),
               const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
             ],
           ),

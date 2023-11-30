@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/model/user.dart';
 import 'package:my_app/repository/user_repository.dart';
 import 'package:my_app/screens/course_detail.dart';
 import 'package:my_app/screens/course_learn_detail.dart';
@@ -52,18 +51,18 @@ class MyAppState extends State<MyApp> {
                       color: Colors.blue) //<-- SEE HERE
                   )),
           routes: {
-            '/Login': (context) => LoginScreen(),
-            '/Register': (context) => RegisterScreen(),
-            '/ResetPassword': (context) => ResetPasswordScreen(),
-            '/TutorList': (context) => TutorListScreen(),
-            '/TutorDetail': (context) => TutorDetailScreen(),
-            '/CourseList': (context) => CourseListScreen(),
-            '/CourseDetail': (context) => CourseDetailScreen(),
-            '/CourseLearnDetail': (context) => CourseLearnDetailScreen(),
-            '/Schedule': (context) => ScheduleScreen(),
-            '/History': (context) => HistoryScreen(),
+            '/Login': (context) => const LoginScreen(),
+            '/Register': (context) => const RegisterScreen(),
+            '/ResetPassword': (context) => const ResetPasswordScreen(),
+            '/TutorList': (context) => const TutorListScreen(),
+            '/TutorDetail': (context) => const TutorDetailScreen(),
+            '/CourseList': (context) => const CourseListScreen(),
+            '/CourseDetail': (context) => const CourseDetailScreen(),
+            '/CourseLearnDetail': (context) => const CourseLearnDetailScreen(),
+            '/Schedule': (context) => const ScheduleScreen(),
+            '/History': (context) => const HistoryScreen(),
           },
-          home: TutorListScreen()),
+          home: const TutorListScreen()),
     );
   }
 }

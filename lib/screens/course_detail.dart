@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/widgets/app_bar.dart';
 
 class CourseDetailScreen extends StatefulWidget {
-  const CourseDetailScreen({Key? key});
+  const CourseDetailScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -136,7 +136,7 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
       children: [
         Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 25, fontWeight: FontWeight.bold, color: Colors.black),
         ),
         const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
@@ -159,15 +159,15 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
             children: [
               Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
               ),
-              Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+              const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
               Text(
                 description,
-                style: TextStyle(fontSize: 15, color: Colors.black),
+                style: const TextStyle(fontSize: 15, color: Colors.black),
               ),
             ],
           ),
@@ -186,7 +186,7 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
         ),
         Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
         ),
       ],
@@ -214,10 +214,10 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
                     Text(
                       "$index.",
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-                    Text(
+                    const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+                    const Text(
                       "The Internet",
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -239,7 +239,7 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
         children: [
           TextSpan(
             text: tutorName,
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
           ),
           const TextSpan(text: '     '),

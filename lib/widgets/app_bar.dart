@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/model/user.dart';
 import 'package:my_app/widgets/menu.dart';
 import 'package:provider/provider.dart';
 
