@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
+import 'package:my_app/model/course.dart';
+import 'package:my_app/repository/course_repository.dart';
+import 'package:my_app/screens/course_detail.dart';
+import 'package:provider/provider.dart';
 
 class CourseListScreen extends StatefulWidget {
   const CourseListScreen({Key? key}) : super(key: key);
@@ -12,43 +16,50 @@ class CourseListScreen extends StatefulWidget {
 }
 
 class CourseScreenWidgetState extends State<CourseListScreen> {
+  final CourseRepository courseRepository = CourseRepository();
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        margin: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHeader(),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-            _buildIntroduction(),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-            _buildSearchTextField(),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-            _buildMultiSelectDropDown(
-              hint: 'Select level',
-              options: _getOptions(),
-              maxItems: 6,
-              selectionType: SelectionType.multi,
-            ),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-            _buildMultiSelectDropDown(
-              hint: 'Sort by level',
-              options: _getOptions(),
-              maxItems: 2,
-              selectionType: SelectionType.single,
-            ),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-            _buildMultiSelectDropDown(
-              hint: 'Select category',
-              options: _getOptions(),
-              maxItems: 6,
-              selectionType: SelectionType.multi,
-            ),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-            _buildTabBarView(),
-          ],
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => courseRepository),
+      ],
+      child: SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHeader(),
+              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+              _buildIntroduction(),
+              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+              _buildSearchTextField(),
+              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+              _buildMultiSelectDropDown(
+                hint: 'Select level',
+                options: _getOptions(),
+                maxItems: 6,
+                selectionType: SelectionType.multi,
+              ),
+              const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+              _buildMultiSelectDropDown(
+                hint: 'Sort by level',
+                options: _getOptions(),
+                maxItems: 2,
+                selectionType: SelectionType.single,
+              ),
+              const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+              _buildMultiSelectDropDown(
+                hint: 'Select category',
+                options: _getOptions(),
+                maxItems: 6,
+                selectionType: SelectionType.multi,
+              ),
+              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+              _buildTabBarView(),
+            ],
+          ),
         ),
       ),
     );
@@ -167,8 +178,8 @@ class CourseScreenWidgetState extends State<CourseListScreen> {
               child: TabBarView(
                 children: [
                   _buildCourseList(),
-                  const Text("It's rainy here"),
-                  const Text("It's sunny here"),
+                  _buildCourseList(),
+                  _buildCourseList(),
                 ],
               ),
             ),
@@ -181,10 +192,14 @@ class CourseScreenWidgetState extends State<CourseListScreen> {
   Widget _buildCourseList() {
     return Column(
       children: [
-        for (var i = 0; i < 9; i++)
+        for (Course course in courseRepository.list)
           GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, '/CourseDetail');
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          CourseDetailScreen(course: course)));
             },
             child: Card(
               margin: const EdgeInsets.only(top: 20),
@@ -201,38 +216,38 @@ class CourseScreenWidgetState extends State<CourseListScreen> {
                       child: SizedBox(
                         height: 200,
                         width: 300,
-                        child: Image.asset('lib/assets/images/bg.png'),
+                        child: Image.asset(course.image),
                       ),
                     ),
                     const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                     Container(
                       margin: const EdgeInsets.all(30),
-                      child: const Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Life In The Internet Age",
-                            style: TextStyle(
+                            course.name,
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Padding(
+                          const Padding(
                             padding: EdgeInsets.symmetric(vertical: 5),
                           ),
                           Text(
-                            "Let's discuss how technology is changing the way we live",
-                            style: TextStyle(
+                            course.description,
+                            style: const TextStyle(
                               color: Colors.black54,
                               fontSize: 15,
                             ),
                           ),
-                          Padding(
+                          const Padding(
                             padding: EdgeInsets.symmetric(vertical: 15),
                           ),
                           Text(
-                            "Intermediate • 9  Lessons",
-                            style: TextStyle(
+                            '${course.level}  •  ${course.topics.length} Lessons',
+                            style: const TextStyle(
                               fontSize: 16,
                             ),
                           ),

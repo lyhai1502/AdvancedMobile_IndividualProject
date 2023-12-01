@@ -64,7 +64,6 @@ class MyAppState extends State<MyApp> {
             '/Home': (context) => const HomeScreen(),
             '/TutorList': (context) => const TutorListScreen(),
             '/CourseList': (context) => const CourseListScreen(),
-            '/CourseDetail': (context) => const CourseDetailScreen(),
             '/CourseLearnDetail': (context) => const CourseLearnDetailScreen(),
             '/Schedule': (context) => const ScheduleScreen(),
             '/History': (context) => const HistoryScreen(),

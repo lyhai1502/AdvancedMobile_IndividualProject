@@ -1,10 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/widgets/app_bar.dart';
+import 'package:my_app/model/course.dart';
 
 class CourseDetailScreen extends StatefulWidget {
-  const CourseDetailScreen({Key? key}) : super(key: key);
+  const CourseDetailScreen({Key? key, required this.course}) : super(key: key);
 
+  final Course course;
   @override
   State<StatefulWidget> createState() {
     return CourseDetailScreenState();
@@ -15,10 +16,8 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pop(context),
-        child: const Icon(Icons.arrow_back),
+      appBar: AppBar(
+        title: const Text('Course detail'),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -29,29 +28,25 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
               _buildCourseCard(context),
               const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
               _buildSection("Overview", [
-                _buildListItem(
-                  Icons.question_mark_rounded,
-                  "Why take this course",
-                  "Our world is rapidly changing thanks to new technology, and the vocabulary needed to discuss modern life is evolving almost daily. In this course you will learn the most up-to-date terminology from expertly crafted lessons as well from your native-speaking tutor.",
-                ),
-                _buildListItem(
-                  Icons.question_mark_rounded,
-                  "What will you be able to do",
-                  "You will learn vocabulary related to timely topics like remote work, artificial intelligence, online privacy, and more. In addition to discussion questions, you will practice intermediate level speaking tasks such as using data to describe trends.",
-                ),
+                _buildListItem(Icons.question_mark_rounded,
+                    "Why take this course", widget.course.target),
+                Padding(padding: EdgeInsets.only(top: 20)),
+                _buildListItem(Icons.question_mark_rounded,
+                    "What will you be able to do", widget.course.todo),
               ]),
               const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
               _buildSection("Experience Level", [
-                _buildInfoRow(Icons.person, "Intermediate"),
+                _buildInfoRow(Icons.person, widget.course.level),
               ]),
               const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
               _buildSection("Course Length", [
-                _buildInfoRow(Icons.book, "9 topics"),
+                _buildInfoRow(
+                    Icons.book, "${widget.course.topics.length} topics"),
               ]),
               const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
               _buildSection("List Topics", [
-                for (var i = 0; i < 9; i++)
-                  _buildTopicCard(context, index: i + 1),
+                for (var i = 0; i < widget.course.topics.length; i++)
+                  _buildTopicCard(widget.course.topics[i], i + 1),
               ]),
               const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
               _buildSection("Suggested Tutors", [
@@ -80,7 +75,7 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
               child: SizedBox(
                 height: 200,
                 width: 300,
-                child: Image.asset('lib/assets/images/bg.png'),
+                child: Image.asset(widget.course.image),
               ),
             ),
             const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
@@ -89,13 +84,13 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Life In The Internet Age",
+                  Text(
+                    widget.course.name,
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-                  const Text(
-                    "Let's discuss how technology is changing the way we live",
+                  Text(
+                    widget.course.description,
                     style: TextStyle(
                       color: Colors.black54,
                       fontSize: 15,
@@ -193,7 +188,7 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
     );
   }
 
-  Widget _buildTopicCard(BuildContext context, {required int index}) {
+  Widget _buildTopicCard(String topic, int indexTopic) {
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, '/CourseLearnDetail'),
       child: Card(
@@ -212,13 +207,13 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      "$index.",
-                      style:
-                          const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      '$indexTopic',
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-                    const Text(
-                      "The Internet",
+                    Text(
+                      topic,
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
