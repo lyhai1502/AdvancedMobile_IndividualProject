@@ -3,11 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/model/booking.dart';
 
-class ScheduleItemWidget extends StatelessWidget {
+class ScheduleItemWidget extends StatefulWidget {
   const ScheduleItemWidget({Key? key, required this.booking}) : super(key: key);
 
   final Booking booking;
 
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return ScheduleItemWidgetState();
+  }
+}
+
+class ScheduleItemWidgetState extends State<ScheduleItemWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -19,7 +27,8 @@ class ScheduleItemWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                DateFormat('EEEE, MMM d, yyyy').format(booking.bookingStart),
+                DateFormat('EEEE, MMM d, yyyy')
+                    .format(widget.booking.bookingStart),
                 style: const TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
@@ -48,13 +57,13 @@ class ScheduleItemWidget extends StatelessWidget {
           SizedBox(
             height: 100,
             width: 100,
-            child: Image.asset(booking.teacher.avatarUrl),
+            child: Image.asset(widget.booking.teacher.avatarUrl),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                booking.teacher.name,
+                widget.booking.teacher.name,
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -69,11 +78,11 @@ class ScheduleItemWidget extends StatelessWidget {
                     width: 20,
                     height: 20,
                     child: Image.asset(
-                      'lib/assets/icons/user/country/${booking.teacher.nation.toLowerCase()}.png',
+                      'lib/assets/icons/user/country/${widget.booking.teacher.nation.toLowerCase()}.png',
                     ),
                   ),
                   const Padding(padding: EdgeInsets.only(right: 5)),
-                  Text(booking.teacher.nation),
+                  Text(widget.booking.teacher.nation),
                 ],
               ),
               Row(
@@ -115,7 +124,7 @@ class ScheduleItemWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '${DateFormat.jm().format(booking.bookingStart)} - ${DateFormat.jm().format(booking.bookingEnd)}',
+                '${DateFormat.jm().format(widget.booking.bookingStart)} - ${DateFormat.jm().format(widget.booking.bookingEnd)}',
                 style: const TextStyle(fontSize: 20, color: Colors.black),
               ),
               ElevatedButton(
@@ -145,7 +154,7 @@ class ScheduleItemWidget extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                   
+                  Navigator.pushNamed(context, '/VideoCall');
                 },
                 child: const Text("Go to meeting"),
               ),
@@ -206,8 +215,8 @@ class ScheduleItemWidget extends StatelessWidget {
             TableCell(
               child: Container(
                 padding: const EdgeInsets.all(10),
-                child: booking.request != ''
-                    ? Text(booking.request)
+                child: widget.booking.request != ''
+                    ? Text(widget.booking.request)
                     : const Text(
                         'Currently there are no requests for this class. Please write down any requests for the teacher.',
                         style: TextStyle(color: Colors.grey),

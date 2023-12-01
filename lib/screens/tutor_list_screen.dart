@@ -4,6 +4,7 @@ import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:my_app/repository/teacher_repository.dart';
 import 'package:my_app/widgets/fliter_button_list.dart';
 import 'package:my_app/widgets/tutor_list_item.dart';
+import 'package:my_app/widgets/upcoming_class_widget.dart';
 import 'package:provider/provider.dart';
 
 class TutorListScreen extends StatefulWidget {
@@ -32,37 +33,43 @@ class TutorListScreenState extends State<TutorListScreen> {
   }
 
   Widget _buildTutorList() {
-    return Container(
-      padding: const EdgeInsets.all(30),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildHeaderText(),
-          _buildSearchTextField(),
-          _buildSelectDropDown(
-            hint: 'Sort by rating/favorite',
-            options: <ValueItem>[
-              const ValueItem(
-                  label: 'Ascending rating', value: 'ascendingRating'),
-              const ValueItem(
-                  label: 'Descending rating', value: 'descendingRating'),
-              const ValueItem(
-                  label: 'Ascending favorite', value: 'ascendingFavorite'),
-              const ValueItem(
-                  label: 'Descending favorite', value: 'descendingFavorite'),
+    return Column(
+      children: [
+        UpcomingClassWidget(),
+        Container(
+          padding: const EdgeInsets.all(30),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHeaderText(),
+              _buildSearchTextField(),
+              _buildSelectDropDown(
+                hint: 'Sort by rating/favorite',
+                options: <ValueItem>[
+                  const ValueItem(
+                      label: 'Ascending rating', value: 'ascendingRating'),
+                  const ValueItem(
+                      label: 'Descending rating', value: 'descendingRating'),
+                  const ValueItem(
+                      label: 'Ascending favorite', value: 'ascendingFavorite'),
+                  const ValueItem(
+                      label: 'Descending favorite',
+                      value: 'descendingFavorite'),
+                ],
+                selectionType: SelectionType.single,
+                onOptionSelected: (options) {
+                  setState(() {
+                    teacherRepository
+                        .sortTeacherByRatingAndFavorite(options.first.value);
+                  });
+                },
+              ),
+              _buildFilterButtons(),
+              _buildRecommendTutors(),
             ],
-            selectionType: SelectionType.single,
-            onOptionSelected: (options) {
-              setState(() {
-                teacherRepository
-                    .sortTeacherByRatingAndFavorite(options.first.value);
-              });
-            },
           ),
-          _buildFilterButtons(),
-          _buildRecommendTutors(),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

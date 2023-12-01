@@ -73,6 +73,22 @@ class SetttingScreen extends StatelessWidget {
               SettingsItem(
                 onTap: () {
                   CoolAlert.show(
+                    confirmBtnText: 'OK',
+                    context: context,
+                    type: CoolAlertType.success,
+                    text: 'Become a tutor successfuly!',
+                  );
+                },
+                icons: CupertinoIcons.book,
+                title: "Becoming a tutor",
+                titleStyle: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SettingsItem(
+                onTap: () {
+                  CoolAlert.show(
                       context: context,
                       type: CoolAlertType.confirm,
                       text: 'Do you want to sign out',

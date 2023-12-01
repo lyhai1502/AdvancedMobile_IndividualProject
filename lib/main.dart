@@ -14,6 +14,7 @@ import 'package:my_app/screens/forgot_password_screem.dart';
 import 'package:my_app/screens/schedule_screen.dart';
 import 'package:my_app/screens/setting_screen.dart';
 import 'package:my_app/screens/tutor_list_screen.dart';
+import 'package:my_app/screens/video_call_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -69,8 +70,9 @@ class MyAppState extends State<MyApp> {
             '/History': (context) => const HistoryScreen(),
             '/Profile': (context) => const ProfileScreen(),
             '/Setting': (context) => const SetttingScreen(),
+            '/VideoCall': (context) => VideoCallScreen(),
           },
-          home: const LoginScreen()),
+          home: LoginScreen()),
     );
   }
 }
