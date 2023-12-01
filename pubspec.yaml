@@ -44,6 +44,7 @@ dependencies:
   booking_calendar: ^1.1.10
   babstrap_settings_screen: ^0.1.6
   intl: ^0.18.1
+  flutter_chat_widget: ^0.0.4
 
 dev_dependencies:
   flutter_test:

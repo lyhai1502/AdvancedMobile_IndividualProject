@@ -150,6 +150,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_chat_widget:
+    dependency: "direct main"
+    description:
+      name: flutter_chat_widget
+      sha256: b1c3817c16225e8852f592e98a6181b89ddf04d8ccf097f777d32655aea383cf
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
   flutter_lints:
     dependency: "direct dev"
     description:

@@ -18,11 +18,19 @@ class TutorDetailScreen extends StatefulWidget {
 }
 
 class TutorDetailScreenState extends State<TutorDetailScreen> {
+  bool isFavorited = true;
+
   final FlickManager flickManager = FlickManager(
     videoPlayerController: VideoPlayerController.network(
       'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
     ),
   );
+
+  @override
+  void initState() {
+    super.initState();
+    isFavorited = true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,24 +125,35 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
   Widget _buildTutorActions() {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
       _buildActionIconButton(
-          const Icon(
-            Icons.favorite,
-            color: Colors.red,
-          ),
-          'Favorite',
-          () {}),
-      _buildActionIconButton(const Icon(Icons.message), 'Message', () {}),
-      _buildActionIconButton(const Icon(Icons.report), 'Report', () {}),
+          isFavorited
+              ? const Icon(
+                  Icons.favorite,
+                  color: Colors.red,
+                )
+              : const Icon(
+                  Icons.favorite,
+                  color: Colors.black,
+                ),
+          'Favorite', () {
+        setState(() {
+          isFavorited = !isFavorited;
+        });
+      }),
+      _buildActionIconButton(const Icon(Icons.message), 'Message', () {
+        openDialog('Message');
+      }),
+      _buildActionIconButton(const Icon(Icons.report), 'Report', () {
+        openDialog('Report');
+      }),
     ]);
   }
 
-  Widget _buildActionIconButton(Icon icon, String label, Function() function) {
+  Widget _buildActionIconButton(
+      Icon icon, String label, VoidCallback function) {
     return Column(
       children: [
         IconButton(
-          onPressed: () {
-            function();
-          },
+          onPressed: function,
           icon: icon,
           color: Colors.blue,
         ),
@@ -227,4 +246,18 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
       ),
     );
   }
+
+  Future openDialog(String content) => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            title: Text(content),
+            content: const TextField(),
+            actions: [
+              CustomButtonWidget(
+                  content: 'Send',
+                  function: () {
+                    Navigator.pop(context);
+                  })
+            ],
+          ));
 }

@@ -1,5 +1,3 @@
-import 'package:my_app/model/topic.dart';
-
 class Course {
   String id = '';
   String name = '';

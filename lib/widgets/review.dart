@@ -15,7 +15,7 @@ class ReviewWidget extends StatelessWidget {
             SizedBox(
               height: 40,
               width: 40,
-              child: Image.asset('lib/assets/icons/facebook.png'),
+              child: Image.asset('lib/assets/icons/user/avatar/avatar10.png'),
             ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 5),
@@ -28,7 +28,7 @@ class ReviewWidget extends StatelessWidget {
                   style: TextStyle(color: Colors.black),
                   children: [
                     TextSpan(
-                      text: 'Name',
+                      text: 'Keegan',
                       style: TextStyle(fontSize: 15, color: Colors.black),
                     ),
                     TextSpan(
@@ -36,7 +36,7 @@ class ReviewWidget extends StatelessWidget {
                     ),
                     TextSpan(
                       style: TextStyle(color: Colors.grey),
-                      text: '4 months ago',
+                      text: '1 months ago',
                     )
                   ],
                 )),
@@ -50,7 +50,7 @@ class ReviewWidget extends StatelessWidget {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 5),
                 ),
-                const Text('Comment here')
+                const Text('Excellent')
               ],
             )
           ],
