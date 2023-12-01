@@ -7,8 +7,9 @@ import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'package:provider/provider.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
-  const ResetPasswordScreen({Key? key}) : super(key: key);
+  const ResetPasswordScreen({Key? key, required this.email}) : super(key: key);
 
+  final String email;
   @override
   State<StatefulWidget> createState() {
     return ResetPasswordScreenState();
@@ -16,17 +17,14 @@ class ResetPasswordScreen extends StatefulWidget {
 }
 
 class ResetPasswordScreenState extends State<ResetPasswordScreen> {
-  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController passwordConfirmController =
       TextEditingController();
 
-  final _formkey = GlobalKey<FormState>();
   final GlobalKey<FlutterPwValidatorState> _validatorKey =
       GlobalKey<FlutterPwValidatorState>();
 
   bool _isObscured = false;
-  bool _isEmailValid = false;
   bool _isPasswordValid = false;
   bool _isConfirmPassword = true;
 
@@ -38,11 +36,12 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.email);
     UserRepository userRepository = context.watch<UserRepository>();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Register'),
+        title: const Text('Reset password'),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -50,7 +49,7 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
           child: Column(
             children: [
               _buildTextFields(),
-              _buildRegisterButton(userRepository),
+              _buildConfirmButton(userRepository),
             ],
           ),
         ),
@@ -62,10 +61,6 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildTextField('Email', 'mail@example.com'),
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 8),
-        ),
         _buildPasswordField(),
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 8),
@@ -75,48 +70,12 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
     );
   }
 
-  Widget _buildTextField(String label, String hintText) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label.toUpperCase(),
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            color: Colors.grey,
-          ),
-        ),
-        Form(
-          key: _formkey,
-          child: TextFormField(
-            validator: MultiValidator([
-              RequiredValidator(errorText: 'Enter email address'),
-              EmailValidator(errorText: 'Please correct email filled'),
-            ]),
-            controller: emailController,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              hintText: hintText,
-              errorStyle: const TextStyle(fontSize: 15.0),
-            ),
-            onChanged: (value) {
-              _isEmailValid = _formkey.currentState!.validate();
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildPasswordField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Password'.toUpperCase(),
+          'New password'.toUpperCase(),
           style: const TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.bold,
@@ -217,7 +176,7 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
     );
   }
 
-  Widget _buildRegisterButton(UserRepository userRepository) {
+  Widget _buildConfirmButton(UserRepository userRepository) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
       child: Row(
@@ -225,23 +184,17 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
           Expanded(
             child: ElevatedButton(
               onPressed: () {
-                if (userRepository.isUserExisted(emailController.text)) {
-                  CoolAlert.show(
-                    context: context,
-                    type: CoolAlertType.warning,
-                    text: 'Your email is existed!',
-                  );
-                } else if (_isEmailValid &&
-                    _isPasswordValid &&
-                    _isConfirmPassword) {
-                  userRepository.add(User.createUser(
-                      emailController.text, passwordController.text));
+                if (_isPasswordValid && _isConfirmPassword) {
+                  userRepository
+                      .getUserByEmail(widget.email)
+                      ?.changePassword(passwordController.text);
                   CoolAlert.show(
                     confirmBtnText: 'OK',
                     context: context,
                     type: CoolAlertType.success,
                     text: 'Register successfully!',
                     onConfirmBtnTap: () {
+                      Navigator.pop(context);
                       Navigator.pop(context);
                     },
                   );
@@ -254,7 +207,7 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 backgroundColor: MaterialStateProperty.all(Colors.blue),
                 foregroundColor: MaterialStateProperty.all(Colors.white),
               ),
-              child: Text('Register'.toUpperCase()),
+              child: Text('Confirm'.toUpperCase()),
             ),
           ),
         ],

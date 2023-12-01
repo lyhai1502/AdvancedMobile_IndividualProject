@@ -69,4 +69,9 @@ class User extends ChangeNotifier {
     avatarUrl = imageUrl;
     notifyListeners();
   }
+
+  void changePassword(String password) {
+    this.password = password;
+    notifyListeners();
+  }
 }

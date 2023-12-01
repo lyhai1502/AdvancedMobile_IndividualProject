@@ -1,5 +1,7 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/repository/user_repository.dart';
+import 'package:my_app/screens/reset_password_screen.dart';
 import 'package:provider/provider.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -74,8 +76,22 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           Expanded(
             child: ElevatedButton(
               onPressed: () {
-                _sendResetEmail();
-                Navigator.pushNamed(context, '/ResetPassword');
+                if (userRepository.getUserByEmail(emailController.text) !=
+                    null) {
+                  _sendResetEmail();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ResetPasswordScreen(
+                              email: emailController.text)));
+                } else {
+                  CoolAlert.show(
+                    confirmBtnText: 'OK',
+                    context: context,
+                    type: CoolAlertType.warning,
+                    text: 'Your email not existed',
+                  );
+                }
               },
               style: ButtonStyle(
                 textStyle: MaterialStateProperty.all(
