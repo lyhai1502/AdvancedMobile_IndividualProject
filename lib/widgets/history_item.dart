@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/model/booking.dart';
 
-class ScheduleItemWidget extends StatelessWidget {
-  const ScheduleItemWidget({Key? key, required this.booking}) : super(key: key);
+class HistoryItemWidget extends StatelessWidget {
+  const HistoryItemWidget({Key? key, required this.booking}) : super(key: key);
 
   final Booking booking;
 
@@ -26,7 +26,8 @@ class ScheduleItemWidget extends StatelessWidget {
                   color: Colors.black,
                 ),
               ),
-              const Text("1 lesson"),
+              Text(
+                  '${DateTime.now().hour - booking.bookingStart.hour - 1} hours ago'),
               _buildProfileInfo(),
               _buildMeetingDetails(),
             ],
@@ -107,48 +108,122 @@ class ScheduleItemWidget extends StatelessWidget {
   Widget _buildMeetingDetails() {
     return Container(
       color: Colors.white,
-      margin: const EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 10),
       padding: const EdgeInsets.all(10),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '${DateFormat.jm().format(booking.bookingStart)} - ${DateFormat.jm().format(booking.bookingEnd)}',
-                style: const TextStyle(fontSize: 20, color: Colors.black),
-              ),
-              ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.red),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                  ),
-                ),
-                onPressed: () {},
-                child: const Text("Cancel"),
-              ),
-            ],
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Text(
+              '${DateFormat.jm().format(booking.bookingStart)} - ${DateFormat.jm().format(booking.bookingEnd)}',
+              style: const TextStyle(fontSize: 20, color: Colors.black),
+            ),
           ),
-          _buildTable(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+          Table(
+            border: TableBorder.all(color: Colors.black12),
+            columnWidths: const {
+              0: FlexColumnWidth(1.0),
+              1: FlexColumnWidth(2.0)
+            },
             children: [
-              ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
+              TableRow(children: [
+                TableCell(
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    height: 40,
+                    decoration: const BoxDecoration(
+                      color: Colors.white24,
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Request for lesson",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                onPressed: () {
-                   
-                },
-                child: const Text("Go to meeting"),
-              ),
+              ]),
+              TableRow(children: [
+                TableCell(
+                    child: Container(
+                  padding: const EdgeInsets.all(10),
+                  child: booking.request != ''
+                      ? Text(booking.request)
+                      : const Text(
+                          'No request for lesson',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                ))
+              ]),
+              TableRow(children: [
+                TableCell(
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    height: 40,
+                    decoration: const BoxDecoration(
+                      color: Colors.white24,
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Review from tutor",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ]),
+              TableRow(children: [
+                TableCell(
+                    child: Container(
+                  padding: const EdgeInsets.all(10),
+                  child: const Text(
+                    'Tutor have not reviewed yet',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                )),
+              ]),
+              TableRow(children: [
+                TableCell(
+                    child: Container(
+                        padding: const EdgeInsets.all(10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            RichText(
+                                text: TextSpan(
+                                    style: const TextStyle(color: Colors.black),
+                                    children: [
+                                  TextSpan(
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blueAccent),
+                                    text: 'Add a rating',
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {},
+                                  )
+                                ])),
+                            RichText(
+                                text: TextSpan(
+                                    style: const TextStyle(color: Colors.black),
+                                    children: [
+                                  TextSpan(
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blueAccent),
+                                    text: 'Report',
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {},
+                                  )
+                                ]))
+                          ],
+                        ))),
+              ]),
             ],
           ),
         ],

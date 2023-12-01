@@ -20,8 +20,9 @@ class ScheduleScreenState extends State<ScheduleScreen> {
   Widget build(BuildContext context) {
     BookingRepository bookingRepository = context.watch<BookingRepository>();
     User user = context.watch<User>();
-    List<Booking> list = bookingRepository.getAllByUserId(user.userId);
-    sortScheduleItemByAscendingTime(list);
+    List<Booking>? list =
+        bookingRepository.getAllAfterPresentByUserId(user.userId);
+    BookingRepository.sortScheduleItemByAscendingTime(list);
 
     // TODO: implement build
     return SingleChildScrollView(
@@ -149,9 +150,5 @@ class ScheduleScreenState extends State<ScheduleScreen> {
         ]),
       ),
     );
-  }
-
-  void sortScheduleItemByAscendingTime(List<Booking> list) {
-    list.sort((a, b) => a.bookingStart.compareTo(b.bookingStart));
   }
 }

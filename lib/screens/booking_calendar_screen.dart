@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:booking_calendar/booking_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -62,6 +63,14 @@ class BookingCalendarScreenState extends State<BookingCalendarScreen> {
     widget.bookingRepository.add(booking);
 
     requestController.clear();
+
+    // ignore: use_build_context_synchronously
+    CoolAlert.show(
+      confirmBtnText: 'OK',
+      context: context,
+      type: CoolAlertType.success,
+      text: 'Booking successfuly!',
+    );
 
     // print(widget.bookingRepository.list.first.bookingStart);
     // print('${newBooking.toJson()} has been uploaded');
