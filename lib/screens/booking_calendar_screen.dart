@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:booking_calendar/booking_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:my_app/model/booking.dart';
+import 'package:my_app/model/teacher.dart';
+import 'package:my_app/model/user.dart';
+import 'package:my_app/repository/booking_repository.dart';
+import 'package:provider/provider.dart';
 
 class BookingCalendarScreen extends StatefulWidget {
-  const BookingCalendarScreen({Key? key}) : super(key: key);
+  BookingCalendarScreen({super.key, required this.teacher});
+
+  final Teacher teacher;
+  User user = User();
+  BookingRepository bookingRepository = BookingRepository();
 
   @override
   State<BookingCalendarScreen> createState() => BookingCalendarScreenState();
@@ -21,7 +30,7 @@ class BookingCalendarScreenState extends State<BookingCalendarScreen> {
     // DateTime.now().startOfDay
     // DateTime.now().endOfDay
     mockBookingService = BookingService(
-        serviceName: 'Mock Service',
+        serviceName: 'Booking Service',
         serviceDuration: 30,
         bookingEnd: DateTime(now.year, now.month, now.day, 18, 0),
         bookingStart: DateTime(now.year, now.month, now.day, 8, 0));
@@ -37,7 +46,18 @@ class BookingCalendarScreenState extends State<BookingCalendarScreen> {
     await Future.delayed(const Duration(seconds: 1));
     converted.add(DateTimeRange(
         start: newBooking.bookingStart, end: newBooking.bookingEnd));
-    print('${newBooking.toJson()} has been uploaded');
+
+    Booking booking = Booking();
+
+    booking.userId = widget.user.userId;
+    booking.teacherId = widget.teacher.id;
+    booking.bookingStart = newBooking.bookingStart;
+    booking.bookingEnd = newBooking.bookingEnd;
+
+    widget.bookingRepository.add(booking);
+
+    // print(widget.bookingRepository.list.first.bookingStart);
+    // print('${newBooking.toJson()} has been uploaded');
   }
 
   List<DateTimeRange> converted = [];
@@ -77,9 +97,16 @@ class BookingCalendarScreenState extends State<BookingCalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
+    User user = context.watch<User>();
+    widget.user = user;
+    BookingRepository bookingRepository = context.watch<BookingRepository>();
+    widget.bookingRepository = bookingRepository;
+
+    String? name = widget.teacher.name;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Booking Class Schedule'),
+        title: Text(name),
       ),
       body: Center(
         child: BookingCalendar(

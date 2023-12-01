@@ -48,23 +48,6 @@ class User extends ChangeNotifier {
     notifyListeners();
   }
 
-  void save(
-      TextEditingController nameController,
-      TextEditingController countryController,
-      TextEditingController phoneNumberController,
-      TextEditingController birthdayController,
-      TextEditingController levelController,
-      TextEditingController studyScheduleController) {
-    name = nameController.text;
-    country = countryController.text;
-    phoneNumber = phoneNumberController.text;
-    birthday = birthdayController.text;
-    level = levelController.text;
-    studySchedule = studyScheduleController.text;
-
-    notifyListeners();
-  }
-
   void changeAvatar(String imageUrl) {
     avatarUrl = imageUrl;
     notifyListeners();
@@ -72,6 +55,22 @@ class User extends ChangeNotifier {
 
   void changePassword(String password) {
     this.password = password;
+    notifyListeners();
+  }
+
+  void cleanUser() {
+    userId = '';
+    email = '';
+    password = '';
+    name = '';
+    avatarUrl = '';
+    country = '';
+    phoneNumber = '';
+    birthday = '';
+    level = '';
+    wantToLearn = [];
+    studySchedule = '';
+
     notifyListeners();
   }
 }

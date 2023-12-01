@@ -142,8 +142,19 @@ class ProfileScreenState extends State<ProfileScreen> {
       child: CustomButtonWidget(
           content: 'Save change',
           function: () {
-            user.save(nameController, countryController, phoneNumberController,
-                birthdayController, levelController, studyScheduleController);
+            User saveUser = User();
+            saveUser.email = user.email;
+            saveUser.password = user.password;
+
+            saveUser.name = nameController.text;
+            saveUser.country = countryController.text;
+            saveUser.phoneNumber = phoneNumberController.text;
+            saveUser.birthday = birthdayController.text;
+            saveUser.level = levelController.text;
+            saveUser.studySchedule = studyScheduleController.text;
+            saveUser.avatarUrl = user.avatarUrl;
+
+            user.cloneUser(saveUser);
 
             CoolAlert.show(
               confirmBtnText: 'OK',

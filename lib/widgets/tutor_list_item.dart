@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/model/teacher.dart';
 import 'package:my_app/repository/teacher_repository.dart';
+import 'package:my_app/screens/booking_calendar_screen.dart';
 import 'package:my_app/screens/tutor_detail_screen.dart';
 import 'package:my_app/widgets/custom_button.dart';
 import 'package:my_app/widgets/rating.dart';
@@ -22,50 +23,43 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
   @override
   Widget build(BuildContext context) {
     TeacherRepository teacherRepository = context.watch<TeacherRepository>();
-    Teacher teacherClicked = Teacher();
 
     // TODO: implement build
-    return MultiProvider(
-      providers: [
-        Provider(create: (context) => teacherClicked),
-      ],
-      child: Center(
-        child: Column(children: [
-          for (Teacher teacher in (teacherRepository.filter.isEmpty &&
-                  teacherRepository.filterName == 'All'
-              ? teacherRepository.list
-              : teacherRepository.filter))
-            GestureDetector(
-              onTap: () {
-                teacherClicked = teacher;
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            TutorDetailScreen(teacher: teacher)));
-              },
-              child: Card(
-                child: Container(
-                  padding: const EdgeInsets.all(15),
-                  child: Column(
-                    children: [
-                      _buildAvatar(teacher.avatarUrl),
-                      _buildName(teacher.name),
-                      _buildNation(teacher.nation),
-                      RatingWidget(rating: teacher.rating),
-                      _buildSpecialities(teacher.specialities),
-                      _buildDescription(teacher.description),
-                      _buildButtons(teacher),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                      ),
-                    ],
-                  ),
+    return Center(
+      child: Column(children: [
+        for (Teacher teacher in (teacherRepository.filter.isEmpty &&
+                teacherRepository.filterName == 'All'
+            ? teacherRepository.list
+            : teacherRepository.filter))
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          TutorDetailScreen(teacher: teacher)));
+            },
+            child: Card(
+              child: Container(
+                padding: const EdgeInsets.all(15),
+                child: Column(
+                  children: [
+                    _buildAvatar(teacher.avatarUrl),
+                    _buildName(teacher.name),
+                    _buildNation(teacher.nation),
+                    RatingWidget(rating: teacher.rating),
+                    _buildSpecialities(teacher.specialities),
+                    _buildDescription(teacher.description),
+                    _buildButtons(teacher),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 5),
+                    ),
+                  ],
                 ),
               ),
             ),
-        ]),
-      ),
+          ),
+      ]),
     );
   }
 
@@ -172,7 +166,11 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
             foregroundColor: MaterialStateProperty.all(Colors.white),
           ),
           onPressed: () {
-            Navigator.pushNamed(context, '/BookingCalendar');
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        BookingCalendarScreen(teacher: teacher)));
           },
           icon: const Icon(
             Icons.calendar_month,

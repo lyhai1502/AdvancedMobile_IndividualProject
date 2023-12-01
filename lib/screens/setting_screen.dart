@@ -1,12 +1,16 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:babstrap_settings_screen/babstrap_settings_screen.dart';
+import 'package:my_app/model/user.dart';
+import 'package:provider/provider.dart';
 
 class SetttingScreen extends StatelessWidget {
   const SetttingScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    User user = context.watch<User>();
     return Padding(
       padding: const EdgeInsets.all(10),
       child: ListView(
@@ -67,7 +71,18 @@ class SetttingScreen extends StatelessWidget {
                 title: "Profile",
               ),
               SettingsItem(
-                onTap: () {},
+                onTap: () {
+                  CoolAlert.show(
+                      context: context,
+                      type: CoolAlertType.confirm,
+                      text: 'Do you want to sign out',
+                      confirmBtnText: 'Yes',
+                      confirmBtnColor: Colors.green,
+                      onConfirmBtnTap: () {
+                        user.cleanUser();
+                        Navigator.pop(context);
+                      });
+                },
                 icons: Icons.exit_to_app_rounded,
                 title: "Sign Out",
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:my_app/model/teacher.dart';
+import 'package:my_app/screens/booking_calendar_screen.dart';
 import 'package:my_app/widgets/custom_button.dart';
 import 'package:my_app/widgets/rating.dart';
 import 'package:my_app/widgets/review.dart';
@@ -62,7 +63,7 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
     int rating = teacher.rating;
     String nation = teacher.nation;
     String nationUrlLowcase = nation.toLowerCase();
-    String nationUrl = 'lib/assets/icons/teacher/country/$nationUrlLowcase.png';
+    String nationUrl = 'lib/assets/icons/user/country/$nationUrlLowcase.png';
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -150,7 +151,10 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildHeaderOfInformation("Education"),
-        CustomButtonWidget(content: teacher.education, function: (){},),
+        CustomButtonWidget(
+          content: teacher.education,
+          function: () {},
+        ),
         const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
         _buildHeaderOfInformation('Languages'),
         _buildMultiCustomButtons(teacher.specialities),
@@ -178,7 +182,11 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
   Widget _buildMultiCustomButtons(List<String> contents) {
     return Wrap(
       children: [
-        for (String item in contents) CustomButtonWidget(content: item, function: (){},)
+        for (String item in contents)
+          CustomButtonWidget(
+            content: item,
+            function: () {},
+          )
       ],
     );
   }
@@ -205,7 +213,11 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
           foregroundColor: MaterialStateProperty.all(Colors.white),
         ),
         onPressed: () {
-          Navigator.pushNamed(context, '/BookingCalendar');
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      BookingCalendarScreen(teacher: widget.teacher)));
         },
         icon: const Icon(
           Icons.calendar_month,
