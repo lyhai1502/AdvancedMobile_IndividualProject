@@ -7,6 +7,7 @@ import 'package:my_app/model/user.dart';
 import 'package:my_app/repository/booking_repository.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class BookingCalendarScreen extends StatefulWidget {
   BookingCalendarScreen({super.key, required this.teacher});
 
@@ -21,6 +22,8 @@ class BookingCalendarScreen extends StatefulWidget {
 class BookingCalendarScreenState extends State<BookingCalendarScreen> {
   final now = DateTime.now();
   late BookingService mockBookingService;
+
+  TextEditingController requestController = TextEditingController();
 
   @override
   void initState() {
@@ -50,11 +53,15 @@ class BookingCalendarScreenState extends State<BookingCalendarScreen> {
     Booking booking = Booking();
 
     booking.userId = widget.user.userId;
-    booking.teacherId = widget.teacher.id;
+    booking.teacher = widget.teacher;
     booking.bookingStart = newBooking.bookingStart;
-    booking.bookingEnd = newBooking.bookingEnd;
+    booking.bookingEnd =
+        newBooking.bookingEnd.subtract(const Duration(minutes: 5));
+    booking.request = requestController.text;
 
     widget.bookingRepository.add(booking);
+
+    requestController.clear();
 
     // print(widget.bookingRepository.list.first.bookingStart);
     // print('${newBooking.toJson()} has been uploaded');
@@ -101,32 +108,53 @@ class BookingCalendarScreenState extends State<BookingCalendarScreen> {
     widget.user = user;
     BookingRepository bookingRepository = context.watch<BookingRepository>();
     widget.bookingRepository = bookingRepository;
-
     String? name = widget.teacher.name;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(name),
       ),
-      body: Center(
-        child: BookingCalendar(
-          bookingService: mockBookingService,
-          convertStreamResultToDateTimeRanges: convertStreamResultMock,
-          getBookingStream: getBookingStreamMock,
-          uploadBooking: uploadBookingMock,
-          pauseSlots: generatePauseSlots(),
-          hideBreakTime: false,
-          loadingWidget: const Text('Fetching data...'),
-          uploadingWidget: const CircularProgressIndicator(),
-          locale: 'hu_HU',
-          startingDayOfWeek: StartingDayOfWeek.tuesday,
-          wholeDayIsBookedWidget:
-              const Text('Sorry, for this day everything is booked'),
-          bookingButtonColor: Colors.blue,
-          availableSlotColor: Colors.blue,
-          //disabledDates: [DateTime(2023, 1, 20)],
-          //disabledDays: [6, 7],
-        ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Center(
+              child: BookingCalendar(
+                bookingService: mockBookingService,
+                convertStreamResultToDateTimeRanges: convertStreamResultMock,
+                getBookingStream: getBookingStreamMock,
+                uploadBooking: uploadBookingMock,
+                pauseSlots: generatePauseSlots(),
+                hideBreakTime: false,
+                loadingWidget: const Text('Fetching data...'),
+                uploadingWidget: const CircularProgressIndicator(),
+                locale: 'hu_HU',
+                startingDayOfWeek: StartingDayOfWeek.tuesday,
+                wholeDayIsBookedWidget:
+                    const Text('Sorry, for this day everything is booked'),
+                bookingButtonColor: Colors.blue,
+                availableSlotColor: Colors.blue,
+
+                //disabledDates: [DateTime(2023, 1, 20)],
+                //disabledDays: [6, 7],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: TextField(
+              controller: requestController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                hintText: 'Enter your note here',
+              ),
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 20),
+          )
+        ],
       ),
     );
   }

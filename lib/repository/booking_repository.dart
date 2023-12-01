@@ -13,4 +13,15 @@ class BookingRepository extends ChangeNotifier {
     list.remove(booking);
     notifyListeners();
   }
+
+  List<Booking> getAllByUserId(String userId) {
+    List<Booking> listTemp = [];
+
+    for (Booking booking in list) {
+      if (booking.userId == userId) {
+        listTemp.add(booking);
+      }
+    }
+    return listTemp;
+  }
 }

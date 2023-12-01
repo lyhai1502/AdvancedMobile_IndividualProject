@@ -15,6 +15,15 @@ class TeacherRepository extends ChangeNotifier {
     list.remove(teacher);
   }
 
+  Teacher? getTeacherById(String id) {
+    for (Teacher teacher in list) {
+      if (teacher.id == id) {
+        return teacher;
+      }
+    }
+    return null;
+  }
+
   List<Teacher>? getTeachersByName(String name) {
     List<Teacher> listTemp = [];
     for (Teacher teacher in list) {
