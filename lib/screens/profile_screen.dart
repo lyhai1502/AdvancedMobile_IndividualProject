@@ -2,14 +2,9 @@ import 'dart:math';
 
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
-import 'package:flick_video_player/flick_video_player.dart';
-import 'package:my_app/model/teacher.dart';
 import 'package:my_app/model/user.dart';
 import 'package:my_app/widgets/custom_button.dart';
-import 'package:my_app/widgets/rating.dart';
-import 'package:my_app/widgets/review.dart';
 import 'package:provider/provider.dart';
-import 'package:video_player/video_player.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -31,18 +26,23 @@ class ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     User user = context.watch<User>();
-    return SingleChildScrollView(
-      child: Container(
-        margin: const EdgeInsets.all(30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildUserHeader(user),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-            _buildUserInformation(user),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-            _buildSaveButton(user)
-          ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Profile'),
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.all(30),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildUserHeader(user),
+              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+              _buildUserInformation(user),
+              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+              _buildSaveButton(user)
+            ],
+          ),
         ),
       ),
     );
@@ -83,7 +83,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                   function: () {
                     var random = Random().nextInt(10);
                     user.changeAvatar(
-                        'lib/assets/icons/teacher/avatar/avatar$random.png');
+                        'lib/assets/icons/user/avatar/avatar$random.png');
                   })
             ],
           ),

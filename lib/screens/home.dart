@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/screens/course_list.dart';
 import 'package:my_app/screens/history_screen.dart';
-import 'package:my_app/screens/profile_screen.dart';
 import 'package:my_app/screens/schedule_screen.dart';
+import 'package:my_app/screens/setting_screen.dart';
 import 'package:my_app/screens/tutor_list_screen.dart';
 import 'package:my_app/widgets/app_bar.dart';
 
@@ -16,12 +16,12 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[
+  static final List<Widget> _widgetOptions = <Widget>[
     TutorListScreen(),
     ScheduleScreen(),
     HistoryScreen(),
     CourseListScreen(),
-    ProfileScreen()
+    SetttingScreen()
   ];
 
   @override
@@ -56,10 +56,8 @@ class HomeScreenState extends State<HomeScreen> {
             label: 'Courses',
           ),
           BottomNavigationBarItem(
-            icon: ImageIcon(
-              AssetImage('lib/assets/icons/navbar/user.png'),
-            ),
-            label: 'Profile',
+            icon: Icon(Icons.menu),
+            label: 'Menu',
           ),
         ],
         currentIndex: _selectedIndex,

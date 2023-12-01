@@ -85,7 +85,7 @@ class TeacherRepository extends ChangeNotifier {
   TeacherRepository() {
     list.add(Teacher.createTeacher(
         'Alice Johnson',
-        'lib/assets/icons/teacher/avatar/avatar1.png',
+        'lib/assets/icons/user/avatar/avatar1.png',
         4,
         'USA',
         'Experienced English teacher passionate about literature.',
@@ -99,7 +99,7 @@ class TeacherRepository extends ChangeNotifier {
 
     list.add(Teacher.createTeacher(
         'Carlos Ramirez',
-        'lib/assets/icons/teacher/avatar/avatar2.png',
+        'lib/assets/icons/user/avatar/avatar2.png',
         2,
         'Mexico',
         'Dynamic Mexico teacher with a focus on conversational skills.',
@@ -113,7 +113,7 @@ class TeacherRepository extends ChangeNotifier {
 
     list.add(Teacher.createTeacher(
         'Emily Chen',
-        'lib/assets/icons/teacher/avatar/avatar3.png',
+        'lib/assets/icons/user/avatar/avatar3.png',
         4,
         'China',
         'Passionate Mandarin teacher dedicated to cultural immersion.',
@@ -127,7 +127,7 @@ class TeacherRepository extends ChangeNotifier {
 
     list.add(Teacher.createTeacher(
         'Daniel Smith',
-        'lib/assets/icons/teacher/avatar/avatar4.png',
+        'lib/assets/icons/user/avatar/avatar4.png',
         5,
         'Canada',
         'Interactive French teacher with a love for language games.',
@@ -141,7 +141,7 @@ class TeacherRepository extends ChangeNotifier {
 
     list.add(Teacher.createTeacher(
         'Isabella Martinez',
-        'lib/assets/icons/teacher/avatar/avatar5.png',
+        'lib/assets/icons/user/avatar/avatar5.png',
         2,
         'Spain',
         'Energetic Spanish teacher specializing in practical language skills.',
@@ -155,7 +155,7 @@ class TeacherRepository extends ChangeNotifier {
 
     list.add(Teacher.createTeacher(
         'William Brown',
-        'lib/assets/icons/teacher/avatar/avatar6.png',
+        'lib/assets/icons/user/avatar/avatar6.png',
         1,
         'UK',
         'Creative English teacher fostering a love for storytelling.',
@@ -169,7 +169,7 @@ class TeacherRepository extends ChangeNotifier {
 
     list.add(Teacher.createTeacher(
         'Sophie Dubois',
-        'lib/assets/icons/teacher/avatar/avatar7.png',
+        'lib/assets/icons/user/avatar/avatar7.png',
         3,
         'France',
         'Innovative French teacher integrating technology into lessons.',
@@ -184,7 +184,7 @@ class TeacherRepository extends ChangeNotifier {
 // Example 8
     list.add(Teacher.createTeacher(
         'Liam Nguyen',
-        'lib/assets/icons/teacher/avatar/avatar8.png',
+        'lib/assets/icons/user/avatar/avatar8.png',
         3,
         'Vietnam',
         'Adaptable Vietnamese teacher using multimedia for engaging lessons.',
@@ -198,7 +198,7 @@ class TeacherRepository extends ChangeNotifier {
 
     list.add(Teacher.createTeacher(
         'Olivia Hansen',
-        'lib/assets/icons/teacher/avatar/avatar9.png',
+        'lib/assets/icons/user/avatar/avatar9.png',
         1,
         'Australia',
         'Dedicated ESL teacher promoting a multicultural learning environment.',
@@ -212,7 +212,7 @@ class TeacherRepository extends ChangeNotifier {
 
     list.add(Teacher.createTeacher(
         'Muhammad Ali',
-        'lib/assets/icons/teacher/avatar/avatar10.png',
+        'lib/assets/icons/user/avatar/avatar10.png',
         5,
         'Pakistan',
         'Motivated Urdu teacher with a focus on practical communication skills.',

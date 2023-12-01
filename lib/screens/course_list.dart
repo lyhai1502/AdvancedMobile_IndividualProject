@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
-import 'package:my_app/widgets/app_bar.dart';
 
 class CourseListScreen extends StatefulWidget {
   const CourseListScreen({Key? key}) : super(key: key);

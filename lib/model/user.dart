@@ -21,7 +21,7 @@ class User extends ChangeNotifier {
     user.email = userEmail;
     user.name = userEmail;
     user.password = userPassword;
-    user.avatarUrl = 'lib/assets/icons/teacher/avatar/avatar0.png';
+    user.avatarUrl = 'lib/assets/icons/user/avatar/avatar0.png';
 
     return user;
   }

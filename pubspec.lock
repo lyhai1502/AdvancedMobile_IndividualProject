@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
+  babstrap_settings_screen:
+    dependency: "direct main"
+    description:
+      name: babstrap_settings_screen
+      sha256: "0b4f52da4f3cfd7bedce74a3432de8c5ecccdf1874fbf1e2402759a1e704b296"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.6"
   booking_calendar:
     dependency: "direct main"
     description:
@@ -201,7 +209,7 @@ packages:
     source: hosted
     version: "4.0.2"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
       sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"

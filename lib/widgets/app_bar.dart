@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/widgets/menu.dart';
-import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class AppBarWidget extends StatefulWidget implements PreferredSizeWidget {

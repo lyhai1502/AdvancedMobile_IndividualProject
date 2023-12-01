@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/widgets/app_bar.dart';
 
 class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({super.key});
@@ -171,7 +170,7 @@ class ScheduleScreenState extends State<ScheduleScreen> {
                                           width: 20,
                                           height: 20,
                                           child: Image.asset(
-                                              'lib/assets/icons/vietnam.png'),
+                                              'lib/assets/icons/user/country/vietnam.png'),
                                         ),
                                         const Padding(
                                           padding: EdgeInsets.only(right: 5),

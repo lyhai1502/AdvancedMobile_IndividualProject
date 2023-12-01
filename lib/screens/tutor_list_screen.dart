@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:my_app/repository/teacher_repository.dart';
-import 'package:my_app/widgets/app_bar.dart';
 import 'package:my_app/widgets/fliter_button_list.dart';
 import 'package:my_app/widgets/tutor_list_item.dart';
 import 'package:provider/provider.dart';

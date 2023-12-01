@@ -11,8 +11,8 @@ import 'package:my_app/screens/login_screen.dart';
 import 'package:my_app/screens/profile_screen.dart';
 import 'package:my_app/screens/register_screen.dart';
 import 'package:my_app/screens/forgot_password_screem.dart';
-import 'package:my_app/screens/reset_password_screen.dart';
 import 'package:my_app/screens/schedule_screen.dart';
+import 'package:my_app/screens/setting_screen.dart';
 import 'package:my_app/screens/tutor_list_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -68,6 +68,7 @@ class MyAppState extends State<MyApp> {
             '/History': (context) => const HistoryScreen(),
             '/BookingCalendar': (context) => const BookingCalendarScreen(),
             '/Profile': (context) => const ProfileScreen(),
+            '/Setting': (context) => const SetttingScreen(),
           },
           home: const LoginScreen()),
     );

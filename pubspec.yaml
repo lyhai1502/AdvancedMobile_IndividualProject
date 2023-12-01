@@ -42,6 +42,8 @@ dependencies:
   provider: ^6.1.1
   cool_alert: ^2.0.1
   booking_calendar: ^1.1.10
+  babstrap_settings_screen: ^0.1.6
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
@@ -68,9 +70,9 @@ flutter:
   assets:
     - lib/assets/
     - lib/assets/icons/
-    - lib/assets/icons/teacher/
-    - lib/assets/icons/teacher/avatar/
-    - lib/assets/icons/teacher/country/
+    - lib/assets/icons/user/
+    - lib/assets/icons/user/country/
+    - lib/assets/icons/user/avatar/
     - lib/assets/icons/navbar/
     - lib/assets/images/
 

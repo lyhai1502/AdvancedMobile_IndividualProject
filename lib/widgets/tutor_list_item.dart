@@ -102,7 +102,7 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
             width: 20,
             height: 20,
             child: Image.asset(
-              'lib/assets/icons/teacher/country/$nationUrl.png',
+              'lib/assets/icons/user/country/$nationUrl.png',
             ),
           ),
           const Padding(
