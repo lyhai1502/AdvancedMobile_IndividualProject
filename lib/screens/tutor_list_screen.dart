@@ -26,11 +26,8 @@ class TutorListScreenState extends State<TutorListScreen> {
       providers: [
         ChangeNotifierProvider(create: (context) => teacherRepository),
       ],
-      child: Scaffold(
-        appBar: AppBarWidget(),
-        body: SingleChildScrollView(
-          child: _buildTutorList(),
-        ),
+      child: SingleChildScrollView(
+        child: _buildTutorList(),
       ),
     );
   }
@@ -138,8 +135,6 @@ class TutorListScreenState extends State<TutorListScreen> {
       ],
     );
   }
-
-
 
   Widget _buildRecommendTutors() {
     return Column(

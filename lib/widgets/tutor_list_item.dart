@@ -120,7 +120,10 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
       child: Wrap(
         children: [
           for (String item in specialities)
-            CustomButtonWidget(content: item)
+            CustomButtonWidget(
+              content: item,
+              function: () {},
+            )
         ],
       ),
     );
@@ -161,16 +164,18 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
           style: ButtonStyle(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
-                side: const BorderSide(color: Colors.blue),
+                side: const BorderSide(color: Colors.white),
                 borderRadius: BorderRadius.circular(15.0),
               ),
             ),
-            backgroundColor: MaterialStateProperty.all(Colors.white),
-            foregroundColor: MaterialStateProperty.all(Colors.blue),
+            backgroundColor: MaterialStateProperty.all(Colors.green),
+            foregroundColor: MaterialStateProperty.all(Colors.white),
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, '/BookingCalendar');
+          },
           icon: const Icon(
-            Icons.task,
+            Icons.calendar_month,
             size: 24.0,
           ),
           label: const Text('Book'),

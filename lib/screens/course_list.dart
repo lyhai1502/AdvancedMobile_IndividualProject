@@ -4,7 +4,7 @@ import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:my_app/widgets/app_bar.dart';
 
 class CourseListScreen extends StatefulWidget {
-  const CourseListScreen({Key? key}): super(key: key);
+  const CourseListScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -15,44 +15,41 @@ class CourseListScreen extends StatefulWidget {
 class CourseScreenWidgetState extends State<CourseListScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarWidget(),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-              _buildIntroduction(),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-              _buildSearchTextField(),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-              _buildMultiSelectDropDown(
-                hint: 'Select level',
-                options: _getOptions(),
-                maxItems: 6,
-                selectionType: SelectionType.multi,
-              ),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-              _buildMultiSelectDropDown(
-                hint: 'Sort by level',
-                options: _getOptions(),
-                maxItems: 2,
-                selectionType: SelectionType.single,
-              ),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-              _buildMultiSelectDropDown(
-                hint: 'Select category',
-                options: _getOptions(),
-                maxItems: 6,
-                selectionType: SelectionType.multi,
-              ),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-              _buildTabBarView(),
-            ],
-          ),
+    return SingleChildScrollView(
+      child: Container(
+        margin: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(),
+            const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+            _buildIntroduction(),
+            const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+            _buildSearchTextField(),
+            const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+            _buildMultiSelectDropDown(
+              hint: 'Select level',
+              options: _getOptions(),
+              maxItems: 6,
+              selectionType: SelectionType.multi,
+            ),
+            const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+            _buildMultiSelectDropDown(
+              hint: 'Sort by level',
+              options: _getOptions(),
+              maxItems: 2,
+              selectionType: SelectionType.single,
+            ),
+            const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+            _buildMultiSelectDropDown(
+              hint: 'Select category',
+              options: _getOptions(),
+              maxItems: 6,
+              selectionType: SelectionType.multi,
+            ),
+            const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+            _buildTabBarView(),
+          ],
         ),
       ),
     );

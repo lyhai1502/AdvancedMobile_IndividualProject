@@ -22,20 +22,6 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
       'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
     ),
   );
-  final List<String> items = [
-    'All',
-    'English for kids',
-    'English for business',
-    'Conversational',
-    'STARTERS',
-    'MOVERS',
-    'FLYERS',
-    'KET',
-    'PET',
-    'IELTS',
-    'TOEFL',
-    'TOEIC'
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -56,11 +42,13 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
               _buildTutorActions(),
               const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
               FlickVideoPlayer(flickManager: flickManager),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
+              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
               _buildInformationDetail(widget.teacher),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
+              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+              _buildBookingButton(),
+              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
               _buildHeaderOfInformation('Other reviews'),
-              _buildReviewWidgets()
+              _buildReviewWidgets(),
             ],
           ),
         ),
@@ -126,21 +114,28 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
   }
 
   Widget _buildTutorActions() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _buildActionIconButton(const Icon(Icons.favorite), 'Favorite'),
-        _buildActionIconButton(const Icon(Icons.report), 'Report'),
-      ],
-    );
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+      _buildActionIconButton(
+          const Icon(
+            Icons.favorite,
+            color: Colors.red,
+          ),
+          'Favorite',
+          () {}),
+      _buildActionIconButton(const Icon(Icons.message), 'Message', () {}),
+      _buildActionIconButton(const Icon(Icons.report), 'Report', () {}),
+    ]);
   }
 
-  Widget _buildActionIconButton(Icon icon, String label) {
+  Widget _buildActionIconButton(Icon icon, String label, Function() function) {
     return Column(
       children: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            function();
+          },
           icon: icon,
+          color: Colors.blue,
         ),
         Text(
           label,
@@ -155,7 +150,7 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildHeaderOfInformation("Education"),
-        CustomButtonWidget(content: teacher.education),
+        CustomButtonWidget(content: teacher.education, function: (){},),
         const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
         _buildHeaderOfInformation('Languages'),
         _buildMultiCustomButtons(teacher.specialities),
@@ -183,7 +178,7 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
   Widget _buildMultiCustomButtons(List<String> contents) {
     return Wrap(
       children: [
-        for (String item in contents) CustomButtonWidget(content: item)
+        for (String item in contents) CustomButtonWidget(content: item, function: (){},)
       ],
     );
   }
@@ -193,6 +188,31 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
       children: [
         for (var i = 0; i < 10; i++) const ReviewWidget(),
       ],
+    );
+  }
+
+  Widget _buildBookingButton() {
+    return Center(
+      child: ElevatedButton.icon(
+        style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              side: const BorderSide(color: Colors.white),
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+          ),
+          backgroundColor: MaterialStateProperty.all(Colors.green),
+          foregroundColor: MaterialStateProperty.all(Colors.white),
+        ),
+        onPressed: () {
+          Navigator.pushNamed(context, '/BookingCalendar');
+        },
+        icon: const Icon(
+          Icons.calendar_month,
+          size: 24.0,
+        ),
+        label: const Text('Book class schedule'),
+      ),
     );
   }
 }

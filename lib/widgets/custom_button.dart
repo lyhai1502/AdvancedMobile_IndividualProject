@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CustomButtonWidget extends StatelessWidget {
-  const CustomButtonWidget({super.key, required this.content});
+  const CustomButtonWidget(
+      {super.key, required this.content, required this.function});
   final String content;
+  final VoidCallback function;
   @override
   Widget build(Object context) {
     // TODO: implement build
@@ -18,7 +20,7 @@ class CustomButtonWidget extends StatelessWidget {
           backgroundColor: MaterialStateProperty.all(Colors.lightBlue),
           foregroundColor: MaterialStateProperty.all(Colors.white),
         ),
-        onPressed: () {},
+        onPressed: function,
         child: Text(content),
       ),
     );

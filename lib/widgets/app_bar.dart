@@ -24,8 +24,6 @@ class AppBarWidgetState extends State<AppBarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    String userLoginId = context.watch<String>();
-
     return AppBar(
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
@@ -47,7 +45,6 @@ class AppBarWidgetState extends State<AppBarWidget> {
                 fontSize: 25, fontWeight: FontWeight.bold, color: Colors.blue),
           ),
           Expanded(child: Container()),
-          userLoginId != '' ? const PopUpMenuWidget() : const SizedBox.shrink(),
         ]));
   }
 }
