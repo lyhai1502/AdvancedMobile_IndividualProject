@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:my_app/widgets/custom_button.dart';
 
 class UpcomingClassWidget extends StatefulWidget {
+  const UpcomingClassWidget({super.key});
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -16,34 +18,36 @@ class UpcomingClassWidgetState extends State<UpcomingClassWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print(nextClassStartTime);
     // TODO: implement build
     return Row(
       children: [
         Expanded(
           child: SizedBox(
-            height: 220,
+            height: 250,
             child: Card(
-              color: Colors.blueAccent,
+              color: Colors.white10,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: Column(
                   children: [
                     _buildHeaderOfInformation(
                         'Upcoming lesson', 25, Colors.white),
-                    Padding(padding: EdgeInsets.only(top: 15)),
+                    const Padding(padding: EdgeInsets.only(top: 15)),
                     _buildHeaderOfInformation(
-                        '${DateFormat('MMM d, h:mm a').format(nextClassStartTime)} - ${DateFormat.jm().format(nextClassStartTime.add(Duration(minutes: 30)))}',
+                        '${DateFormat('MMM d, h:mm a').format(nextClassStartTime)} - ${DateFormat.jm().format(nextClassStartTime.add(const Duration(minutes: 30)))}',
                         18,
                         Colors.white),
                     _buildHeaderOfInformation(
                         '(class time: 00:10:49)', 15, Colors.greenAccent),
-                    Padding(padding: EdgeInsets.only(top: 15)),
+                    const Padding(padding: EdgeInsets.only(top: 15)),
                     CustomButtonWidget(
-                        content: 'Enter lesson room',
-                        function: () {
-                          Navigator.pushNamed(context, '/VideoCall');
-                        }),
+                      content: 'Enter lesson room',
+                      function: () {
+                        Navigator.pushNamed(context, '/VideoCall');
+                      },
+                      color: Colors.blue,
+                    ),
                     _buildHeaderOfInformation(
                         'Total lesson time is 533 hours 20 minutes',
                         15,

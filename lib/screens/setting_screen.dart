@@ -11,8 +11,8 @@ class SetttingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User user = context.watch<User>();
-    return Padding(
-      padding: const EdgeInsets.all(10),
+    return Container(
+      margin: const EdgeInsets.all(20),
       child: ListView(
         children: [
           // user card

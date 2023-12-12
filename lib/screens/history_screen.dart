@@ -27,7 +27,7 @@ class HistoryScreenState extends State<HistoryScreen> {
     // TODO: implement build
     return SingleChildScrollView(
       child: Container(
-        margin: const EdgeInsets.all(30),
+        margin: const EdgeInsets.all(20),
         child:
             Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Row(

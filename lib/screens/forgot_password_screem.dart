@@ -2,6 +2,7 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/repository/user_repository.dart';
 import 'package:my_app/screens/reset_password_screen.dart';
+import 'package:my_app/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -27,7 +28,7 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          margin: const EdgeInsets.all(30),
+          margin: const EdgeInsets.all(20),
           child: Column(
             children: [
               _buildTextFields(),
@@ -74,35 +75,27 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       child: Row(
         children: [
           Expanded(
-            child: ElevatedButton(
-              onPressed: () {
-                if (userRepository.getUserByEmail(emailController.text) !=
-                    null) {
-                  _sendResetEmail();
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ResetPasswordScreen(
-                              email: emailController.text)));
-                } else {
-                  CoolAlert.show(
-                    confirmBtnText: 'OK',
-                    context: context,
-                    type: CoolAlertType.warning,
-                    text: 'Your email not existed',
-                  );
-                }
-              },
-              style: ButtonStyle(
-                textStyle: MaterialStateProperty.all(
-                  const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                backgroundColor: MaterialStateProperty.all(Colors.blue),
-                foregroundColor: MaterialStateProperty.all(Colors.white),
-              ),
-              child: const Text('Reset password'),
-            ),
-          ),
+              child: CustomButtonWidget(
+                  content: "Reset password",
+                  function: () {
+                    if (userRepository.getUserByEmail(emailController.text) !=
+                        null) {
+                      _sendResetEmail();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ResetPasswordScreen(
+                                  email: emailController.text)));
+                    } else {
+                      CoolAlert.show(
+                        confirmBtnText: 'OK',
+                        context: context,
+                        type: CoolAlertType.warning,
+                        text: 'Your email not existed',
+                      );
+                    }
+                  },
+                  color: Colors.blue)),
         ],
       ),
     );

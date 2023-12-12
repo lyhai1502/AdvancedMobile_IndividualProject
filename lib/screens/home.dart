@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:my_app/screens/course_list.dart';
 import 'package:my_app/screens/history_screen.dart';

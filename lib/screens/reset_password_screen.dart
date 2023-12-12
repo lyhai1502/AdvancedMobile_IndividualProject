@@ -34,7 +34,6 @@ class ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.email);
     UserRepository userRepository = context.watch<UserRepository>();
 
     return Scaffold(

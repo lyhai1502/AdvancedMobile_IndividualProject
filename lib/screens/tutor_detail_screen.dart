@@ -40,7 +40,7 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          margin: const EdgeInsets.all(30),
+          margin: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -173,6 +173,7 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
         CustomButtonWidget(
           content: teacher.education,
           function: () {},
+          color: Colors.blue,
         ),
         const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
         _buildHeaderOfInformation('Languages'),
@@ -201,11 +202,14 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
   Widget _buildMultiCustomButtons(List<String> contents) {
     return Wrap(
       children: [
-        for (String item in contents)
+        for (String item in contents) ...[
           CustomButtonWidget(
             content: item,
             function: () {},
-          )
+            color: Colors.blue,
+          ),
+          Padding(padding: EdgeInsets.all(3))
+        ]
       ],
     );
   }
@@ -254,10 +258,12 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
             content: const TextField(),
             actions: [
               CustomButtonWidget(
-                  content: 'Send',
-                  function: () {
-                    Navigator.pop(context);
-                  })
+                content: 'Send',
+                function: () {
+                  Navigator.pop(context);
+                },
+                color: Colors.blue,
+              )
             ],
           ));
 }

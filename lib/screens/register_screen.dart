@@ -46,7 +46,7 @@ class RegisterScreenState extends State<RegisterScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          margin: const EdgeInsets.all(30),
+          margin: const EdgeInsets.all(20),
           child: Column(
             children: [
               _buildTextFields(),
@@ -57,7 +57,6 @@ class RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
-
 
   Widget _buildTextFields() {
     return Column(

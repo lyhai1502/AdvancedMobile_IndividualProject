@@ -117,6 +117,7 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
             CustomButtonWidget(
               content: item,
               function: () {},
+              color: Colors.blue,
             )
         ],
       ),

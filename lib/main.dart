@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:my_app/model/user.dart';
 import 'package:my_app/repository/booking_repository.dart';
