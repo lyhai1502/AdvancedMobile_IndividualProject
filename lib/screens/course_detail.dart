@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/model/course.dart';
+import 'package:my_app/widgets/custom_button.dart';
 
 class CourseDetailScreen extends StatefulWidget {
   const CourseDetailScreen({Key? key, required this.course}) : super(key: key);
@@ -30,7 +31,7 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
               _buildSection("Overview", [
                 _buildListItem(Icons.question_mark_rounded,
                     "Why take this course", widget.course.target),
-                Padding(padding: EdgeInsets.only(top: 20)),
+                const Padding(padding: EdgeInsets.only(top: 20)),
                 _buildListItem(Icons.question_mark_rounded,
                     "What will you be able to do", widget.course.todo),
               ]),
@@ -86,12 +87,12 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
                 children: [
                   Text(
                     widget.course.name,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                   Text(
                     widget.course.description,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black54,
                       fontSize: 15,
                     ),
@@ -99,22 +100,13 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
                   const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
                   Row(children: [
                     Expanded(
-                      child: ElevatedButton(
-                        onPressed: () =>
-                            Navigator.pushNamed(context, '/CourseLearnDetail'),
-                        style: ButtonStyle(
-                          textStyle: MaterialStateProperty.all(
-                            const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.blue),
-                          foregroundColor:
-                              MaterialStateProperty.all(Colors.white),
-                        ),
-                        child: Text('Discover'.toUpperCase()),
-                      ),
-                    )
+                        child: CustomButtonWidget(
+                            content: 'DISCOVER',
+                            function: () {
+                              Navigator.pushNamed(
+                                  context, '/CourseLearnDetail');
+                            },
+                            color: Colors.blue))
                   ]),
                 ],
               ),
@@ -215,7 +207,7 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
                     Text(
                       topic,
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),

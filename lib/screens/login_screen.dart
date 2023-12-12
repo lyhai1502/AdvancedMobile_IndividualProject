@@ -35,7 +35,7 @@ class LoginScreenState extends State<LoginScreen> {
       appBar: AppBarWidget(),
       body: SingleChildScrollView(
         child: Container(
-          margin: const EdgeInsets.all(30),
+          margin: const EdgeInsets.all(20),
           child: Column(
             children: [
               _buildHeader(),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 /// Flutter code sample for [PopupMenuButton].
 
 // This is the type used by the popup menu below.
+// ignore: constant_identifier_names
 enum SampleItem { Profile, Tutor, Course, Schedule, History }
 
 class PopUpMenuWidget extends StatefulWidget {

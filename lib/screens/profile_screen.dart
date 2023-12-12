@@ -32,7 +32,7 @@ class ProfileScreenState extends State<ProfileScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          margin: const EdgeInsets.all(30),
+          margin: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -79,12 +79,14 @@ class ProfileScreenState extends State<ProfileScreen> {
               Text('Account ID: $id'),
               Text('Email: $email'),
               CustomButtonWidget(
-                  content: 'Change avatar',
-                  function: () {
-                    var random = Random().nextInt(10);
-                    user.changeAvatar(
-                        'lib/assets/icons/user/avatar/avatar$random.png');
-                  })
+                content: 'Change avatar',
+                function: () {
+                  var random = Random().nextInt(10);
+                  user.changeAvatar(
+                      'lib/assets/icons/user/avatar/avatar$random.png');
+                },
+                color: Colors.blue,
+              )
             ],
           ),
         ),
@@ -140,29 +142,31 @@ class ProfileScreenState extends State<ProfileScreen> {
   Widget _buildSaveButton(User user) {
     return Center(
       child: CustomButtonWidget(
-          content: 'Save change',
-          function: () {
-            User saveUser = User();
-            saveUser.email = user.email;
-            saveUser.password = user.password;
+        content: 'Save change',
+        function: () {
+          User saveUser = User();
+          saveUser.email = user.email;
+          saveUser.password = user.password;
 
-            saveUser.name = nameController.text;
-            saveUser.country = countryController.text;
-            saveUser.phoneNumber = phoneNumberController.text;
-            saveUser.birthday = birthdayController.text;
-            saveUser.level = levelController.text;
-            saveUser.studySchedule = studyScheduleController.text;
-            saveUser.avatarUrl = user.avatarUrl;
+          saveUser.name = nameController.text;
+          saveUser.country = countryController.text;
+          saveUser.phoneNumber = phoneNumberController.text;
+          saveUser.birthday = birthdayController.text;
+          saveUser.level = levelController.text;
+          saveUser.studySchedule = studyScheduleController.text;
+          saveUser.avatarUrl = user.avatarUrl;
 
-            user.cloneUser(saveUser);
+          user.cloneUser(saveUser);
 
-            CoolAlert.show(
-              confirmBtnText: 'OK',
-              context: context,
-              type: CoolAlertType.success,
-              text: 'Save successfully!',
-            );
-          }),
+          CoolAlert.show(
+            confirmBtnText: 'OK',
+            context: context,
+            type: CoolAlertType.success,
+            text: 'Save successfully!',
+          );
+        },
+        color: Colors.blue,
+      ),
     );
   }
 }
