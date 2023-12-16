@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/model/user.dart';
+import 'package:my_app/network/UserTokenApi.dart';
 import 'package:my_app/repository/user_repository.dart';
 import 'package:my_app/widgets/app_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -190,11 +194,31 @@ class LoginScreenState extends State<LoginScreen> {
         children: [
           Expanded(
             child: ElevatedButton(
-              onPressed: () {
-                if (userRepository.isLoginSucess(
-                    emailController.text, passwordController.text)) {
-                  user.cloneUser(
-                      userRepository.getUserByEmail(emailController.text));
+              onPressed: () async {
+                // if (userRepository.isLoginSucess(
+                //     emailController.text, passwordController.text)) {
+                //   user.cloneUser(
+                //       userRepository.getUserByEmail(emailController.text));
+                //   Navigator.pushNamed(context, '/Home');
+                //   CoolAlert.show(
+                //     confirmBtnText: 'OK',
+                //     context: context,
+                //     type: CoolAlertType.success,
+                //     text: 'Login successfully!',
+                //   );
+                // } else {
+                //   CoolAlert.show(
+                //     confirmBtnText: 'OK',
+                //     context: context,
+                //     type: CoolAlertType.warning,
+                //     text: 'Your email or password is incorrect',
+                //   );
+                // }
+                UserTokenApi? userTokenApi = await UserTokenApi()
+                    .login(emailController.text, passwordController.text);
+
+                print(userTokenApi.user!.email);
+                if (userTokenApi.user != null) {
                   Navigator.pushNamed(context, '/Home');
                   CoolAlert.show(
                     confirmBtnText: 'OK',
