@@ -1,6 +1,5 @@
-import 'dart:convert';
-
 import 'package:cool_alert/cool_alert.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/model/user.dart';
@@ -8,7 +7,6 @@ import 'package:my_app/network/UserTokenApi.dart';
 import 'package:my_app/repository/user_repository.dart';
 import 'package:my_app/widgets/app_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -217,9 +215,14 @@ class LoginScreenState extends State<LoginScreen> {
                 UserTokenApi? userTokenApi = await UserTokenApi()
                     .login(emailController.text, passwordController.text);
 
-                print(userTokenApi.user!.email);
+                if (kDebugMode) {
+                  print(userTokenApi.user != null);
+                }
+
                 if (userTokenApi.user != null) {
+                  // ignore: use_build_context_synchronously
                   Navigator.pushNamed(context, '/Home');
+                  // ignore: use_build_context_synchronously
                   CoolAlert.show(
                     confirmBtnText: 'OK',
                     context: context,
@@ -227,6 +230,7 @@ class LoginScreenState extends State<LoginScreen> {
                     text: 'Login successfully!',
                   );
                 } else {
+                  // ignore: use_build_context_synchronously
                   CoolAlert.show(
                     confirmBtnText: 'OK',
                     context: context,
