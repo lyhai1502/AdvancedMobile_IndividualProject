@@ -3,9 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/model/user.dart';
-import 'package:my_app/network/Response/ErrorResponse.dart';
+import 'package:my_app/network/response/ErrorResponse.dart';
 import 'package:my_app/network/UserTokenApi.dart';
-import 'package:my_app/network/authentication/LoginRequest.dart';
+import 'package:my_app/network/network_request/authentication/LoginRequest.dart';
 import 'package:my_app/network/models/Tokens.dart';
 import 'package:my_app/repository/user_repository.dart';
 import 'package:my_app/widgets/app_bar.dart';
@@ -36,7 +36,7 @@ class LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     UserRepository? userRepository = context.watch<UserRepository>();
     User user = context.watch<User>();
-    UserTokenApi userTokenApi = context.watch<UserTokenApi>();
+    Tokens currentTokens = context.watch<Tokens>();
     return Scaffold(
       appBar: AppBarWidget(),
       body: SingleChildScrollView(
@@ -46,7 +46,7 @@ class LoginScreenState extends State<LoginScreen> {
             children: [
               _buildHeader(),
               _buildTextFields(),
-              _buildLoginButton(userRepository, user, userTokenApi),
+              _buildLoginButton(userRepository, user, currentTokens),
               _buildForgotPasswordLink(),
               _buildContinueWithText(),
               _buildSocialButtons(),
@@ -190,7 +190,7 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildLoginButton(
-      UserRepository userRepository, User user, UserTokenApi userTokenApi) {
+      UserRepository userRepository, User user, Tokens currentTokens) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
       child: Row(
@@ -223,7 +223,7 @@ class LoginScreenState extends State<LoginScreen> {
                 // if (kDebugMode) {
                 //   print(userTokenApi.user != null);
                 // }
-                loginRequest();
+                loginRequest(currentTokens);
               },
               style: ButtonStyle(
                 textStyle: MaterialStateProperty.all(
@@ -301,11 +301,12 @@ class LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<void> loginRequest() async {
+  Future<void> loginRequest(Tokens currentTokens) async {
     dynamic tokens =
         await LoginRequest.login(emailController.text, passwordController.text);
 
     if (tokens is Tokens) {
+      currentTokens.updateTokens(tokens);
       // ignore: use_build_context_synchronously
       Navigator.pushNamed(context, '/Home');
       // ignore: use_build_context_synchronously

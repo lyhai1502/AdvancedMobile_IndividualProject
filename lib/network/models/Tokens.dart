@@ -1,4 +1,6 @@
-class Tokens {
+import 'package:flutter/material.dart';
+
+class Tokens extends ChangeNotifier {
   Access? access;
   Access? refresh;
 
@@ -20,6 +22,12 @@ class Tokens {
       data['refresh'] = this.refresh!.toJson();
     }
     return data;
+  }
+
+  void updateTokens(Tokens tokens) {
+    this.access = tokens.access;
+    this.refresh = tokens.refresh;
+    notifyListeners();
   }
 }
 

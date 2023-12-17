@@ -1,8 +1,8 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/network/Response/ErrorResponse.dart';
-import 'package:my_app/network/Response/SuccessResponse.dart';
-import 'package:my_app/network/authentication/RegisterRequest.dart';
+import 'package:my_app/network/response/ErrorResponse.dart';
+import 'package:my_app/network/response/SuccessResponse.dart';
+import 'package:my_app/network/network_request/authentication/RegisterRequest.dart';
 import 'package:my_app/repository/user_repository.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';

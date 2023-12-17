@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:my_app/model/user.dart';
-import 'package:my_app/network/UserTokenApi.dart';
+import 'package:my_app/network/models/Tokens.dart';
 import 'package:my_app/repository/booking_repository.dart';
 import 'package:my_app/repository/user_repository.dart';
 import 'package:my_app/screens/course_learn_detail.dart';
@@ -38,7 +38,7 @@ class MyAppState extends State<MyApp> {
   final UserRepository? userRepository = UserRepository();
   final User? user = User();
   final BookingRepository? bookingRepository = BookingRepository();
-  final UserTokenApi userTokenApi = UserTokenApi();
+  final Tokens? currentToken = Tokens();
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class MyAppState extends State<MyApp> {
         Provider(create: (context) => userRepository),
         ChangeNotifierProvider(create: (context) => user),
         ChangeNotifierProvider(create: (context) => bookingRepository),
-        ChangeNotifierProvider(create: (context) => userTokenApi)
+        ChangeNotifierProvider(create: (context) => currentToken),
       ],
       child: MaterialApp(
           theme: ThemeData(

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:my_app/network/Response/ErrorResponse.dart';
+import 'package:my_app/network/response/ErrorResponse.dart';
 import 'package:my_app/network/models/Tokens.dart';
 
 class LoginRequest {
