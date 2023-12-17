@@ -1,6 +1,6 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/model/user.dart';
+import 'package:my_app/network/UserTokenApi.dart';
 import 'package:my_app/repository/user_repository.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
@@ -224,27 +224,59 @@ class RegisterScreenState extends State<RegisterScreen> {
         children: [
           Expanded(
             child: ElevatedButton(
-              onPressed: () {
-                if (userRepository.isUserExisted(emailController.text)) {
-                  CoolAlert.show(
-                    context: context,
-                    type: CoolAlertType.warning,
-                    text: 'Your email is existed!',
+              onPressed: () async {
+                // if (userRepository.isUserExisted(emailController.text)) {
+                //   CoolAlert.show(
+                //     context: context,
+                //     type: CoolAlertType.warning,
+                //     text: 'Your email is existed!',
+                //   );
+                // } else if (_isEmailValid &&
+                //     _isPasswordValid &&
+                //     _isConfirmPassword) {
+                //   userRepository.add(User.createUser(
+                //       emailController.text, passwordController.text));
+                //   CoolAlert.show(
+                //     confirmBtnText: 'OK',
+                //     context: context,
+                //     type: CoolAlertType.success,
+                //     text: 'Register successfully!',
+                //     onConfirmBtnTap: () {
+                //       Navigator.pop(context);
+                //     },
+                //   );
+                // }
+                if (_isEmailValid && _isPasswordValid && _isConfirmPassword) {
+                  UserTokenApi? userTokenApi = await UserTokenApi().register(
+                    emailController.text,
+                    passwordController.text,
+                    "",
                   );
-                } else if (_isEmailValid &&
-                    _isPasswordValid &&
-                    _isConfirmPassword) {
-                  userRepository.add(User.createUser(
-                      emailController.text, passwordController.text));
-                  CoolAlert.show(
-                    confirmBtnText: 'OK',
-                    context: context,
-                    type: CoolAlertType.success,
-                    text: 'Register successfully!',
-                    onConfirmBtnTap: () {
-                      Navigator.pop(context);
-                    },
-                  );
+                  if (userTokenApi.user != null) {
+                    // userRepository.add(User.createUser(
+                    //     userTokenApi.user!.email, userTokenApi.user!.password));
+                    emailController.clear();
+                    passwordController.clear();
+                    passwordConfirmController.clear();
+                    // ignore: use_build_context_synchronously
+                    CoolAlert.show(
+                      confirmBtnText: 'OK',
+                      context: context,
+                      type: CoolAlertType.success,
+                      text: 'Register successfully!',
+                      onConfirmBtnTap: () {
+                        Navigator.pop(context);
+                      },
+                    );
+                  } else {
+                    // ignore: use_build_context_synchronously
+                    CoolAlert.show(
+                      confirmBtnText: 'OK',
+                      context: context,
+                      type: CoolAlertType.warning,
+                      text: 'Your email is existed!',
+                    );
+                  }
                 }
               },
               style: ButtonStyle(

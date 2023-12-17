@@ -29,11 +29,30 @@ class UserTokenApi {
       "email": email,
       "password": password,
     };
-    final url = "https://sandbox.api.lettutor.com/auth/login";
+    const url = "https://sandbox.api.lettutor.com/auth/login";
     final uri = Uri.parse(url);
 
-    final response = await http.post(uri, body: body);
-    if (response.statusCode == 200) {
+    final response = await http.post(uri, body: jsonEncode(body), headers: {
+      "Content-Type": "application/json",
+    });
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final json = jsonDecode(response.body);
+      final userTokenApi = UserTokenApi.fromJson(json);
+      return userTokenApi;
+    }
+    return UserTokenApi();
+  }
+
+  Future<UserTokenApi> register(
+      String email, String password, String source) async {
+    final body = {"email": email, "password": password, "source": source};
+    const url = "https://sandbox.api.lettutor.com/auth/register";
+    final uri = Uri.parse(url);
+
+    final response = await http.post(uri, body: jsonEncode(body), headers: {
+      "Content-Type": "application/json",
+    });
+    if (response.statusCode == 200 || response.statusCode == 201) {
       final json = jsonDecode(response.body);
       final userTokenApi = UserTokenApi.fromJson(json);
       return userTokenApi;
@@ -50,7 +69,7 @@ class UserApi {
   String? country;
   String? phone;
   List<String>? roles;
-  // Null? language;
+  String? language;
   String? birthday;
   bool? isActivated;
   WalletInfo? walletInfo;
@@ -72,7 +91,7 @@ class UserApi {
       this.country,
       this.phone,
       this.roles,
-      // this.language,
+      this.language,
       this.birthday,
       this.isActivated,
       this.walletInfo,
@@ -93,12 +112,12 @@ class UserApi {
     avatar = json['avatar'];
     country = json['country'];
     phone = json['phone'];
-    roles = json['roles'].cast<String>();
-    // language = json['language'];
+    roles = json['roles'] != null ? json['roles'].cast<String>() : null;
+    language = json['language'];
     birthday = json['birthday'];
     isActivated = json['isActivated'];
     walletInfo = json['walletInfo'] != null
-        ? new WalletInfo.fromJson(json['walletInfo'])
+        ? WalletInfo.fromJson(json['walletInfo'])
         : null;
     // if (json['courses'] != null) {
     //   courses = <Null>[];

@@ -222,6 +222,8 @@ class LoginScreenState extends State<LoginScreen> {
                 if (userTokenApi.user != null) {
                   // ignore: use_build_context_synchronously
                   Navigator.pushNamed(context, '/Home');
+                  emailController.clear();
+                  passwordController.clear();
                   // ignore: use_build_context_synchronously
                   CoolAlert.show(
                     confirmBtnText: 'OK',
