@@ -1,6 +1,8 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/network/UserTokenApi.dart';
+import 'package:my_app/network/Response/ErrorResponse.dart';
+import 'package:my_app/network/Response/SuccessResponse.dart';
+import 'package:my_app/network/authentication/RegisterRequest.dart';
 import 'package:my_app/repository/user_repository.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
@@ -224,7 +226,7 @@ class RegisterScreenState extends State<RegisterScreen> {
         children: [
           Expanded(
             child: ElevatedButton(
-              onPressed: () async {
+              onPressed: () {
                 // if (userRepository.isUserExisted(emailController.text)) {
                 //   CoolAlert.show(
                 //     context: context,
@@ -246,38 +248,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                 //     },
                 //   );
                 // }
-                if (_isEmailValid && _isPasswordValid && _isConfirmPassword) {
-                  UserTokenApi? userTokenApi = await UserTokenApi().register(
-                    emailController.text,
-                    passwordController.text,
-                    "",
-                  );
-                  if (userTokenApi.user != null) {
-                    // userRepository.add(User.createUser(
-                    //     userTokenApi.user!.email, userTokenApi.user!.password));
-                    emailController.clear();
-                    passwordController.clear();
-                    passwordConfirmController.clear();
-                    // ignore: use_build_context_synchronously
-                    CoolAlert.show(
-                      confirmBtnText: 'OK',
-                      context: context,
-                      type: CoolAlertType.success,
-                      text: 'Register successfully!',
-                      onConfirmBtnTap: () {
-                        Navigator.pop(context);
-                      },
-                    );
-                  } else {
-                    // ignore: use_build_context_synchronously
-                    CoolAlert.show(
-                      confirmBtnText: 'OK',
-                      context: context,
-                      type: CoolAlertType.warning,
-                      text: 'Your email is existed!',
-                    );
-                  }
-                }
+                registerRequest();
               },
               style: ButtonStyle(
                 textStyle: MaterialStateProperty.all(
@@ -292,5 +263,38 @@ class RegisterScreenState extends State<RegisterScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> registerRequest() async {
+    if (_isEmailValid && _isPasswordValid && _isConfirmPassword) {
+      dynamic registerResponse = await RegisterRequest.register(
+        emailController.text,
+        passwordController.text,
+        '',
+      );
+      if (registerResponse is SuccessResponse) {
+        // ignore: use_build_context_synchronously
+        CoolAlert.show(
+          confirmBtnText: 'OK',
+          context: context,
+          type: CoolAlertType.success,
+          text: registerResponse.message,
+          onConfirmBtnTap: () {
+            Navigator.pop(context);
+            emailController.clear();
+            passwordController.clear();
+            passwordConfirmController.clear();
+          },
+        );
+      } else if (registerResponse is ErrorResponse) {
+        // ignore: use_build_context_synchronously
+        CoolAlert.show(
+          confirmBtnText: 'OK',
+          context: context,
+          type: CoolAlertType.warning,
+          text: registerResponse.message,
+        );
+      }
+    }
   }
 }

@@ -1,16 +1,18 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:my_app/network/models/Tokens.dart';
 
-class UserTokenApi {
+class UserTokenApi extends ChangeNotifier {
   UserApi? user;
   Tokens? tokens;
 
   UserTokenApi({this.user, this.tokens});
 
   UserTokenApi.fromJson(Map<String, dynamic> json) {
-    user = json['user'] != null ? new UserApi.fromJson(json['user']) : null;
+    // user = json['user'] != null ? new UserApi.fromJson(json['user']) : null;
     tokens =
-        json['tokens'] != null ? new Tokens.fromJson(json['tokens']) : null;
+        json['tokens'] != null ? Tokens.fromJson(json['tokens']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -43,8 +45,7 @@ class UserTokenApi {
     return UserTokenApi();
   }
 
-  Future<UserTokenApi> register(
-      String email, String password, String source) async {
+  register(String email, String password, String source) async {
     final body = {"email": email, "password": password, "source": source};
     const url = "https://sandbox.api.lettutor.com/auth/register";
     final uri = Uri.parse(url);
@@ -53,15 +54,12 @@ class UserTokenApi {
       "Content-Type": "application/json",
     });
     if (response.statusCode == 200 || response.statusCode == 201) {
-      final json = jsonDecode(response.body);
-      final userTokenApi = UserTokenApi.fromJson(json);
-      return userTokenApi;
+      return;
     }
-    return UserTokenApi();
   }
 }
 
-class UserApi {
+class UserApi extends ChangeNotifier {
   String? id;
   String? email;
   String? name;
@@ -240,50 +238,6 @@ class LearnTopics {
     data['id'] = this.id;
     data['key'] = this.key;
     data['name'] = this.name;
-    return data;
-  }
-}
-
-class Tokens {
-  Access? access;
-  Access? refresh;
-
-  Tokens({this.access, this.refresh});
-
-  Tokens.fromJson(Map<String, dynamic> json) {
-    access =
-        json['access'] != null ? new Access.fromJson(json['access']) : null;
-    refresh =
-        json['refresh'] != null ? new Access.fromJson(json['refresh']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.access != null) {
-      data['access'] = this.access!.toJson();
-    }
-    if (this.refresh != null) {
-      data['refresh'] = this.refresh!.toJson();
-    }
-    return data;
-  }
-}
-
-class Access {
-  String? token;
-  String? expires;
-
-  Access({this.token, this.expires});
-
-  Access.fromJson(Map<String, dynamic> json) {
-    token = json['token'];
-    expires = json['expires'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['token'] = this.token;
-    data['expires'] = this.expires;
     return data;
   }
 }

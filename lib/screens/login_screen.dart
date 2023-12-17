@@ -3,7 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/model/user.dart';
+import 'package:my_app/network/Response/ErrorResponse.dart';
 import 'package:my_app/network/UserTokenApi.dart';
+import 'package:my_app/network/authentication/LoginRequest.dart';
+import 'package:my_app/network/models/Tokens.dart';
 import 'package:my_app/repository/user_repository.dart';
 import 'package:my_app/widgets/app_bar.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +36,7 @@ class LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     UserRepository? userRepository = context.watch<UserRepository>();
     User user = context.watch<User>();
+    UserTokenApi userTokenApi = context.watch<UserTokenApi>();
     return Scaffold(
       appBar: AppBarWidget(),
       body: SingleChildScrollView(
@@ -42,7 +46,7 @@ class LoginScreenState extends State<LoginScreen> {
             children: [
               _buildHeader(),
               _buildTextFields(),
-              _buildLoginButton(userRepository, user),
+              _buildLoginButton(userRepository, user, userTokenApi),
               _buildForgotPasswordLink(),
               _buildContinueWithText(),
               _buildSocialButtons(),
@@ -185,14 +189,15 @@ class LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildLoginButton(UserRepository userRepository, User user) {
+  Widget _buildLoginButton(
+      UserRepository userRepository, User user, UserTokenApi userTokenApi) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
       child: Row(
         children: [
           Expanded(
             child: ElevatedButton(
-              onPressed: () async {
+              onPressed: () {
                 // if (userRepository.isLoginSucess(
                 //     emailController.text, passwordController.text)) {
                 //   user.cloneUser(
@@ -212,34 +217,13 @@ class LoginScreenState extends State<LoginScreen> {
                 //     text: 'Your email or password is incorrect',
                 //   );
                 // }
-                UserTokenApi? userTokenApi = await UserTokenApi()
-                    .login(emailController.text, passwordController.text);
+                // userTokenApi = await UserTokenApi()
+                //     .login(emailController.text, passwordController.text);
 
-                if (kDebugMode) {
-                  print(userTokenApi.user != null);
-                }
-
-                if (userTokenApi.user != null) {
-                  // ignore: use_build_context_synchronously
-                  Navigator.pushNamed(context, '/Home');
-                  emailController.clear();
-                  passwordController.clear();
-                  // ignore: use_build_context_synchronously
-                  CoolAlert.show(
-                    confirmBtnText: 'OK',
-                    context: context,
-                    type: CoolAlertType.success,
-                    text: 'Login successfully!',
-                  );
-                } else {
-                  // ignore: use_build_context_synchronously
-                  CoolAlert.show(
-                    confirmBtnText: 'OK',
-                    context: context,
-                    type: CoolAlertType.warning,
-                    text: 'Your email or password is incorrect',
-                  );
-                }
+                // if (kDebugMode) {
+                //   print(userTokenApi.user != null);
+                // }
+                loginRequest();
               },
               style: ButtonStyle(
                 textStyle: MaterialStateProperty.all(
@@ -315,5 +299,29 @@ class LoginScreenState extends State<LoginScreen> {
         ),
       ],
     );
+  }
+
+  Future<void> loginRequest() async {
+    dynamic tokens =
+        await LoginRequest.login(emailController.text, passwordController.text);
+
+    if (tokens is Tokens) {
+      // ignore: use_build_context_synchronously
+      Navigator.pushNamed(context, '/Home');
+      // ignore: use_build_context_synchronously
+      CoolAlert.show(
+        confirmBtnText: 'OK',
+        context: context,
+        type: CoolAlertType.success,
+        text: 'Login successfully!',
+      );
+    } else if (tokens is ErrorResponse) {
+      // ignore: use_build_context_synchronously
+      CoolAlert.show(
+          confirmBtnText: 'OK',
+          context: context,
+          type: CoolAlertType.warning,
+          text: tokens.message);
+    }
   }
 }
