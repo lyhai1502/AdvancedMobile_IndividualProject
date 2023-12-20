@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:my_app/network/models/UserApi.dart';
 import 'package:my_app/network/response/ErrorResponse.dart';
 
-class UserInformationRequest {
+class GetInfoUserRequest {
   static Future<dynamic> getUserInformation(String? token) async {
     const url = "https://sandbox.api.lettutor.com/user/info";
     final uri = Uri.parse(url);

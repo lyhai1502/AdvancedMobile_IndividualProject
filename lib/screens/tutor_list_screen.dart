@@ -20,15 +20,37 @@ class TutorListScreenState extends State<TutorListScreen> {
   final TeacherRepository teacherRepository = TeacherRepository();
   final TextEditingController searchTutorController = TextEditingController();
 
+  // Tokens tokens = Tokens();
+  // List<TutorApi> tutorList = [];
+  // late bool _isLoading;
+
+  @override
+  void initState() {
+    // tokens = context.read<Tokens>();
+    // Future<dynamic> future =
+    //     TutorListRequest.getTutorListPagination(tokens.access?.token, 9, 1);
+    // future.then((value) {
+    //   setState(() {
+    //     tutorList = value;
+    //   });
+    // });
+
+    // _isLoading = true;
+    // Future.delayed(const Duration(seconds: 1), () {
+    //   setState(() {
+    //     _isLoading = false;
+    //   });
+    // });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => teacherRepository),
       ],
-      child: SingleChildScrollView(
-        child: _buildTutorList(),
-      ),
+      child: SingleChildScrollView(child: _buildTutorList()),
     );
   }
 

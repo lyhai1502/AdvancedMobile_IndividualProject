@@ -94,7 +94,7 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
             ),
             const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
             Row(
-              children: [RatingWidget(rating: rating), Text('  ($rating)')],
+              children: [RatingWidget(rating: rating as double), Text('  ($rating)')],
             ),
             const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
             Row(

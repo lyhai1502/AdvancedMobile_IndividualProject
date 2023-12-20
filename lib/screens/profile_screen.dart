@@ -1,10 +1,9 @@
-import 'dart:math';
-
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/network/models/Tokens.dart';
 import 'package:my_app/network/models/UserApi.dart';
-import 'package:my_app/network/network_request/user/UserInformationRequest.dart';
+import 'package:my_app/network/network_request/user/get_user_info_request.dart';
+import 'package:my_app/network/network_request/user/update_user_info_request.dart';
 import 'package:my_app/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
@@ -24,15 +23,15 @@ class ProfileScreenState extends State<ProfileScreen> {
   TextEditingController birthdayController = TextEditingController();
   TextEditingController levelController = TextEditingController();
   TextEditingController studyScheduleController = TextEditingController();
-  
 
   UserApi userApi = UserApi();
+  Tokens tokens = Tokens();
   late bool _isLoading;
 
   @override
   void initState() {
     // TODO: implement initState
-    Tokens tokens = context.read<Tokens>();
+    tokens = context.read<Tokens>();
     Future<dynamic> future = loadUserInformation(tokens.access?.token);
     future.then((value) {
       setState(() {
@@ -45,6 +44,7 @@ class ProfileScreenState extends State<ProfileScreen> {
         _isLoading = false;
       });
     });
+
     super.initState();
   }
 
@@ -183,6 +183,14 @@ class ProfileScreenState extends State<ProfileScreen> {
           // saveUser.avatarUrl = user.avatarUrl;
 
           // user.cloneUser(saveUser);
+          UpdateUserInfoRequest.updateUserInfo(
+              tokens.access?.token,
+              nameController.text,
+              countryController.text,
+              // phoneNumberController.text,
+              birthdayController.text,
+              levelController.text,
+              studyScheduleController.text);
 
           CoolAlert.show(
             confirmBtnText: 'OK',
@@ -197,6 +205,6 @@ class ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<dynamic> loadUserInformation(String? token) async {
-    return await UserInformationRequest.getUserInformation(token);
+    return await GetInfoUserRequest.getUserInformation(token);
   }
 }
