@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/model/user.dart';
 import 'package:my_app/network/response/ErrorResponse.dart';
 import 'package:my_app/network/network_request/authentication/login_request.dart';
-import 'package:my_app/network/models/Tokens.dart';
+import 'package:my_app/network/models/tokens.dart';
 import 'package:my_app/repository/user_repository.dart';
 import 'package:my_app/widgets/app_bar.dart';
 import 'package:provider/provider.dart';

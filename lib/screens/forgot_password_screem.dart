@@ -1,7 +1,8 @@
+
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/network/network_request/user/reset_password_request.dart';
 import 'package:my_app/repository/user_repository.dart';
-import 'package:my_app/screens/reset_password_screen.dart';
 import 'package:my_app/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
@@ -31,6 +32,18 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           margin: const EdgeInsets.all(20),
           child: Column(
             children: [
+              const Text(
+                "Please enter your email address. You will receive a link to create a new password via email.",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 5),
+              ),
               _buildTextFields(),
               _buildSendEmailButton(userRepository),
             ],
@@ -76,22 +89,38 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         children: [
           Expanded(
               child: CustomButtonWidget(
-                  content: "Reset password",
+                  content: "Send reset link",
                   function: () {
-                    if (userRepository.getUserByEmail(emailController.text) !=
-                        null) {
-                      _sendResetEmail();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ResetPasswordScreen(
-                                  email: emailController.text)));
-                    } else {
+                    // if (userRepository.getUserByEmail(emailController.text) !=
+                    //     null) {
+                    //   _sendResetEmail();
+                    //   Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //           builder: (context) => ResetPasswordScreen(
+                    //               email: emailController.text)));
+                    // } else {
+                    //   CoolAlert.show(
+                    //     confirmBtnText: 'OK',
+                    //     context: context,
+                    //     type: CoolAlertType.warning,
+                    //     text: 'Your email not existed',
+                    //   );
+                    // }
+                    if (emailController.text.isEmpty) {
                       CoolAlert.show(
                         confirmBtnText: 'OK',
                         context: context,
                         type: CoolAlertType.warning,
-                        text: 'Your email not existed',
+                        text: 'Please enter your email',
+                      );
+                    } else {
+                      ResetPasswordRequest.resetPassword(emailController.text);
+                      CoolAlert.show(
+                        confirmBtnText: 'OK',
+                        context: context,
+                        type: CoolAlertType.success,
+                        text: 'Please check your email to reset password',
                       );
                     }
                   },

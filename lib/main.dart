@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:my_app/model/user.dart';
-import 'package:my_app/network/models/Tokens.dart';
+import 'package:my_app/network/models/tokens.dart';
 import 'package:my_app/repository/booking_repository.dart';
 import 'package:my_app/repository/user_repository.dart';
 import 'package:my_app/screens/course_learn_detail.dart';

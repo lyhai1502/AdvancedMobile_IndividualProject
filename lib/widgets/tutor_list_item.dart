@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/model/teacher.dart';
-import 'package:my_app/network/models/Tokens.dart';
-import 'package:my_app/network/models/TutorApi.dart';
-import 'package:my_app/network/network_request/tutor/get_tutor_info_request.dart';
+import 'package:my_app/network/models/tokens.dart';
+import 'package:my_app/network/models/tutor_api.dart';
 import 'package:my_app/network/network_request/tutor/tutor_list_request.dart';
-import 'package:my_app/repository/teacher_repository.dart';
-import 'package:my_app/screens/booking_calendar_screen.dart';
 import 'package:my_app/widgets/custom_button.dart';
 import 'package:my_app/widgets/rating.dart';
 import 'package:provider/provider.dart';
@@ -56,6 +52,7 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
     return !_isLoading
         ? Column(
             children: [
+              _buildPaginationButtons(),
               Center(
                 child: Column(children: [
                   for (TutorApi tutor in tutorList)
@@ -97,7 +94,6 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
                     ),
                 ]),
               ),
-              _buildPaginationButtons(),
             ],
           )
         : Center(

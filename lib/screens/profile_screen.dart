@@ -1,7 +1,7 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/network/models/Tokens.dart';
-import 'package:my_app/network/models/UserApi.dart';
+import 'package:my_app/network/models/tokens.dart';
+import 'package:my_app/network/models/user_api.dart';
 import 'package:my_app/network/network_request/user/get_user_info_request.dart';
 import 'package:my_app/network/network_request/user/update_user_info_request.dart';
 import 'package:my_app/widgets/custom_button.dart';

@@ -1,4 +1,3 @@
-
 class TutorApi {
   String? name;
   String? avatar;
