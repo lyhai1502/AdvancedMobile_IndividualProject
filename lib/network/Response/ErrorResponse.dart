@@ -16,6 +16,7 @@ class ErrorResponse {
       internalCode: json['internalCode'],
     );
   }
+  
 
   Map<String, dynamic> toJson() {
     return {

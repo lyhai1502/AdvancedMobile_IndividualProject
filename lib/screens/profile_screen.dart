@@ -26,26 +26,26 @@ class ProfileScreenState extends State<ProfileScreen> {
 
   UserApi userApi = UserApi();
   Tokens tokens = Tokens();
-  late bool _isLoading;
+  bool _isLoading = true;
 
   @override
   void initState() {
     // TODO: implement initState
+    getData();
+    super.initState();
+  }
+
+  Future<void> getData() async {
     tokens = context.read<Tokens>();
-    Future<dynamic> future = loadUserInformation(tokens.access?.token);
-    future.then((value) {
+
+    Future<dynamic> future =
+        GetInfoUserRequest.getUserInformation(tokens.access?.token);
+    await future.then((value) {
       setState(() {
         userApi = value;
-      });
-    });
-    _isLoading = true;
-    Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
         _isLoading = false;
       });
     });
-
-    super.initState();
   }
 
   @override
@@ -202,9 +202,5 @@ class ProfileScreenState extends State<ProfileScreen> {
         color: Colors.blue,
       ),
     );
-  }
-
-  Future<dynamic> loadUserInformation(String? token) async {
-    return await GetInfoUserRequest.getUserInformation(token);
   }
 }

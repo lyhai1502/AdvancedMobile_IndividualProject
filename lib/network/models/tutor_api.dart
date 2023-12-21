@@ -65,6 +65,33 @@ class TutorApi {
     totalFeedback = json['totalFeedback'];
   }
 
+  TutorApi.fromJson2(Map<String, dynamic> json) {
+    name = json['User']['name'];
+    avatar = json['User']['avatar'];
+    country = json['User']['country'];
+    video = json['video'];
+    bio = json['bio'];
+    education = json['education'];
+    experience = json['experience'];
+    profession = json['profession'];
+    accent = json['accent'];
+    targetStudent = json['targetStudent'];
+    interests = json['interests'];
+    languages = json['languages'];
+    specialties = json['specialties'];
+    rating = json['rating'];
+    isNative = json['isNative'];
+    youtubeVideoId = json['youtubeVideoId'];
+    userId = json['User']['id'];
+    isFavorite = json['isFavorite'];
+    if (avgRating is int) {
+      avgRating = json['avgRating'];
+    } else {
+      avgRating = json['avgRating'].toDouble();
+    }
+    totalFeedback = json['totalFeedback'];
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;

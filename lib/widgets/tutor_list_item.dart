@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/network/models/tokens.dart';
 import 'package:my_app/network/models/tutor_api.dart';
+import 'package:my_app/network/network_request/other/get_flag_request.dart';
+import 'package:my_app/network/network_request/tutor/manage_favorite_tutor_request.dart';
 import 'package:my_app/network/network_request/tutor/tutor_list_request.dart';
+import 'package:my_app/screens/tutor_detail_screen.dart';
 import 'package:my_app/widgets/custom_button.dart';
 import 'package:my_app/widgets/rating.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +27,7 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
   List<TutorApi> tutorList = [];
   bool _isLoading = true;
   int currentPage = 1;
+  
 
   @override
   void initState() {
@@ -46,7 +50,6 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // getData();
     // TeacherRepository teacherRepository = context.watch<TeacherRepository>();
     // TODO: implement build
     return !_isLoading
@@ -58,11 +61,11 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
                   for (TutorApi tutor in tutorList)
                     GestureDetector(
                       onTap: () {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) =>
-                        //             TutorDetailScreen(teacher: tutor)));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    TutorDetailScreen(tutorId: tutor.userId)));
                       },
                       child: Card(
                         child: Container(
@@ -105,15 +108,22 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
   }
 
   Widget _buildAvatar(String? avatarUrl) {
-    return SizedBox(
-        height: 100,
-        width: 100,
-        child: avatarUrl != null
-            ? CircleAvatar(backgroundImage: NetworkImage(avatarUrl))
-            : const Icon(
-                Icons.person,
-                size: 100,
-              ));
+    try {
+      return SizedBox(
+          height: 100,
+          width: 100,
+          child: avatarUrl != null
+              ? CircleAvatar(backgroundImage: NetworkImage(avatarUrl))
+              : const Icon(
+                  Icons.person,
+                  size: 100,
+                ));
+    } catch (e) {
+      return const Icon(
+        Icons.person,
+        size: 100,
+      );
+    }
   }
 
   Widget _buildName(String? name) {
@@ -127,45 +137,8 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
     );
   }
 
-  Widget _buildNation(String? nation) {
-    if (nation != null) {
-      String flagApiUrl = 'https://flagsapi.com/$nation/flat/64.png';
-
-      return FutureBuilder(
-        future: http.get(Uri.parse(flagApiUrl)),
-        builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot) {
-          if (snapshot.hasData) {
-            // Parse the response and extract the flag API
-            // Example: String flagApi = jsonDecode(snapshot.data.body)['flags']['png'];
-
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                      width: 20,
-                      height: 20,
-                      // Use the flag API to display the flag
-                      // Example: Image.network(flagApi),
-                      child: Image.network((flagApiUrl))),
-                  const Padding(
-                    padding: EdgeInsets.only(right: 5),
-                  ),
-                  Text(nation),
-                ],
-              ),
-            );
-          } else if (snapshot.hasError) {
-            return const Text('Error fetching flag API');
-          } else {
-            return const CircularProgressIndicator();
-          }
-        },
-      );
-    } else {
-      return const SizedBox();
-    }
+  Widget _buildNation(String? country) {
+    return GetFlagRequest.getFlag(country);
   }
 
   Widget _buildSpecialities(List<String> specialities) {
@@ -204,10 +177,12 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
         IconButton(
             onPressed: () {
               setState(() {
+                ManageFavoriteTutorRequest.manageFavoriteTutor(
+                    tokens.access?.token ?? '', tutorApi.userId ?? '');
                 tutorApi.isFavorite = !tutorApi.isFavorite!;
               });
             },
-            icon: isFavorited
+            icon: tutorApi.isFavorite!
                 ? const Icon(Icons.favorite, color: Colors.red)
                 : const Icon(Icons.favorite)),
         ElevatedButton.icon(

@@ -20,27 +20,8 @@ class TutorListScreenState extends State<TutorListScreen> {
   final TeacherRepository teacherRepository = TeacherRepository();
   final TextEditingController searchTutorController = TextEditingController();
 
-  // Tokens tokens = Tokens();
-  // List<TutorApi> tutorList = [];
-  // late bool _isLoading;
-
   @override
   void initState() {
-    // tokens = context.read<Tokens>();
-    // Future<dynamic> future =
-    //     TutorListRequest.getTutorListPagination(tokens.access?.token, 9, 1);
-    // future.then((value) {
-    //   setState(() {
-    //     tutorList = value;
-    //   });
-    // });
-
-    // _isLoading = true;
-    // Future.delayed(const Duration(seconds: 1), () {
-    //   setState(() {
-    //     _isLoading = false;
-    //   });
-    // });
     super.initState();
   }
 
@@ -148,10 +129,10 @@ class TutorListScreenState extends State<TutorListScreen> {
   }
 
   Widget _buildFilterButtons() {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Select available tutoring time:',
           style: TextStyle(
             fontSize: 15,

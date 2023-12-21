@@ -1,16 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:my_app/model/teacher.dart';
+import 'package:my_app/network/models/tokens.dart';
+import 'package:my_app/network/models/tutor_api.dart';
+import 'package:my_app/network/models/user_api.dart';
+import 'package:my_app/network/network_request/other/get_flag_request.dart';
+import 'package:my_app/network/network_request/tutor/get_tutor_info_request.dart';
+import 'package:my_app/network/network_request/tutor/manage_favorite_tutor_request.dart';
+import 'package:my_app/network/network_request/user/get_user_info_request.dart';
 import 'package:my_app/screens/booking_calendar_screen.dart';
 import 'package:my_app/widgets/custom_button.dart';
 import 'package:my_app/widgets/rating.dart';
 import 'package:my_app/widgets/review.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 class TutorDetailScreen extends StatefulWidget {
-  const TutorDetailScreen({super.key, required this.teacher});
+  const TutorDetailScreen({super.key, required this.tutorId});
 
-  final Teacher teacher;
+  // final Teacher teacher;
+  final String? tutorId;
+
   @override
   State<StatefulWidget> createState() {
     return TutorDetailScreenState();
@@ -18,74 +28,105 @@ class TutorDetailScreen extends StatefulWidget {
 }
 
 class TutorDetailScreenState extends State<TutorDetailScreen> {
-  bool isFavorited = true;
+  UserApi userApi = UserApi();
+  TutorApi tutorApi = TutorApi();
+  Tokens tokens = Tokens();
+  bool _isLoading = true;
 
-  final FlickManager flickManager = FlickManager(
-    videoPlayerController: VideoPlayerController.network(
-      'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-    ),
-  );
+  late final FlickManager flickManager;
 
   @override
   void initState() {
+    getData();
     super.initState();
-    isFavorited = true;
+  }
+
+  Future<void> getData() async {
+    tokens = context.read<Tokens>();
+
+    Future<dynamic> future =
+        GetTutorInfoRequest.getTutorInfo(tokens.access?.token, widget.tutorId);
+    await future.then((value) {
+      setState(() {
+        tutorApi = value;
+        loadVideo();
+        _isLoading = false;
+      });
+    });
+  }
+
+  Future<void> loadVideo() async {
+    flickManager = FlickManager(
+      videoPlayerController: VideoPlayerController.network(
+        tutorApi.video ?? '',
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Tutor detail'),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildTutorHeader(widget.teacher),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-              _buildTutorDescription(widget.teacher.description),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-              _buildTutorActions(),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-              FlickVideoPlayer(flickManager: flickManager),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-              _buildInformationDetail(widget.teacher),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-              _buildBookingButton(),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-              _buildHeaderOfInformation('Other reviews'),
-              _buildReviewWidgets(),
-            ],
-          ),
+        appBar: AppBar(
+          title: const Text('Tutor detail'),
         ),
-      ),
-    );
+        body: !_isLoading
+            ? SingleChildScrollView(
+                child: Container(
+                  margin: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildTutorHeader(tutorApi),
+                      const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10)),
+                      _buildTutorDescription(tutorApi.bio ?? ''),
+                      const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10)),
+                      _buildTutorActions(),
+                      const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10)),
+                      FlickVideoPlayer(flickManager: flickManager),
+                      const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10)),
+                      _buildInformationDetail(tutorApi),
+                      const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10)),
+                      _buildBookingButton(),
+                      const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10)),
+                      _buildHeaderOfInformation('Other reviews'),
+                      _buildReviewWidgets(),
+                    ],
+                  ),
+                ),
+              )
+            : Center(
+                heightFactor: MediaQuery.of(context).size.height / 2,
+                child: const CircularProgressIndicator(
+                  color: Colors.blue,
+                ),
+              ));
   }
 
-  Widget _buildTutorHeader(Teacher teacher) {
-    String name = teacher.name;
-    String avatarUrl = teacher.avatarUrl;
-    int rating = teacher.rating;
-    String nation = teacher.nation;
-    String nationUrlLowcase = nation.toLowerCase();
-    String nationUrl = 'lib/assets/icons/user/country/$nationUrlLowcase.png';
-
+  Widget _buildTutorHeader(TutorApi tutorApi) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         SizedBox(
-          height: 100,
-          width: 100,
-          child: Image.asset(avatarUrl),
-        ),
+            height: 100,
+            width: 100,
+            child: tutorApi.avatar != null
+                ? CircleAvatar(
+                    backgroundImage: NetworkImage(tutorApi.avatar ?? ''))
+                : const Icon(
+                    Icons.person,
+                    size: 100,
+                  )),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              name,
+              tutorApi.name ?? 'No name',
               style: const TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
@@ -94,21 +135,16 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
             ),
             const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
             Row(
-              children: [RatingWidget(rating: rating as double), Text('  ($rating)')],
-            ),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: Image.asset(nationUrl),
-                ),
-                const Padding(padding: EdgeInsets.only(right: 5)),
-                Text(nation),
+                if (tutorApi.rating != null)
+                  RatingWidget(rating: tutorApi.rating as double)
+                else
+                  Text("No rating"),
+                Text('   (${tutorApi.totalFeedback})')
               ],
             ),
+            const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+            GetFlagRequest.getFlag(tutorApi.country ?? ''),
           ],
         ),
       ],
@@ -125,7 +161,7 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
   Widget _buildTutorActions() {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
       _buildActionIconButton(
-          isFavorited
+          tutorApi.isFavorite!
               ? const Icon(
                   Icons.favorite,
                   color: Colors.red,
@@ -136,7 +172,9 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
                 ),
           'Favorite', () {
         setState(() {
-          isFavorited = !isFavorited;
+          ManageFavoriteTutorRequest.manageFavoriteTutor(
+              tokens.access?.token ?? '', tutorApi.userId ?? '');
+          tutorApi.isFavorite = !tutorApi.isFavorite!;
         });
       }),
       _buildActionIconButton(const Icon(Icons.message), 'Message', () {
@@ -165,25 +203,33 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
     );
   }
 
-  Widget _buildInformationDetail(Teacher teacher) {
+  Widget _buildInformationDetail(TutorApi tutorApi) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildHeaderOfInformation("Education"),
         CustomButtonWidget(
-          content: teacher.education,
+          content: tutorApi.education ?? '',
           function: () {},
           color: Colors.blue,
         ),
         const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
         _buildHeaderOfInformation('Languages'),
-        _buildMultiCustomButtons(teacher.specialities),
+        _buildMultiCustomButtons(tutorApi.languages != null
+            ? tutorApi.languages!.split(',').map((s) => s.trim()).toList()
+            : []),
+        const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+        _buildHeaderOfInformation("Specialities"),
+        _buildMultiCustomButtons(tutorApi.specialties != null
+            ? tutorApi.specialties!.split(',').map((s) => s.trim()).toList()
+            : []),
         const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
         _buildHeaderOfInformation('Interests'),
-        Padding(padding: EdgeInsets.all(5), child: Text(teacher.interests)),
+        Padding(
+            padding: EdgeInsets.all(5), child: Text(tutorApi.interests ?? '')),
         const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
         _buildHeaderOfInformation('Teaching experience'),
-        Padding(padding: EdgeInsets.all(5), child: Text(teacher.experience)),
+        Padding(padding: EdgeInsets.all(5), child: Text(tutorApi.bio ?? '')),
       ],
     );
   }
@@ -202,14 +248,15 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
   Widget _buildMultiCustomButtons(List<String> contents) {
     return Wrap(
       children: [
-        for (String item in contents) ...[
-          CustomButtonWidget(
-            content: item,
-            function: () {},
-            color: Colors.blue,
+        for (String item in contents)
+          Padding(
+            padding: EdgeInsets.only(right: 5),
+            child: CustomButtonWidget(
+              content: item,
+              function: () {},
+              color: Colors.blue,
+            ),
           ),
-          Padding(padding: EdgeInsets.all(3))
-        ]
       ],
     );
   }
@@ -236,11 +283,11 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
           foregroundColor: MaterialStateProperty.all(Colors.white),
         ),
         onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      BookingCalendarScreen(teacher: widget.teacher)));
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //         builder: (context) =>
+          //             BookingCalendarScreen(teacher: widget.teacher)));
         },
         icon: const Icon(
           Icons.calendar_month,

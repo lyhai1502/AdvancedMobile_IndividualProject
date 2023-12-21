@@ -1,3 +1,5 @@
+import 'package:my_app/network/models/tutor_api.dart';
+
 class UserApi {
   String? id;
   String? email;
@@ -9,7 +11,7 @@ class UserApi {
   String? language;
   String? birthday;
   bool? isActivated;
-  TutorInfo? tutorInfo;
+  TutorApi? tutorApi;
   WalletInfo? walletInfo;
   String? requireNote;
   String? level;
@@ -35,7 +37,7 @@ class UserApi {
       this.language,
       this.birthday,
       this.isActivated,
-      this.tutorInfo,
+      this.tutorApi,
       this.walletInfo,
       this.requireNote,
       this.level,
@@ -61,8 +63,8 @@ class UserApi {
     language = json['language'];
     birthday = json['birthday'];
     isActivated = json['isActivated'];
-    tutorInfo = json['tutorInfo'] != null
-        ? new TutorInfo.fromJson(json['tutorInfo'])
+    tutorApi = json['tutorInfo'] != null
+        ? new TutorApi.fromJson(json['tutorInfo'])
         : null;
     walletInfo = json['walletInfo'] != null
         ? new WalletInfo.fromJson(json['walletInfo'])
@@ -105,8 +107,8 @@ class UserApi {
     data['language'] = this.language;
     data['birthday'] = this.birthday;
     data['isActivated'] = this.isActivated;
-    if (this.tutorInfo != null) {
-      data['tutorInfo'] = this.tutorInfo!.toJson();
+    if (this.tutorApi != null) {
+      data['tutorInfo'] = this.tutorApi!.toJson();
     }
     if (this.walletInfo != null) {
       data['walletInfo'] = this.walletInfo!.toJson();
@@ -130,83 +132,6 @@ class UserApi {
     // data['studentGroup'] = this.studentGroup;
     // data['studentInfo'] = this.studentInfo;
     data['avgRating'] = this.avgRating;
-    return data;
-  }
-}
-
-class TutorInfo {
-  String? id;
-  String? video;
-  String? bio;
-  String? education;
-  String? experience;
-  String? profession;
-  Null? accent;
-  String? targetStudent;
-  String? interests;
-  String? languages;
-  String? specialties;
-  Null? resume;
-  int? rating;
-  bool? isActivated;
-  bool? isNative;
-  Null? youtubeVideoId;
-
-  TutorInfo(
-      {this.id,
-      this.video,
-      this.bio,
-      this.education,
-      this.experience,
-      this.profession,
-      this.accent,
-      this.targetStudent,
-      this.interests,
-      this.languages,
-      this.specialties,
-      this.resume,
-      this.rating,
-      this.isActivated,
-      this.isNative,
-      this.youtubeVideoId});
-
-  TutorInfo.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    video = json['video'];
-    bio = json['bio'];
-    education = json['education'];
-    experience = json['experience'];
-    profession = json['profession'];
-    accent = json['accent'];
-    targetStudent = json['targetStudent'];
-    interests = json['interests'];
-    languages = json['languages'];
-    specialties = json['specialties'];
-    resume = json['resume'];
-    rating = json['rating'];
-    isActivated = json['isActivated'];
-    isNative = json['isNative'];
-    youtubeVideoId = json['youtubeVideoId'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['video'] = this.video;
-    data['bio'] = this.bio;
-    data['education'] = this.education;
-    data['experience'] = this.experience;
-    data['profession'] = this.profession;
-    data['accent'] = this.accent;
-    data['targetStudent'] = this.targetStudent;
-    data['interests'] = this.interests;
-    data['languages'] = this.languages;
-    data['specialties'] = this.specialties;
-    data['resume'] = this.resume;
-    data['rating'] = this.rating;
-    data['isActivated'] = this.isActivated;
-    data['isNative'] = this.isNative;
-    data['youtubeVideoId'] = this.youtubeVideoId;
     return data;
   }
 }

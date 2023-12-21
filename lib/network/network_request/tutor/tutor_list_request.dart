@@ -3,6 +3,7 @@ import 'dart:core';
 
 import 'package:http/http.dart' as http;
 import 'package:my_app/network/models/tutor_api.dart';
+import 'package:my_app/network/network_request/tutor/get_tutor_info_request.dart';
 import 'package:my_app/network/response/ErrorResponse.dart';
 
 class TutorListRequest {
@@ -22,8 +23,14 @@ class TutorListRequest {
       final json = jsonDecode(response.body);
       for (var i = 0; i < perPage; i++) {
         final tutorApi = TutorApi.fromJson(json['tutors']['rows'][i]);
+        Future<dynamic> newTutor =
+            GetTutorInfoRequest.getTutorInfo(token, tutorApi.userId);
+        await newTutor.then((value) {
+          tutorApi.isFavorite = value.isFavorite;
+        });
         tutorsList.add(tutorApi);
       }
+
       return tutorsList;
     } else if (response.statusCode == 400 || response.statusCode == 401) {
       final json = jsonDecode(response.body);
