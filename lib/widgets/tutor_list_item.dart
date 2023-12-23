@@ -8,11 +8,11 @@ import 'package:my_app/screens/tutor_detail_screen.dart';
 import 'package:my_app/widgets/custom_button.dart';
 import 'package:my_app/widgets/rating.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
 class TutorListItemWidget extends StatefulWidget {
-  const TutorListItemWidget({super.key});
+  TutorListItemWidget({super.key, required this.tutorList});
 
+  List<TutorApi> tutorList = [];
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -24,10 +24,8 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
   bool isFavorited = false;
 
   Tokens tokens = Tokens();
-  List<TutorApi> tutorList = [];
   bool _isLoading = true;
   int currentPage = 1;
-  
 
   @override
   void initState() {
@@ -36,13 +34,14 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
   }
 
   Future<void> getData() async {
+    widget.tutorList = [];
     tokens = context.read<Tokens>();
 
     Future<dynamic> future = TutorListRequest.getTutorListPagination(
         tokens.access?.token, 9, currentPage);
     await future.then((value) {
       setState(() {
-        tutorList = value;
+        widget.tutorList = value;
         _isLoading = false;
       });
     });
@@ -58,7 +57,7 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
               _buildPaginationButtons(),
               Center(
                 child: Column(children: [
-                  for (TutorApi tutor in tutorList)
+                  for (TutorApi tutor in widget.tutorList)
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -78,7 +77,7 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
                               if (tutor.rating != null)
                                 RatingWidget(rating: tutor.rating as double)
                               else
-                                Text("No rating"),
+                                const Text("No rating"),
                               _buildSpecialities(tutor.specialties != null
                                   ? tutor.specialties!
                                       .split(',')
@@ -99,9 +98,8 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
               ),
             ],
           )
-        : Center(
-            heightFactor: MediaQuery.of(context).size.height / 2,
-            child: const CircularProgressIndicator(
+        : const Center(
+            child: CircularProgressIndicator(
               color: Colors.blue,
             ),
           );
@@ -171,6 +169,7 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
   }
 
   Widget _buildButtons(TutorApi tutorApi) {
+    tutorApi.isFavorite ??= false;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

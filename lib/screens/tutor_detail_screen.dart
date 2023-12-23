@@ -208,11 +208,8 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildHeaderOfInformation("Education"),
-        CustomButtonWidget(
-          content: tutorApi.education ?? '',
-          function: () {},
-          color: Colors.blue,
-        ),
+        Padding(
+            padding: EdgeInsets.all(5), child: Text(tutorApi.education ?? '')),
         const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
         _buildHeaderOfInformation('Languages'),
         _buildMultiCustomButtons(tutorApi.languages != null

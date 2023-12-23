@@ -60,7 +60,7 @@ class TutorApi {
     isNative = json['isNative'];
     youtubeVideoId = json['youtubeVideoId'];
     userId = json['userId'];
-    isFavorite = json['isFavorite'];
+    isFavorite = json['isFavoriteTutor'];
     avgRating = json['avgRating'];
     totalFeedback = json['totalFeedback'];
   }

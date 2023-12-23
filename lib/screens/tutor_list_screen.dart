@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
+import 'package:my_app/network/models/tokens.dart';
+import 'package:my_app/network/models/tutor_api.dart';
+import 'package:my_app/network/network_request/tutor/search_filter_tutor_request.dart';
 import 'package:my_app/repository/teacher_repository.dart';
 import 'package:my_app/widgets/fliter_button_list.dart';
 import 'package:my_app/widgets/tutor_list_item.dart';
@@ -20,6 +23,7 @@ class TutorListScreenState extends State<TutorListScreen> {
   final TeacherRepository teacherRepository = TeacherRepository();
   final TextEditingController searchTutorController = TextEditingController();
 
+  List<TutorApi> tutorList = [];
   @override
   void initState() {
     super.initState();
@@ -29,7 +33,9 @@ class TutorListScreenState extends State<TutorListScreen> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => teacherRepository),
+        ChangeNotifierProvider(
+          create: (context) => teacherRepository,
+        ),
       ],
       child: SingleChildScrollView(child: _buildTutorList()),
     );
@@ -96,14 +102,26 @@ class TutorListScreenState extends State<TutorListScreen> {
 
   Widget _buildSearchTextField() {
     return CupertinoSearchTextField(
-      placeholder: 'Search tutor name/country',
+      placeholder: 'Search tutor name',
       controller: searchTutorController,
       onChanged: (value) {
         setState(() {
-          teacherRepository.findByNameOrNation(searchTutorController.text);
+          getSearchData();
+          // teacherRepository.findByNameOrNation(searchTutorController.text);
+          // print(value);
         });
       },
     );
+  }
+
+  Future<void> getSearchData() async {
+    Future<dynamic> future = SearchFilterTutorRequest.searchTutor(
+        context.read<Tokens>().access?.token, searchTutorController.text, 9, 1);
+    await future.then((value) {
+      setState(() {
+        tutorList = value;
+      });
+    });
   }
 
   Widget _buildSelectDropDown({
@@ -165,6 +183,6 @@ class TutorListScreenState extends State<TutorListScreen> {
   }
 
   Widget _buildTutorListCard() {
-    return TutorListItemWidget();
+    return TutorListItemWidget(tutorList: tutorList);
   }
 }
