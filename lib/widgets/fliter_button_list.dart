@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/network/models/tokens.dart';
-import 'package:my_app/network/models/tutor_api.dart';
 import 'package:my_app/network/network_request/tutor/search_filter_tutor_request.dart';
 import 'package:my_app/repository/teacher_repository.dart';
 import 'package:provider/provider.dart';
@@ -35,19 +34,18 @@ class FilterButtonListState extends State<FilterButtonList> {
   @override
   Widget build(BuildContext context) {
     TeacherRepository teacherRepository = context.watch<TeacherRepository>();
-    List<TutorApi> tutorList = context.watch<List<TutorApi>>();
+
     // TODO: implement build
     return Wrap(
       children: [
         for (String item in specialitiesFilters)
-          _buildFilterButton(item, teacherRepository, tutorList),
-        _buildResetFilterButton(teacherRepository, tutorList),
+          _buildFilterButton(item, teacherRepository),
+        _buildResetFilterButton(teacherRepository),
       ],
     );
   }
 
-  Widget _buildFilterButton(String item, TeacherRepository teacherRepository,
-      List<TutorApi> tutorList) {
+  Widget _buildFilterButton(String item, TeacherRepository teacherRepository) {
     return Container(
       padding: const EdgeInsets.only(right: 10),
       child: ElevatedButton(
@@ -67,8 +65,8 @@ class FilterButtonListState extends State<FilterButtonList> {
         onPressed: () {
           setState(() {
             selectSpecialitiesFilter = item;
-            getFilterData('flyer', tutorList);
-            // teacherRepository.filterSpecialities(selectSpecialitiesFilter);
+            // SearchFilterTutorRequest.filterTutor(token, keyword, perPage, page)
+            teacherRepository.filterSpecialities(selectSpecialitiesFilter);
           });
         },
         child: Text(item),
@@ -76,19 +74,17 @@ class FilterButtonListState extends State<FilterButtonList> {
     );
   }
 
-  Future<void> getFilterData(String item, List<TutorApi> tutorList) async {
-    Future<dynamic> future = SearchFilterTutorRequest.filterTutor(
+  Future<void> getFilterData(String item) async {
+    Future<dynamic> future = SearchFilterTutorRequest.searchTutor(
         context.read<Tokens>().access?.token, item, 9, 1);
     await future.then((value) {
       setState(() {
-        tutorList = value;
-        print(tutorList.length);
+        //  tutorList = value;
       });
     });
   }
 
-  Widget _buildResetFilterButton(
-      TeacherRepository teacherRepository, List<TutorApi> tutorList) {
+  Widget _buildResetFilterButton(TeacherRepository teacherRepository) {
     return ElevatedButton(
       style: ButtonStyle(
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
