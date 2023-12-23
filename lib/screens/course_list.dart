@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
-import 'package:my_app/model/course.dart';
+import 'package:my_app/network/models/course_api.dart';
+import 'package:my_app/network/models/tokens.dart';
+import 'package:my_app/network/network_request/course/course_list_request.dart';
 import 'package:my_app/repository/course_repository.dart';
 import 'package:my_app/screens/course_detail.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +19,25 @@ class CourseListScreen extends StatefulWidget {
 
 class CourseScreenWidgetState extends State<CourseListScreen> {
   final CourseRepository courseRepository = CourseRepository();
+  Tokens tokens = Tokens();
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
+
+  Future<void> getData() async {
+    tokens = context.read<Tokens>();
+
+    Future<dynamic> future =
+        CourseListRequest.getCourseList(tokens.access?.token, 9, 1);
+    await future.then((value) {
+      setState(() {
+        courseRepository.courseList = value;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -192,14 +213,14 @@ class CourseScreenWidgetState extends State<CourseListScreen> {
   Widget _buildCourseList() {
     return Column(
       children: [
-        for (Course course in courseRepository.list)
+        for (CourseApi course in courseRepository.courseList)
           GestureDetector(
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          CourseDetailScreen(course: course)));
+                          CourseDetailScreen(courseId: course.id)));
             },
             child: Card(
               margin: const EdgeInsets.only(top: 20),
@@ -213,10 +234,17 @@ class CourseScreenWidgetState extends State<CourseListScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Center(
-                      child: SizedBox(
-                        height: 200,
-                        width: 300,
-                        child: Image.asset(course.image),
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          topRight: Radius.circular(12),
+                        ),
+                        child: Image.network(
+                          course.imageUrl ?? '',
+                          width: 400,
+                          height: 200,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
@@ -226,7 +254,7 @@ class CourseScreenWidgetState extends State<CourseListScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            course.name,
+                            course.name ?? '',
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -236,7 +264,7 @@ class CourseScreenWidgetState extends State<CourseListScreen> {
                             padding: EdgeInsets.symmetric(vertical: 5),
                           ),
                           Text(
-                            course.description,
+                            course.description ?? '',
                             style: const TextStyle(
                               color: Colors.black54,
                               fontSize: 15,
@@ -246,7 +274,7 @@ class CourseScreenWidgetState extends State<CourseListScreen> {
                             padding: EdgeInsets.symmetric(vertical: 15),
                           ),
                           Text(
-                            '${course.level}  •  ${course.topics.length} Lessons',
+                            '${courseLevel(course.level)}  •  ${course.topics?.length} Lessons',
                             style: const TextStyle(
                               fontSize: 16,
                             ),
@@ -261,5 +289,20 @@ class CourseScreenWidgetState extends State<CourseListScreen> {
           ),
       ],
     );
+  }
+
+   String courseLevel(String? courseLevel) {
+    switch (courseLevel) {
+      case '0':
+        return 'Any level';
+      case '1':
+        return 'Beginner';
+      case '4':
+        return 'Intermediate';
+      case '7':
+        return 'Advanced';
+      default:
+        return 'Unknown';
+    }
   }
 }

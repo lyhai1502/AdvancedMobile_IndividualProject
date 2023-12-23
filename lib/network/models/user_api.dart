@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:my_app/network/models/tutor_api.dart';
 
-class UserApi {
+class UserApi extends ChangeNotifier{
   String? id;
   String? email;
   String? name;
@@ -64,17 +65,17 @@ class UserApi {
     birthday = json['birthday'];
     isActivated = json['isActivated'];
     tutorApi = json['tutorInfo'] != null
-        ? new TutorApi.fromJson(json['tutorInfo'])
+        ? TutorApi.fromJson(json['tutorInfo'])
         : null;
     walletInfo = json['walletInfo'] != null
-        ? new WalletInfo.fromJson(json['walletInfo'])
+        ? WalletInfo.fromJson(json['walletInfo'])
         : null;
     requireNote = json['requireNote'];
     level = json['level'];
     if (json['learnTopics'] != null) {
       learnTopics = <LearnTopics>[];
       json['learnTopics'].forEach((v) {
-        learnTopics!.add(new LearnTopics.fromJson(v));
+        learnTopics!.add(LearnTopics.fromJson(v));
       });
     }
     // if (json['testPreparations'] != null) {
@@ -86,52 +87,56 @@ class UserApi {
     isPhoneActivated = json['isPhoneActivated'];
     timezone = json['timezone'];
     referralInfo = json['referralInfo'] != null
-        ? new ReferralInfo.fromJson(json['referralInfo'])
+        ? ReferralInfo.fromJson(json['referralInfo'])
         : null;
     studySchedule = json['studySchedule'];
     canSendMessage = json['canSendMessage'];
     // studentGroup = json['studentGroup'];
     // studentInfo = json['studentInfo'];
-    avgRating = json['avgRating'];
+    // if (avgRating is int) {
+    //   avgRating = json['avgRating'];
+    // } else {
+    //   avgRating = json['avgRating'].toDouble();
+    // }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['email'] = this.email;
-    data['name'] = this.name;
-    data['avatar'] = this.avatar;
-    data['country'] = this.country;
-    data['phone'] = this.phone;
-    data['roles'] = this.roles;
-    data['language'] = this.language;
-    data['birthday'] = this.birthday;
-    data['isActivated'] = this.isActivated;
-    if (this.tutorApi != null) {
-      data['tutorInfo'] = this.tutorApi!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['email'] = email;
+    data['name'] = name;
+    data['avatar'] = avatar;
+    data['country'] = country;
+    data['phone'] = phone;
+    data['roles'] = roles;
+    data['language'] = language;
+    data['birthday'] = birthday;
+    data['isActivated'] = isActivated;
+    if (tutorApi != null) {
+      data['tutorInfo'] = tutorApi!.toJson();
     }
-    if (this.walletInfo != null) {
-      data['walletInfo'] = this.walletInfo!.toJson();
+    if (walletInfo != null) {
+      data['walletInfo'] = walletInfo!.toJson();
     }
-    data['requireNote'] = this.requireNote;
-    data['level'] = this.level;
-    if (this.learnTopics != null) {
-      data['learnTopics'] = this.learnTopics!.map((v) => v.toJson()).toList();
+    data['requireNote'] = requireNote;
+    data['level'] = level;
+    if (learnTopics != null) {
+      data['learnTopics'] = learnTopics!.map((v) => v.toJson()).toList();
     }
     // if (this.testPreparations != null) {
     //   data['testPreparations'] =
     //       this.testPreparations!.map((v) => v.toJson()).toList();
     // }
-    data['isPhoneActivated'] = this.isPhoneActivated;
-    data['timezone'] = this.timezone;
-    if (this.referralInfo != null) {
-      data['referralInfo'] = this.referralInfo!.toJson();
+    data['isPhoneActivated'] = isPhoneActivated;
+    data['timezone'] = timezone;
+    if (referralInfo != null) {
+      data['referralInfo'] = referralInfo!.toJson();
     }
-    data['studySchedule'] = this.studySchedule;
-    data['canSendMessage'] = this.canSendMessage;
+    data['studySchedule'] = studySchedule;
+    data['canSendMessage'] = canSendMessage;
     // data['studentGroup'] = this.studentGroup;
     // data['studentInfo'] = this.studentInfo;
-    data['avgRating'] = this.avgRating;
+    data['avgRating'] = avgRating;
     return data;
   }
 }
@@ -150,10 +155,10 @@ class WalletInfo {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['amount'] = this.amount;
-    data['isBlocked'] = this.isBlocked;
-    data['bonus'] = this.bonus;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['amount'] = amount;
+    data['isBlocked'] = isBlocked;
+    data['bonus'] = bonus;
     return data;
   }
 }
@@ -172,10 +177,10 @@ class LearnTopics {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['key'] = this.key;
-    data['name'] = this.name;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['key'] = key;
+    data['name'] = name;
     return data;
   }
 }
@@ -189,15 +194,15 @@ class ReferralInfo {
   ReferralInfo.fromJson(Map<String, dynamic> json) {
     referralCode = json['referralCode'];
     referralPackInfo = json['referralPackInfo'] != null
-        ? new ReferralPackInfo.fromJson(json['referralPackInfo'])
+        ? ReferralPackInfo.fromJson(json['referralPackInfo'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['referralCode'] = this.referralCode;
-    if (this.referralPackInfo != null) {
-      data['referralPackInfo'] = this.referralPackInfo!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['referralCode'] = referralCode;
+    if (referralPackInfo != null) {
+      data['referralPackInfo'] = referralPackInfo!.toJson();
     }
     return data;
   }
@@ -213,8 +218,8 @@ class ReferralPackInfo {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['earnPercent'] = this.earnPercent;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['earnPercent'] = earnPercent;
     return data;
   }
 }

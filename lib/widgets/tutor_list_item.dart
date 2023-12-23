@@ -11,7 +11,7 @@ import 'package:my_app/widgets/rating.dart';
 import 'package:provider/provider.dart';
 
 class TutorListItemWidget extends StatefulWidget {
-  TutorListItemWidget({super.key});
+  const TutorListItemWidget({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -147,7 +147,7 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
         children: [
           for (String item in specialities)
             Padding(
-              padding: EdgeInsets.only(right: 5),
+              padding: const EdgeInsets.only(right: 5),
               child: CustomButtonWidget(
                 content: item,
                 function: () {},

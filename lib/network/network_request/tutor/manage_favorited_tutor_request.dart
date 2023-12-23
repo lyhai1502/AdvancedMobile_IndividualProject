@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:my_app/network/response/ErrorResponse.dart';
-import 'package:my_app/network/response/SuccessResponse.dart';
+import 'package:my_app/network/response/error_response.dart';
+import 'package:my_app/network/response/sucess_response.dart';
 class ManageFavoritedTutorRequest{
   static Future<dynamic> getFavoritedTutorList(String token, String idTutor) async {
     final body = {"tutorId": idTutor};

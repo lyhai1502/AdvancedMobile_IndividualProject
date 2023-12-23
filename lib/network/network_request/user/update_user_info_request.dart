@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:my_app/network/models/user_api.dart';
-import 'package:my_app/network/response/ErrorResponse.dart';
+import 'package:my_app/network/response/error_response.dart';
 
 class UpdateUserInfoRequest {
   static Future<dynamic> updateUserInfo(
@@ -12,7 +12,8 @@ class UpdateUserInfoRequest {
       // String? phoneNumber,
       String? birthday,
       String? level,
-      String? studySchedule) async {
+      String? studySchedule,
+      String? avatar) async {
     const url = "https://sandbox.api.lettutor.com/user/info";
     final uri = Uri.parse(url);
 
@@ -22,12 +23,13 @@ class UpdateUserInfoRequest {
           "Authorization": "Bearer $token",
         },
         body: jsonEncode(<String, String?>{
-          "name": name,
-          "country": country,
+          "name": name ?? "",
+          "country": country ?? "",
           // "phone": phoneNumber,
-          "birthday": birthday,
-          "level": level,
-          "studySchedule": studySchedule,
+          "birthday": birthday ?? "",
+          "level": level ?? "",
+          "studySchedule": studySchedule ?? "",
+          "avatar": avatar ?? ""
         }));
     if (response.statusCode == 200 || response.statusCode == 201) {
       final json = jsonDecode(response.body);

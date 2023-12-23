@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:my_app/network/models/tutor_api.dart';
-import 'package:my_app/network/response/ErrorResponse.dart';
+import 'package:my_app/network/response/error_response.dart';
 
 class SearchFilterTutorRequest {
   static Future<dynamic> searchTutor(
@@ -37,7 +37,7 @@ class SearchFilterTutorRequest {
       String? token, String keyword, int perPage, int page) async {
     final body = {
       "filters": {
-        "specialties": ["$keyword"]
+        "specialties": [keyword]
       },
       "page": page,
       "perPage": perPage

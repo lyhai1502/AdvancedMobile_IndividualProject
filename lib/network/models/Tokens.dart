@@ -8,25 +8,25 @@ class Tokens extends ChangeNotifier {
 
   Tokens.fromJson(Map<String, dynamic> json) {
     access =
-        json['access'] != null ? new Access.fromJson(json['access']) : null;
+        json['access'] != null ? Access.fromJson(json['access']) : null;
     refresh =
-        json['refresh'] != null ? new Access.fromJson(json['refresh']) : null;
+        json['refresh'] != null ? Access.fromJson(json['refresh']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.access != null) {
-      data['access'] = this.access!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (access != null) {
+      data['access'] = access!.toJson();
     }
-    if (this.refresh != null) {
-      data['refresh'] = this.refresh!.toJson();
+    if (refresh != null) {
+      data['refresh'] = refresh!.toJson();
     }
     return data;
   }
 
   void updateTokens(Tokens tokens) {
-    this.access = tokens.access;
-    this.refresh = tokens.refresh;
+    access = tokens.access;
+    refresh = tokens.refresh;
     notifyListeners();
   }
 }
@@ -43,9 +43,9 @@ class Access {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['token'] = this.token;
-    data['expires'] = this.expires;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['token'] = token;
+    data['expires'] = expires;
     return data;
   }
 }

@@ -28,18 +28,18 @@ class ReviewWidget extends StatelessWidget {
               children: [
                 RichText(
                     text: TextSpan(
-                  style: TextStyle(color: Colors.black),
+                  style: const TextStyle(color: Colors.black),
                   children: [
                     TextSpan(
                       text: feedBack?.userName ?? '',
-                      style: TextStyle(fontSize: 15, color: Colors.black),
+                      style: const TextStyle(fontSize: 15, color: Colors.black),
                     ),
                     const TextSpan(
                       text: '    ',
                     ),
                     TextSpan(
-                      text: '${_calculateRemainingTime(feedBack?.createdAt)}',
-                      style: TextStyle(fontSize: 15, color: Colors.black),
+                      text: _calculateRemainingTime(feedBack?.createdAt),
+                      style: const TextStyle(fontSize: 15, color: Colors.black),
                     ),
                   ],
                 )),
@@ -62,9 +62,6 @@ class ReviewWidget extends StatelessWidget {
   String _calculateRemainingTime(String? createdAt) {
     final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
     final createdAt = formatter.parse(feedBack?.createdAt ?? '');
-    if (createdAt == null) {
-      return 'Unknown';
-    }
 
     final now = DateTime.now();
     final difference = now.difference(createdAt);

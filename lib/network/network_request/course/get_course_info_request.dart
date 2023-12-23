@@ -1,26 +1,24 @@
 import 'dart:convert';
+import 'dart:core';
 
 import 'package:http/http.dart' as http;
+import 'package:my_app/network/models/course_api.dart';
 import 'package:my_app/network/response/error_response.dart';
-import 'package:my_app/network/models/tokens.dart';
 
-class LoginRequest {
-  static Future<dynamic> login(String email, String password) async {
-    final body = {
-      "email": email,
-      "password": password,
-    };
-    const url = "https://sandbox.api.lettutor.com/auth/login";
+class CourseInfoRequest {
+  static Future<dynamic> getCourseInfo(String? token, String? courseId) async {
+    final url = "https://sandbox.api.lettutor.com/course/$courseId";
     final uri = Uri.parse(url);
 
-    final response = await http.post(uri, body: jsonEncode(body), headers: {
+    final response = await http.get(uri, headers: {
       "Content-Type": "application/json",
+      "Authorization": "Bearer $token",
     });
     if (response.statusCode == 200 || response.statusCode == 201) {
       final json = jsonDecode(response.body);
-      final tokens = Tokens.fromJson(json['tokens']);
-      return tokens;
-    } else if (response.statusCode == 400) {
+      final course = CourseApi.fromJson(json['data']);
+      return course;
+    } else if (response.statusCode == 400 || response.statusCode == 401) {
       final json = jsonDecode(response.body);
       final message = ErrorResponse.fromJson(json);
       return message;

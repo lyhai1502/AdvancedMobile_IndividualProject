@@ -130,5 +130,4 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     );
   }
 
-  void _sendResetEmail() {}
 }

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:my_app/network/models/feed_back.dart';
 
 class TutorApi {
@@ -71,7 +70,7 @@ class TutorApi {
     if (json['feedbacks'] != null) {
       feedback = <FeedBack>[];
       json['feedbacks'].forEach((v) {
-        feedback!.add(new FeedBack.fromJson(v));
+        feedback!.add(FeedBack.fromJson(v));
       });
     }
   }
@@ -104,27 +103,27 @@ class TutorApi {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['avatar'] = this.avatar;
-    data['country'] = this.country;
-    data['video'] = this.video;
-    data['bio'] = this.bio;
-    data['education'] = this.education;
-    data['experience'] = this.experience;
-    data['profession'] = this.profession;
-    data['accent'] = this.accent;
-    data['targetStudent'] = this.targetStudent;
-    data['interests'] = this.interests;
-    data['languages'] = this.languages;
-    data['specialties'] = this.specialties;
-    data['rating'] = this.rating;
-    data['isNative'] = this.isNative;
-    data['youtubeVideoId'] = this.youtubeVideoId;
-    data['User']['id'] = this.userId;
-    data['isFavorite'] = this.isFavorite;
-    data['avgRating'] = this.avgRating;
-    data['totalFeedback'] = this.totalFeedback;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['avatar'] = avatar;
+    data['country'] = country;
+    data['video'] = video;
+    data['bio'] = bio;
+    data['education'] = education;
+    data['experience'] = experience;
+    data['profession'] = profession;
+    data['accent'] = accent;
+    data['targetStudent'] = targetStudent;
+    data['interests'] = interests;
+    data['languages'] = languages;
+    data['specialties'] = specialties;
+    data['rating'] = rating;
+    data['isNative'] = isNative;
+    data['youtubeVideoId'] = youtubeVideoId;
+    data['User']['id'] = userId;
+    data['isFavorite'] = isFavorite;
+    data['avgRating'] = avgRating;
+    data['totalFeedback'] = totalFeedback;
     return data;
   }
 }

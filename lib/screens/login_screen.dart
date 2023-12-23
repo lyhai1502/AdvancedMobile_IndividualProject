@@ -1,9 +1,8 @@
 import 'package:cool_alert/cool_alert.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/model/user.dart';
-import 'package:my_app/network/response/ErrorResponse.dart';
+import 'package:my_app/network/response/error_response.dart';
 import 'package:my_app/network/network_request/authentication/login_request.dart';
 import 'package:my_app/network/models/tokens.dart';
 import 'package:my_app/repository/user_repository.dart';
@@ -24,6 +23,7 @@ class LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
 
   bool _isObscured = false;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -196,43 +196,53 @@ class LoginScreenState extends State<LoginScreen> {
         children: [
           Expanded(
             child: ElevatedButton(
-              onPressed: () {
-                // if (userRepository.isLoginSucess(
-                //     emailController.text, passwordController.text)) {
-                //   user.cloneUser(
-                //       userRepository.getUserByEmail(emailController.text));
-                //   Navigator.pushNamed(context, '/Home');
-                //   CoolAlert.show(
-                //     confirmBtnText: 'OK',
-                //     context: context,
-                //     type: CoolAlertType.success,
-                //     text: 'Login successfully!',
-                //   );
-                // } else {
-                //   CoolAlert.show(
-                //     confirmBtnText: 'OK',
-                //     context: context,
-                //     type: CoolAlertType.warning,
-                //     text: 'Your email or password is incorrect',
-                //   );
-                // }
-                // userTokenApi = await UserTokenApi()
-                //     .login(emailController.text, passwordController.text);
+                onPressed: () {
+                  // if (userRepository.isLoginSucess(
+                  //     emailController.text, passwordController.text)) {
+                  //   user.cloneUser(
+                  //       userRepository.getUserByEmail(emailController.text));
+                  //   Navigator.pushNamed(context, '/Home');
+                  //   CoolAlert.show(
+                  //     confirmBtnText: 'OK',
+                  //     context: context,
+                  //     type: CoolAlertType.success,
+                  //     text: 'Login successfully!',
+                  //   );
+                  // } else {
+                  //   CoolAlert.show(
+                  //     confirmBtnText: 'OK',
+                  //     context: context,
+                  //     type: CoolAlertType.warning,
+                  //     text: 'Your email or password is incorrect',
+                  //   );
+                  // }
+                  // userTokenApi = await UserTokenApi()
+                  //     .login(emailController.text, passwordController.text);
 
-                // if (kDebugMode) {
-                //   print(userTokenApi.user != null);
-                // }
-                loginRequest(currentTokens);
-              },
-              style: ButtonStyle(
-                textStyle: MaterialStateProperty.all(
-                  const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  // if (kDebugMode) {
+                  //   print(userTokenApi.user != null);
+                  // }
+                  setState(() {
+                    _isLoading = true;
+                    loginRequest(currentTokens);
+                  });
+                },
+                style: ButtonStyle(
+                  textStyle: MaterialStateProperty.all(
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  backgroundColor: MaterialStateProperty.all(Colors.blue),
+                  foregroundColor: MaterialStateProperty.all(Colors.white),
                 ),
-                backgroundColor: MaterialStateProperty.all(Colors.blue),
-                foregroundColor: MaterialStateProperty.all(Colors.white),
-              ),
-              child: Text('Login'.toUpperCase()),
-            ),
+                child: !_isLoading
+                    ? Text('Login'.toUpperCase())
+                    : const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      )),
           ),
         ],
       ),
@@ -303,7 +313,7 @@ class LoginScreenState extends State<LoginScreen> {
   Future<void> loginRequest(Tokens currentTokens) async {
     dynamic tokens =
         await LoginRequest.login(emailController.text, passwordController.text);
-
+    _isLoading = false;
     if (tokens is Tokens) {
       currentTokens.updateTokens(tokens);
       // ignore: use_build_context_synchronously

@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flick_video_player/flick_video_player.dart';
-import 'package:my_app/model/teacher.dart';
 import 'package:my_app/network/models/feed_back.dart';
 import 'package:my_app/network/models/tokens.dart';
 import 'package:my_app/network/models/tutor_api.dart';
-import 'package:my_app/network/models/user_api.dart';
 import 'package:my_app/network/network_request/other/get_flag_request.dart';
 import 'package:my_app/network/network_request/tutor/get_tutor_info_request.dart';
 import 'package:my_app/network/network_request/tutor/manage_favorite_tutor_request.dart';
-import 'package:my_app/network/network_request/user/get_user_info_request.dart';
-import 'package:my_app/screens/booking_calendar_screen.dart';
 import 'package:my_app/widgets/custom_button.dart';
 import 'package:my_app/widgets/rating.dart';
 import 'package:my_app/widgets/review.dart';
@@ -31,7 +27,6 @@ class TutorDetailScreen extends StatefulWidget {
 }
 
 class TutorDetailScreenState extends State<TutorDetailScreen> {
-  UserApi userApi = UserApi();
   TutorApi tutorApi = TutorApi();
   Tokens tokens = Tokens();
   bool _isLoading = true;
@@ -60,6 +55,7 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
 
   Future<void> loadVideo() async {
     flickManager = FlickManager(
+      // ignore: deprecated_member_use
       videoPlayerController: VideoPlayerController.network(
         tutorApi.video ?? '',
       ),
@@ -142,7 +138,7 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
                 if (tutorApi.rating != null)
                   RatingWidget(rating: tutorApi.rating as double)
                 else
-                  Text("No rating"),
+                  const Text("No rating"),
                 Text('   (${tutorApi.totalFeedback})')
               ],
             ),
@@ -157,7 +153,7 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
   Widget _buildTutorDescription(String description) {
     return Text(
       description,
-      style: TextStyle(fontSize: 15, color: Colors.black),
+      style: const TextStyle(fontSize: 15, color: Colors.black),
     );
   }
 
@@ -212,7 +208,7 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
       children: [
         _buildHeaderOfInformation("Education"),
         Padding(
-            padding: EdgeInsets.all(5), child: Text(tutorApi.education ?? '')),
+            padding: const EdgeInsets.all(5), child: Text(tutorApi.education ?? '')),
         const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
         _buildHeaderOfInformation('Languages'),
         _buildMultiCustomButtons(tutorApi.languages != null
@@ -226,10 +222,10 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
         const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
         _buildHeaderOfInformation('Interests'),
         Padding(
-            padding: EdgeInsets.all(5), child: Text(tutorApi.interests ?? '')),
+            padding: const EdgeInsets.all(5), child: Text(tutorApi.interests ?? '')),
         const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
         _buildHeaderOfInformation('Teaching experience'),
-        Padding(padding: EdgeInsets.all(5), child: Text(tutorApi.bio ?? '')),
+        Padding(padding: const EdgeInsets.all(5), child: Text(tutorApi.bio ?? '')),
       ],
     );
   }
@@ -250,7 +246,7 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
       children: [
         for (String item in contents)
           Padding(
-            padding: EdgeInsets.only(right: 5),
+            padding: const EdgeInsets.only(right: 5),
             child: CustomButtonWidget(
               content: item,
               function: () {},

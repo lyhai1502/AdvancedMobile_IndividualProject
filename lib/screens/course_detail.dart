@@ -1,12 +1,17 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/model/course.dart';
+import 'package:my_app/network/models/course_api.dart';
+import 'package:my_app/network/models/tokens.dart';
+import 'package:my_app/network/network_request/course/get_course_info_request.dart';
+import 'package:my_app/screens/pdf_view_screen.dart';
 import 'package:my_app/widgets/custom_button.dart';
+import 'package:provider/provider.dart';
 
 class CourseDetailScreen extends StatefulWidget {
-  const CourseDetailScreen({Key? key, required this.course}) : super(key: key);
+  const CourseDetailScreen({Key? key, required this.courseId})
+      : super(key: key);
 
-  final Course course;
+  final String? courseId;
   @override
   State<StatefulWidget> createState() {
     return CourseDetailScreenState();
@@ -14,51 +19,89 @@ class CourseDetailScreen extends StatefulWidget {
 }
 
 class CourseDetailScreenState extends State<CourseDetailScreen> {
+  CourseApi courseApi = CourseApi();
+  Tokens tokens = Tokens();
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
+
+  Future<void> getData() async {
+    tokens = context.read<Tokens>();
+
+    Future<dynamic> future =
+        CourseInfoRequest.getCourseInfo(tokens.access?.token, widget.courseId);
+    await future.then((value) {
+      setState(() {
+        courseApi = value;
+        _isLoading = false;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Course detail'),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _buildCourseCard(context),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-              _buildSection("Overview", [
-                _buildListItem(Icons.question_mark_rounded,
-                    "Why take this course", widget.course.target),
-                const Padding(padding: EdgeInsets.only(top: 20)),
-                _buildListItem(Icons.question_mark_rounded,
-                    "What will you be able to do", widget.course.todo),
-              ]),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
-              _buildSection("Experience Level", [
-                _buildInfoRow(Icons.person, widget.course.level),
-              ]),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
-              _buildSection("Course Length", [
-                _buildInfoRow(
-                    Icons.book, "${widget.course.topics.length} topics"),
-              ]),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
-              _buildSection("List Topics", [
-                for (var i = 0; i < widget.course.topics.length; i++)
-                  _buildTopicCard(widget.course.topics[i], i + 1),
-              ]),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-              _buildSection("Suggested Tutors", [
-                _buildSuggestedTutor("Keegan"),
-              ]),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
-            ],
-          ),
+        appBar: AppBar(
+          title: const Text('Course detail'),
         ),
-      ),
-    );
+        body: !_isLoading
+            ? SingleChildScrollView(
+                child: Container(
+                  margin: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _buildCourseCard(context),
+                      const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10)),
+                      _buildSection("Overview", [
+                        _buildListItem(Icons.question_mark_rounded,
+                            "Why take this course", courseApi.reason ?? ''),
+                        const Padding(padding: EdgeInsets.only(top: 20)),
+                        _buildListItem(
+                            Icons.question_mark_rounded,
+                            "What will you be able to do",
+                            courseApi.purpose ?? ''),
+                      ]),
+                      const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 15)),
+                      _buildSection("Experience Level", [
+                        _buildInfoRow(
+                            Icons.person, courseLevel(courseApi.level ?? '')),
+                      ]),
+                      const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 15)),
+                      _buildSection("Course Length", [
+                        _buildInfoRow(
+                            Icons.book, "${courseApi.topics?.length} topics"),
+                      ]),
+                      const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 15)),
+                      _buildSection("List Topics", [
+                        for (var i = 0; i < courseApi.topics!.length; i++)
+                          _buildTopicCard(courseApi.topics![i], i + 1),
+                      ]),
+                      const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10)),
+                      _buildSection("Suggested Tutors", [
+                        _buildSuggestedTutor("Keegan"),
+                      ]),
+                      const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 20)),
+                    ],
+                  ),
+                ),
+              )
+            : Center(
+                heightFactor: MediaQuery.of(context).size.height / 2,
+                child: const CircularProgressIndicator(
+                  color: Colors.blue,
+                ),
+              ));
   }
 
   Widget _buildCourseCard(BuildContext context) {
@@ -73,10 +116,17 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Center(
-              child: SizedBox(
-                height: 200,
-                width: 300,
-                child: Image.asset(widget.course.image),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(12),
+                  topRight: Radius.circular(12),
+                ),
+                child: Image.network(
+                  courseApi.imageUrl ?? '',
+                  width: 400,
+                  height: 200,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
@@ -86,12 +136,13 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.course.name,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    courseApi.name ?? '',
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                   Text(
-                    widget.course.description,
+                    courseApi.description ?? '',
                     style: const TextStyle(
                       color: Colors.black54,
                       fontSize: 15,
@@ -180,9 +231,15 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
     );
   }
 
-  Widget _buildTopicCard(String topic, int indexTopic) {
+  Widget _buildTopicCard(Topics topic, int indexTopic) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, '/CourseLearnDetail'),
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PdfViewScreen(
+                    pdfUrl: courseApi.topics?[indexTopic].nameFile ?? '')));
+      },
       child: Card(
         elevation: 0,
         shape: const RoundedRectangleBorder(
@@ -205,9 +262,9 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
                     ),
                     const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                     Text(
-                      topic,
-                      style:
-                          const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      topic.name ?? '',
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -238,5 +295,20 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
         ],
       ),
     );
+  }
+
+  String courseLevel(String? courseLevel) {
+    switch (courseLevel) {
+      case '0':
+        return 'Any level';
+      case '1':
+        return 'Beginner';
+      case '4':
+        return 'Intermediate';
+      case '7':
+        return 'Advanced';
+      default:
+        return 'Unknown';
+    }
   }
 }

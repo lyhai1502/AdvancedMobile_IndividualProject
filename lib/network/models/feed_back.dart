@@ -36,15 +36,15 @@ class FeedBack {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['bookingId'] = this.bookingId;
-    data['firstId'] = this.firstId;
-    data['secondId'] = this.secondId;
-    data['rating'] = this.rating;
-    data['content'] = this.content;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['bookingId'] = bookingId;
+    data['firstId'] = firstId;
+    data['secondId'] = secondId;
+    data['rating'] = rating;
+    data['content'] = content;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
     return data;
   }
 }

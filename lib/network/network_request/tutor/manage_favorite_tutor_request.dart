@@ -16,7 +16,6 @@ class ManageFavoriteTutorRequest {
         body: jsonEncode({"tutorId": tutorId}));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print("success");
       return;
     }
   }

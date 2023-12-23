@@ -1,12 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:my_app/model/course.dart';
 import 'package:my_app/model/teacher.dart';
+import 'package:my_app/network/models/course_api.dart';
 
 class CourseRepository extends ChangeNotifier {
   List<Course> list = [];
 
   List<Teacher> filter = [];
+
+  List<CourseApi> courseList = [];
   String filterName = 'All';
+
+  void update() {
+    notifyListeners();
+  }
 
   void add(Course course) {
     list.add(course);

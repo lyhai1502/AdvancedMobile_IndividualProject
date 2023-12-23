@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/network/models/tokens.dart';
@@ -107,9 +109,12 @@ class ProfileScreenState extends State<ProfileScreen> {
               CustomButtonWidget(
                 content: 'Change avatar',
                 function: () {
-                  // var random = Random().nextInt(10);
-                  // user.changeAvatar(
-                  //     'lib/assets/icons/user/avatar/avatar$random.png');
+                  setState(() {
+                    Random random = Random();
+                    String randomAvatarApi =
+                        "https://xsgames.co/randomusers/assets/avatars/female/${random.nextInt(20)}.jpg";
+                    userApi.avatar = randomAvatarApi;
+                  });
                 },
                 color: Colors.blue,
               )
@@ -190,7 +195,8 @@ class ProfileScreenState extends State<ProfileScreen> {
               // phoneNumberController.text,
               birthdayController.text,
               levelController.text,
-              studyScheduleController.text);
+              studyScheduleController.text,
+              userApi.avatar);
 
           CoolAlert.show(
             confirmBtnText: 'OK',
