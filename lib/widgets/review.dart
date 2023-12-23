@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/network/models/feed_back.dart';
+import 'package:intl/intl.dart';
+import 'package:my_app/widgets/rating.dart';
 
 class ReviewWidget extends StatelessWidget {
-  const ReviewWidget({super.key});
+  const ReviewWidget({super.key, required this.feedBack});
 
+  final FeedBack? feedBack;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -12,10 +16,9 @@ class ReviewWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 40,
-              width: 40,
-              child: Image.asset('lib/assets/icons/user/avatar/avatar10.png'),
+            CircleAvatar(
+              radius: 25,
+              backgroundImage: NetworkImage(feedBack?.userAvatar ?? ''),
             ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 5),
@@ -24,38 +27,60 @@ class ReviewWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 RichText(
-                    text: const TextSpan(
+                    text: TextSpan(
                   style: TextStyle(color: Colors.black),
                   children: [
                     TextSpan(
-                      text: 'Keegan',
+                      text: feedBack?.userName ?? '',
                       style: TextStyle(fontSize: 15, color: Colors.black),
                     ),
-                    TextSpan(
+                    const TextSpan(
                       text: '    ',
                     ),
                     TextSpan(
-                      style: TextStyle(color: Colors.grey),
-                      text: '1 months ago',
-                    )
+                      text: '${_calculateRemainingTime(feedBack?.createdAt)}',
+                      style: TextStyle(fontSize: 15, color: Colors.black),
+                    ),
                   ],
                 )),
-                Row(
-                  children: [
-                    for (var i = 0; i < 5; i++)
-                      const Icon(Icons.star,
-                          size: 20, color: Colors.amberAccent),
-                  ],
-                ),
+                RatingWidget(rating: feedBack!.rating!.toDouble()),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 5),
                 ),
-                const Text('Excellent')
+                Text(
+                  feedBack?.content ?? 'No content',
+                  style: const TextStyle(fontSize: 15, color: Colors.black),
+                ),
               ],
             )
           ],
         ),
       ),
     );
+  }
+
+  String _calculateRemainingTime(String? createdAt) {
+    final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
+    final createdAt = formatter.parse(feedBack?.createdAt ?? '');
+    if (createdAt == null) {
+      return 'Unknown';
+    }
+
+    final now = DateTime.now();
+    final difference = now.difference(createdAt);
+
+    if (difference.inDays > 365) {
+      return '${difference.inDays ~/ 365} years ago';
+    } else if (difference.inDays > 30) {
+      return '${difference.inDays ~/ 30} months ago';
+    } else if (difference.inDays > 0) {
+      return '${difference.inDays} days ago';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours} hours ago';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes} minutes ago';
+    } else {
+      return 'Just now';
+    }
   }
 }

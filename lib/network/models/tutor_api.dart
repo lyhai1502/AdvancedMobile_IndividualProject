@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:my_app/network/models/feed_back.dart';
+
 class TutorApi {
   String? name;
   String? avatar;
@@ -13,12 +16,13 @@ class TutorApi {
   String? languages;
   String? specialties;
   double? rating;
-  Null? isNative;
-  Null? youtubeVideoId;
+  bool? isNative;
+  String? youtubeVideoId;
   String? userId;
   bool? isFavorite;
   double? avgRating;
   int? totalFeedback;
+  List<FeedBack>? feedback;
 
   TutorApi(
       {this.name,
@@ -40,7 +44,8 @@ class TutorApi {
       this.userId,
       this.isFavorite,
       this.avgRating,
-      this.totalFeedback});
+      this.totalFeedback,
+      this.feedback});
 
   TutorApi.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -63,6 +68,12 @@ class TutorApi {
     isFavorite = json['isFavoriteTutor'];
     avgRating = json['avgRating'];
     totalFeedback = json['totalFeedback'];
+    if (json['feedbacks'] != null) {
+      feedback = <FeedBack>[];
+      json['feedbacks'].forEach((v) {
+        feedback!.add(new FeedBack.fromJson(v));
+      });
+    }
   }
 
   TutorApi.fromJson2(Map<String, dynamic> json) {

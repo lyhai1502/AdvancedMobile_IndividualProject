@@ -1,11 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:my_app/model/teacher.dart';
+import 'package:my_app/network/models/tutor_api.dart';
+import 'package:my_app/network/network_request/tutor/search_filter_tutor_request.dart';
 
 class TeacherRepository extends ChangeNotifier {
   List<Teacher> list = [];
-
   List<Teacher> filter = [];
+
+  List<TutorApi> tutorList = [];
   String filterName = 'All';
+
+  void update() {
+    notifyListeners();
+  }
 
   void add(Teacher teacher) {
     list.add(teacher);

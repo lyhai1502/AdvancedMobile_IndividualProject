@@ -4,15 +4,15 @@ import 'package:my_app/network/models/tutor_api.dart';
 import 'package:my_app/network/network_request/other/get_flag_request.dart';
 import 'package:my_app/network/network_request/tutor/manage_favorite_tutor_request.dart';
 import 'package:my_app/network/network_request/tutor/tutor_list_request.dart';
+import 'package:my_app/repository/teacher_repository.dart';
 import 'package:my_app/screens/tutor_detail_screen.dart';
 import 'package:my_app/widgets/custom_button.dart';
 import 'package:my_app/widgets/rating.dart';
 import 'package:provider/provider.dart';
 
 class TutorListItemWidget extends StatefulWidget {
-  TutorListItemWidget({super.key, required this.tutorList});
+  TutorListItemWidget({super.key});
 
-  List<TutorApi> tutorList = [];
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -23,6 +23,7 @@ class TutorListItemWidget extends StatefulWidget {
 class TutorListItemWidgetState extends State<TutorListItemWidget> {
   bool isFavorited = false;
 
+  TeacherRepository teacherRepository = TeacherRepository();
   Tokens tokens = Tokens();
   bool _isLoading = true;
   int currentPage = 1;
@@ -34,14 +35,14 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
   }
 
   Future<void> getData() async {
-    widget.tutorList = [];
+    teacherRepository.tutorList = context.read<TeacherRepository>().tutorList;
     tokens = context.read<Tokens>();
 
     Future<dynamic> future = TutorListRequest.getTutorListPagination(
         tokens.access?.token, 9, currentPage);
     await future.then((value) {
       setState(() {
-        widget.tutorList = value;
+        teacherRepository.tutorList = value;
         _isLoading = false;
       });
     });
@@ -49,7 +50,7 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // TeacherRepository teacherRepository = context.watch<TeacherRepository>();
+    teacherRepository = context.watch<TeacherRepository>();
     // TODO: implement build
     return !_isLoading
         ? Column(
@@ -57,14 +58,14 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
               _buildPaginationButtons(),
               Center(
                 child: Column(children: [
-                  for (TutorApi tutor in widget.tutorList)
+                  for (TutorApi tutor in teacherRepository.tutorList)
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    TutorDetailScreen(tutorId: tutor.userId)));
+                                    TutorDetailScreen(tutorId: tutor.userId, feedbacks: tutor.feedback,)));
                       },
                       child: Card(
                         child: Container(

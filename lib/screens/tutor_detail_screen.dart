@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:my_app/model/teacher.dart';
+import 'package:my_app/network/models/feed_back.dart';
 import 'package:my_app/network/models/tokens.dart';
 import 'package:my_app/network/models/tutor_api.dart';
 import 'package:my_app/network/models/user_api.dart';
@@ -16,10 +17,12 @@ import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 class TutorDetailScreen extends StatefulWidget {
-  const TutorDetailScreen({super.key, required this.tutorId});
+  const TutorDetailScreen(
+      {super.key, required this.tutorId, required this.feedbacks});
 
   // final Teacher teacher;
   final String? tutorId;
+  final List<FeedBack>? feedbacks;
 
   @override
   State<StatefulWidget> createState() {
@@ -259,9 +262,11 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
   }
 
   Widget _buildReviewWidgets() {
+    widget.feedbacks?.sort((a, b) => b.createdAt!.compareTo(a.createdAt ?? ''));
     return Column(
       children: [
-        for (var i = 0; i < 10; i++) const ReviewWidget(),
+        for (var i = 0; i < 9; i++)
+          ReviewWidget(feedBack: widget.feedbacks?[i]),
       ],
     );
   }

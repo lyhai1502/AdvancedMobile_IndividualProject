@@ -18,8 +18,8 @@ class FilterButtonListState extends State<FilterButtonList> {
   final List<String> specialitiesFilters = [
     'All',
     'English for kids',
-    'English for business',
-    'Conversational',
+    'Business English',
+    'Conversational English',
     'STARTERS',
     'MOVERS',
     'FLYERS',
@@ -65,8 +65,12 @@ class FilterButtonListState extends State<FilterButtonList> {
         onPressed: () {
           setState(() {
             selectSpecialitiesFilter = item;
-            // SearchFilterTutorRequest.filterTutor(token, keyword, perPage, page)
-            teacherRepository.filterSpecialities(selectSpecialitiesFilter);
+            if (item == 'All') {
+              item = '';
+            }
+            getFilterData(
+                item.replaceAll(' ', '-').toLowerCase(), teacherRepository);
+            // teacherRepository.filterSpecialities(selectSpecialitiesFilter);
           });
         },
         child: Text(item),
@@ -74,12 +78,14 @@ class FilterButtonListState extends State<FilterButtonList> {
     );
   }
 
-  Future<void> getFilterData(String item) async {
-    Future<dynamic> future = SearchFilterTutorRequest.searchTutor(
+  Future<void> getFilterData(
+      String item, TeacherRepository teacherRepository) async {
+    Future<dynamic> future = SearchFilterTutorRequest.filterTutor(
         context.read<Tokens>().access?.token, item, 9, 1);
     await future.then((value) {
       setState(() {
-        //  tutorList = value;
+        teacherRepository.tutorList = value;
+        teacherRepository.update();
       });
     });
   }
@@ -99,7 +105,7 @@ class FilterButtonListState extends State<FilterButtonList> {
       onPressed: () {
         setState(() {
           selectSpecialitiesFilter = 'All';
-          teacherRepository.filterSpecialities(selectSpecialitiesFilter);
+          getFilterData('', teacherRepository);
         });
       },
       child: const Text('Reset filter'),

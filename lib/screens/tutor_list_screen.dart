@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:my_app/network/models/tokens.dart';
-import 'package:my_app/network/models/tutor_api.dart';
 import 'package:my_app/network/network_request/tutor/search_filter_tutor_request.dart';
 import 'package:my_app/repository/teacher_repository.dart';
 import 'package:my_app/widgets/fliter_button_list.dart';
@@ -23,7 +22,6 @@ class TutorListScreenState extends State<TutorListScreen> {
   final TeacherRepository teacherRepository = TeacherRepository();
   final TextEditingController searchTutorController = TextEditingController();
 
-  List<TutorApi> tutorList = [];
   @override
   void initState() {
     super.initState();
@@ -119,7 +117,7 @@ class TutorListScreenState extends State<TutorListScreen> {
         context.read<Tokens>().access?.token, searchTutorController.text, 9, 1);
     await future.then((value) {
       setState(() {
-        tutorList = value;
+        teacherRepository.tutorList = value;
       });
     });
   }
@@ -183,6 +181,6 @@ class TutorListScreenState extends State<TutorListScreen> {
   }
 
   Widget _buildTutorListCard() {
-    return TutorListItemWidget(tutorList: tutorList);
+    return TutorListItemWidget();
   }
 }
