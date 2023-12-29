@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/model/booking.dart';
 import 'package:my_app/model/user.dart';
+import 'package:my_app/network/models/schedule_api.dart';
+import 'package:my_app/network/models/tokens.dart';
+import 'package:my_app/network/network_request/schedule/get_booked_class_request.dart';
 import 'package:my_app/repository/booking_repository.dart';
 import 'package:my_app/widgets/schedule_item.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +19,32 @@ class ScheduleScreen extends StatefulWidget {
 }
 
 class ScheduleScreenState extends State<ScheduleScreen> {
+  Tokens tokens = Tokens();
+  List<ScheduleApi> scheduleList = [];
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
+
+  Future<void> getData() async {
+    tokens = context.read<Tokens>();
+    Future<dynamic> future = GetBookedClassRequest.getBookedClass(
+        tokens.access?.token,
+        1,
+        20,
+        DateTime.now().millisecondsSinceEpoch,
+        'meeting',
+        'desc');
+    await future.then((value) {
+      setState(() {
+        scheduleList = value;
+        print(DateTime.now().millisecondsSinceEpoch);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     BookingRepository bookingRepository = context.watch<BookingRepository>();

@@ -10,6 +10,7 @@ class PdfViewScreen extends StatefulWidget {
   const PdfViewScreen({Key? key, required this.pdfUrl}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _PdfViewScreenState createState() => _PdfViewScreenState();
 }
 

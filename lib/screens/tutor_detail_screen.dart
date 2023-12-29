@@ -125,7 +125,7 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              tutorApi.name ?? 'No name',
+              tutorApi.name ?? '',
               style: const TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,

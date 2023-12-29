@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/model/booking.dart';
 import 'package:my_app/model/user.dart';
+import 'package:my_app/network/models/schedule_api.dart';
+import 'package:my_app/network/models/tokens.dart';
+import 'package:my_app/network/network_request/schedule/get_booked_class_request.dart';
 import 'package:my_app/repository/booking_repository.dart';
 import 'package:my_app/widgets/history_item.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +19,33 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class HistoryScreenState extends State<HistoryScreen> {
+  Tokens tokens = Tokens();
+  List<ScheduleApi> scheduleList = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
+
+  Future<void> getData() async {
+    tokens = context.read<Tokens>();
+    Future<dynamic> future = GetBookedClassRequest.getBookedClass(
+        tokens.access?.token,
+        1,
+        20,
+        DateTime.now().millisecondsSinceEpoch,
+        'meeting',
+        'desc');
+    await future.then((value) {
+      setState(() {
+        scheduleList = value;
+        _isLoading = false;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     BookingRepository bookingRepository = context.watch<BookingRepository>();
@@ -58,11 +88,17 @@ class HistoryScreenState extends State<HistoryScreen> {
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 20),
           ),
-          Column(
-            children: [
-              for (Booking booking in list) HistoryItemWidget(booking: booking)
-            ],
-          )
+          if (_isLoading)
+            const Center(
+              child: CircularProgressIndicator(),
+            )
+          else
+            Column(
+              children: [
+                for (ScheduleApi schedule in scheduleList)
+                  HistoryItemWidget(scheduleApi: schedule)
+              ],
+            )
         ]),
       ),
     );

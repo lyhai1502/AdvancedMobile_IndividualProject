@@ -1,15 +1,22 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/model/booking.dart';
+import 'package:my_app/network/models/schedule_api.dart';
+import 'package:my_app/network/network_request/other/get_flag_request.dart';
 
 class HistoryItemWidget extends StatelessWidget {
-  const HistoryItemWidget({Key? key, required this.booking}) : super(key: key);
+  const HistoryItemWidget({Key? key, required this.scheduleApi})
+      : super(key: key);
 
-  final Booking booking;
+  final ScheduleApi scheduleApi;
 
   @override
   Widget build(BuildContext context) {
+    DateTime scheduleDate = DateTime.parse(
+        scheduleApi.scheduleDetailInfo?.scheduleInfo?.date ?? '');
+    DateTime now = DateTime.now();
+    Duration remainingTime = now.difference(scheduleDate);
+
     return Card(
       child: Container(
         padding: const EdgeInsets.all(10),
@@ -17,7 +24,7 @@ class HistoryItemWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              DateFormat('EEEE, MMM d, yyyy').format(booking.bookingStart),
+              DateFormat.yMMMMd().format(scheduleDate),
               style: const TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
@@ -25,7 +32,10 @@ class HistoryItemWidget extends StatelessWidget {
               ),
             ),
             Text(
-                '${DateTime.now().hour - booking.bookingStart.hour - 1} hours ago'),
+              remainingTime.inDays == 0
+                  ? ' ${remainingTime.inHours} hours ${remainingTime.inMinutes.remainder(60)} minutes ago'
+                  : ' ${remainingTime.inDays} days ago',
+            ),
             _buildProfileInfo(),
             _buildMeetingDetails(),
           ],
@@ -40,16 +50,18 @@ class HistoryItemWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          SizedBox(
-            height: 100,
-            width: 100,
-            child: Image.asset(booking.teacher.avatarUrl),
+          CircleAvatar(
+            radius: 50,
+            backgroundImage: NetworkImage(scheduleApi
+                    .scheduleDetailInfo?.scheduleInfo?.tutorInfo?.avatar ??
+                ''),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                booking.teacher.name,
+                scheduleApi.scheduleDetailInfo?.scheduleInfo?.tutorInfo?.name ??
+                    '',
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -57,20 +69,9 @@ class HistoryItemWidget extends StatelessWidget {
                 ),
               ),
               const Padding(padding: EdgeInsets.symmetric(vertical: 3)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: Image.asset(
-                      'lib/assets/icons/user/country/${booking.teacher.nation.toLowerCase()}.png',
-                    ),
-                  ),
-                  const Padding(padding: EdgeInsets.only(right: 5)),
-                  Text(booking.teacher.nation),
-                ],
-              ),
+              GetFlagRequest.getFlag(scheduleApi
+                      .scheduleDetailInfo?.scheduleInfo?.tutorInfo?.country ??
+                  ''),
               Row(
                 children: [
                   IconButton(
@@ -111,7 +112,7 @@ class HistoryItemWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Text(
-              '${DateFormat.jm().format(booking.bookingStart)} - ${DateFormat.jm().format(booking.bookingEnd)}',
+              '${scheduleApi.scheduleDetailInfo?.startPeriod ?? ''} - ${scheduleApi.scheduleDetailInfo?.endPeriod ?? ''}',
               style: const TextStyle(
                   fontSize: 20,
                   color: Colors.black,
@@ -151,8 +152,8 @@ class HistoryItemWidget extends StatelessWidget {
                   TableCell(
                       child: Container(
                     padding: const EdgeInsets.all(10),
-                    child: booking.request != ''
-                        ? Text(booking.request)
+                    child: scheduleApi.studentRequest != null
+                        ? Text(scheduleApi.studentRequest ?? '')
                         : const Text(
                             'No request for lesson',
                             style: TextStyle(color: Colors.grey),
@@ -234,5 +235,4 @@ class HistoryItemWidget extends StatelessWidget {
       ),
     );
   }
-
 }
