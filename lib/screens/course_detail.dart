@@ -154,8 +154,13 @@ class CourseDetailScreenState extends State<CourseDetailScreen> {
                         child: CustomButtonWidget(
                             content: 'DISCOVER',
                             function: () {
-                              Navigator.pushNamed(
-                                  context, '/CourseLearnDetail');
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PdfViewScreen(
+                                          pdfUrl:
+                                              courseApi.topics?[0].nameFile ??
+                                                  '')));
                             },
                             color: Colors.blue))
                   ]),

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:my_app/model/teacher.dart';
 import 'package:my_app/network/models/tutor_api.dart';
-import 'package:my_app/network/network_request/tutor/search_filter_tutor_request.dart';
 
 class TeacherRepository extends ChangeNotifier {
   List<Teacher> list = [];

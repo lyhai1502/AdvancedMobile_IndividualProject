@@ -39,6 +39,7 @@ class MyAppState extends State<MyApp> {
   final User? user = User();
   final BookingRepository? bookingRepository = BookingRepository();
   final Tokens? currentToken = Tokens();
+  final ThemeData themeData = ThemeData();
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +50,7 @@ class MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => user),
         ChangeNotifierProvider(create: (context) => bookingRepository),
         ChangeNotifierProvider(create: (context) => currentToken),
+        Provider(create: (context) => themeData)
       ],
       child: MaterialApp(
           theme: ThemeData(

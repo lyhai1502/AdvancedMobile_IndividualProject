@@ -20,17 +20,6 @@ class SetttingScreen extends StatelessWidget {
             items: [
               SettingsItem(
                 onTap: () {},
-                icons: Icons.fingerprint,
-                iconStyle: IconStyle(
-                  iconsColor: Colors.white,
-                  withBackground: true,
-                  backgroundColor: Colors.blue,
-                ),
-                title: 'Privacy',
-                subtitle: "Lock to improve your privacy",
-              ),
-              SettingsItem(
-                onTap: () {},
                 icons: Icons.dark_mode_rounded,
                 iconStyle: IconStyle(
                   iconsColor: Colors.white,
