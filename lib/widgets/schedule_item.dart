@@ -1,13 +1,15 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/model/booking.dart';
+import 'package:my_app/network/models/schedule_api.dart';
+import 'package:my_app/network/network_request/other/get_flag_request.dart';
 import 'package:my_app/widgets/custom_button.dart';
 
 class ScheduleItemWidget extends StatefulWidget {
-  const ScheduleItemWidget({Key? key, required this.booking}) : super(key: key);
+  const ScheduleItemWidget({Key? key, required this.scheduleApi})
+      : super(key: key);
 
-  final Booking booking;
+  final ScheduleApi scheduleApi;
 
   @override
   State<StatefulWidget> createState() {
@@ -26,8 +28,9 @@ class ScheduleItemWidgetState extends State<ScheduleItemWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              DateFormat('EEEE, MMM d, yyyy')
-                  .format(widget.booking.bookingStart),
+              DateFormat.yMMMMd().format(DateTime.parse(
+                  widget.scheduleApi.scheduleDetailInfo?.scheduleInfo?.date ??
+                      '')),
               style: const TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
@@ -49,16 +52,19 @@ class ScheduleItemWidgetState extends State<ScheduleItemWidget> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          SizedBox(
-            height: 100,
-            width: 100,
-            child: Image.asset(widget.booking.teacher.avatarUrl),
+          CircleAvatar(
+            radius: 50,
+            backgroundImage: NetworkImage(widget.scheduleApi.scheduleDetailInfo
+                    ?.scheduleInfo?.tutorInfo?.avatar ??
+                ''),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                widget.booking.teacher.name,
+                widget.scheduleApi.scheduleDetailInfo?.scheduleInfo?.tutorInfo
+                        ?.name ??
+                    '',
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -66,20 +72,9 @@ class ScheduleItemWidgetState extends State<ScheduleItemWidget> {
                 ),
               ),
               const Padding(padding: EdgeInsets.symmetric(vertical: 3)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: Image.asset(
-                      'lib/assets/icons/user/country/${widget.booking.teacher.nation.toLowerCase()}.png',
-                    ),
-                  ),
-                  const Padding(padding: EdgeInsets.only(right: 5)),
-                  Text(widget.booking.teacher.nation),
-                ],
-              ),
+              GetFlagRequest.getFlag(widget.scheduleApi.scheduleDetailInfo
+                      ?.scheduleInfo?.tutorInfo?.country ??
+                  ''),
               Row(
                 children: [
                   IconButton(
@@ -117,8 +112,11 @@ class ScheduleItemWidgetState extends State<ScheduleItemWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '${DateFormat.jm().format(widget.booking.bookingStart)} - ${DateFormat.jm().format(widget.booking.bookingEnd)}',
-                style: const TextStyle(fontSize: 20, color: Colors.black),
+                '${widget.scheduleApi.scheduleDetailInfo?.startPeriod ?? ''} - ${widget.scheduleApi.scheduleDetailInfo?.endPeriod ?? ''}',
+                style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
               ),
               ElevatedButton(
                 style: ButtonStyle(
@@ -205,16 +203,15 @@ class ScheduleItemWidgetState extends State<ScheduleItemWidget> {
           TableRow(
             children: [
               TableCell(
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  child: widget.booking.request != ''
-                      ? Text(widget.booking.request)
-                      : const Text(
-                          'Currently there are no requests for this class. Please write down any requests for the teacher.',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                ),
-              ),
+                  child: Container(
+                padding: const EdgeInsets.all(10),
+                child: widget.scheduleApi.studentRequest != null
+                    ? Text(widget.scheduleApi.studentRequest ?? '')
+                    : const Text(
+                        'Currently there are no requests for this class. Please write down any requests for the teacher.',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+              ))
             ],
           ),
         ],

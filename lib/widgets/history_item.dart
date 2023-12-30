@@ -14,8 +14,17 @@ class HistoryItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     DateTime scheduleDate = DateTime.parse(
         scheduleApi.scheduleDetailInfo?.scheduleInfo?.date ?? '');
+    scheduleDate = DateTime(
+      scheduleDate.year,
+      scheduleDate.month,
+      scheduleDate.day,
+      int.parse(
+          scheduleApi.scheduleDetailInfo?.startPeriod?.split(':')[0] ?? ''),
+      int.parse(
+          scheduleApi.scheduleDetailInfo?.startPeriod?.split(':')[1] ?? ''),
+    );
     DateTime now = DateTime.now();
-    Duration remainingTime = now.difference(scheduleDate);
+    Duration passedTime = now.difference(scheduleDate);
 
     return Card(
       child: Container(
@@ -32,9 +41,9 @@ class HistoryItemWidget extends StatelessWidget {
               ),
             ),
             Text(
-              remainingTime.inDays == 0
-                  ? ' ${remainingTime.inHours} hours ${remainingTime.inMinutes.remainder(60)} minutes ago'
-                  : ' ${remainingTime.inDays} days ago',
+              passedTime.inDays == 0
+                  ? ' ${passedTime.inHours} hours ${passedTime.inMinutes.remainder(60)} minutes ago'
+                  : ' ${passedTime.inDays} days ago',
             ),
             _buildProfileInfo(),
             _buildMeetingDetails(),

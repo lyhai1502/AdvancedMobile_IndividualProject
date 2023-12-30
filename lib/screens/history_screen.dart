@@ -90,7 +90,9 @@ class HistoryScreenState extends State<HistoryScreen> {
           ),
           if (_isLoading)
             const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                color: Colors.blue,
+              ),
             )
           else
             Column(

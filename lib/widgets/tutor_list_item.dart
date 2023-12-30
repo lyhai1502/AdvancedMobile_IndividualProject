@@ -35,6 +35,7 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
   }
 
   Future<void> getData() async {
+    _isLoading = true;
     teacherRepository.tutorList = context.read<TeacherRepository>().tutorList;
     tokens = context.read<Tokens>();
 
@@ -52,11 +53,11 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
   Widget build(BuildContext context) {
     teacherRepository = context.watch<TeacherRepository>();
     // TODO: implement build
-    return !_isLoading
-        ? Column(
-            children: [
-              _buildPaginationButtons(),
-              Center(
+    return Column(
+      children: [
+        _buildPaginationButtons(),
+        !_isLoading
+            ? Center(
                 child: Column(children: [
                   for (TutorApi tutor in teacherRepository.tutorList)
                     GestureDetector(
@@ -64,8 +65,10 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    TutorDetailScreen(tutorId: tutor.userId, feedbacks: tutor.feedback,)));
+                                builder: (context) => TutorDetailScreen(
+                                      tutorId: tutor.userId,
+                                      feedbacks: tutor.feedback,
+                                    )));
                       },
                       child: Card(
                         child: Container(
@@ -96,14 +99,14 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
                       ),
                     ),
                 ]),
-              ),
-            ],
-          )
-        : const Center(
-            child: CircularProgressIndicator(
-              color: Colors.blue,
-            ),
-          );
+              )
+            : const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.blue,
+                ),
+              )
+      ],
+    );
   }
 
   Widget _buildAvatar(String? avatarUrl) {

@@ -162,12 +162,12 @@ class TutorListScreenState extends State<TutorListScreen> {
   }
 
   Widget _buildRecommendTutors() {
-    return Column(
+    return const Column(
       children: [
-        const Padding(
+        Padding(
           padding: EdgeInsets.symmetric(vertical: 15),
         ),
-        const Text(
+        Text(
           'Recommend Tutors',
           style: TextStyle(
             fontSize: 20,
@@ -175,12 +175,8 @@ class TutorListScreenState extends State<TutorListScreen> {
             color: Colors.black,
           ),
         ),
-        _buildTutorListCard(),
+        TutorListItemWidget(),
       ],
     );
-  }
-
-  Widget _buildTutorListCard() {
-    return TutorListItemWidget();
   }
 }

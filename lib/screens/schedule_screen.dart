@@ -21,6 +21,7 @@ class ScheduleScreen extends StatefulWidget {
 class ScheduleScreenState extends State<ScheduleScreen> {
   Tokens tokens = Tokens();
   List<ScheduleApi> scheduleList = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -31,16 +32,11 @@ class ScheduleScreenState extends State<ScheduleScreen> {
   Future<void> getData() async {
     tokens = context.read<Tokens>();
     Future<dynamic> future = GetBookedClassRequest.getBookedClass(
-        tokens.access?.token,
-        1,
-        20,
-        DateTime.now().millisecondsSinceEpoch,
-        'meeting',
-        'desc');
+        tokens.access?.token, 1, 20, null, 'meeting', 'desc');
     await future.then((value) {
       setState(() {
         scheduleList = value;
-        print(DateTime.now().millisecondsSinceEpoch);
+        _isLoading = false;
       });
     });
   }
@@ -100,82 +96,90 @@ class ScheduleScreenState extends State<ScheduleScreen> {
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
           ),
-          const Text(
-            'Latest book',
-            style: TextStyle(
-                fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 5),
-          ),
-          Table(
-            border: TableBorder.all(color: Colors.black12),
-            columnWidths: const {
-              0: FlexColumnWidth(1.0),
-              1: FlexColumnWidth(2.0)
-            },
-            children: [
-              TableRow(children: [
-                TableCell(
-                  child: Container(
-                    height: 40,
-                    decoration: const BoxDecoration(
-                      color: Colors.black12,
-                    ),
-                    child: const Center(child: Text('Name')),
-                  ),
-                ),
-                const TableCell(
-                  child: SizedBox(
-                    height: 40,
-                    child: Center(child: Text('sample.pdf')),
-                  ),
-                ),
-              ]),
-              TableRow(children: [
-                TableCell(
-                  child: Container(
-                    height: 40,
-                    decoration: const BoxDecoration(
-                      color: Colors.black12,
-                    ),
-                    child: const Center(child: Text('Page')),
-                  ),
-                ),
-                const TableCell(
-                  child: SizedBox(
-                    height: 40,
-                    child: Center(child: Text('0')),
-                  ),
-                ),
-              ]),
-              TableRow(children: [
-                TableCell(
-                  child: Container(
-                    height: 40,
-                    decoration: const BoxDecoration(
-                      color: Colors.black12,
-                    ),
-                    child: const Center(child: Text('Description')),
-                  ),
-                ),
-                const TableCell(
-                  child: SizedBox(
-                    height: 40,
-                    child: Center(child: Text('...')),
-                  ),
-                ),
-              ]),
-            ],
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 20),
-          ),
-          Column(
-            children: [
-              for (Booking booking in list) ScheduleItemWidget(booking: booking)
-            ],
-          )
+          // const Text(
+          //   'Latest book',
+          //   style: TextStyle(
+          //       fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black),
+          // ),
+          // const Padding(
+          //   padding: EdgeInsets.symmetric(vertical: 5),
+          // ),
+          // Table(
+          //   border: TableBorder.all(color: Colors.black12),
+          //   columnWidths: const {
+          //     0: FlexColumnWidth(1.0),
+          //     1: FlexColumnWidth(2.0)
+          //   },
+          //   children: [
+          //     TableRow(children: [
+          //       TableCell(
+          //         child: Container(
+          //           height: 40,
+          //           decoration: const BoxDecoration(
+          //             color: Colors.black12,
+          //           ),
+          //           child: const Center(child: Text('Name')),
+          //         ),
+          //       ),
+          //       const TableCell(
+          //         child: SizedBox(
+          //           height: 40,
+          //           child: Center(child: Text('sample.pdf')),
+          //         ),
+          //       ),
+          //     ]),
+          //     TableRow(children: [
+          //       TableCell(
+          //         child: Container(
+          //           height: 40,
+          //           decoration: const BoxDecoration(
+          //             color: Colors.black12,
+          //           ),
+          //           child: const Center(child: Text('Page')),
+          //         ),
+          //       ),
+          //       const TableCell(
+          //         child: SizedBox(
+          //           height: 40,
+          //           child: Center(child: Text('0')),
+          //         ),
+          //       ),
+          //     ]),
+          //     TableRow(children: [
+          //       TableCell(
+          //         child: Container(
+          //           height: 40,
+          //           decoration: const BoxDecoration(
+          //             color: Colors.black12,
+          //           ),
+          //           child: const Center(child: Text('Description')),
+          //         ),
+          //       ),
+          //       const TableCell(
+          //         child: SizedBox(
+          //           height: 40,
+          //           child: Center(child: Text('...')),
+          //         ),
+          //       ),
+          //     ]),
+          //   ],
+          // ),
+          // const Padding(
+          //   padding: EdgeInsets.symmetric(vertical: 20),
+          // ),
+          if (_isLoading)
+            const Center(
+              child: CircularProgressIndicator(
+                color: Colors.blue,
+              ),
+            )
+          else
+            Column(
+              children: [
+                for (ScheduleApi schedule in scheduleList)
+                  ScheduleItemWidget(scheduleApi: schedule)
+              ],
+            )
         ]),
       ),
     );
