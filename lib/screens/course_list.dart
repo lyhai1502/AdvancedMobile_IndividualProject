@@ -291,7 +291,7 @@ class CourseScreenWidgetState extends State<CourseListScreen> {
     );
   }
 
-   String courseLevel(String? courseLevel) {
+  String courseLevel(String? courseLevel) {
     switch (courseLevel) {
       case '0':
         return 'Any level';

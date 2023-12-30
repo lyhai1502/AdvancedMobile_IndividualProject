@@ -174,6 +174,20 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
           ManageFavoriteTutorRequest.manageFavoriteTutor(
               tokens.access?.token ?? '', tutorApi.userId ?? '');
           tutorApi.isFavorite = !tutorApi.isFavorite!;
+
+          if (tutorApi.isFavorite!) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Added to favorite'),
+              ),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Removed from favorite'),
+              ),
+            );
+          }
         });
       }),
       _buildActionIconButton(const Icon(Icons.message), 'Message', () {
@@ -208,7 +222,8 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
       children: [
         _buildHeaderOfInformation("Education"),
         Padding(
-            padding: const EdgeInsets.all(5), child: Text(tutorApi.education ?? '')),
+            padding: const EdgeInsets.all(5),
+            child: Text(tutorApi.education ?? '')),
         const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
         _buildHeaderOfInformation('Languages'),
         _buildMultiCustomButtons(tutorApi.languages != null
@@ -222,10 +237,12 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
         const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
         _buildHeaderOfInformation('Interests'),
         Padding(
-            padding: const EdgeInsets.all(5), child: Text(tutorApi.interests ?? '')),
+            padding: const EdgeInsets.all(5),
+            child: Text(tutorApi.interests ?? '')),
         const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
         _buildHeaderOfInformation('Teaching experience'),
-        Padding(padding: const EdgeInsets.all(5), child: Text(tutorApi.bio ?? '')),
+        Padding(
+            padding: const EdgeInsets.all(5), child: Text(tutorApi.bio ?? '')),
       ],
     );
   }

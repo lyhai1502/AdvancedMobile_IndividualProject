@@ -5,6 +5,7 @@ import 'package:my_app/network/network_request/other/get_flag_request.dart';
 import 'package:my_app/network/network_request/tutor/manage_favorite_tutor_request.dart';
 import 'package:my_app/network/network_request/tutor/tutor_list_request.dart';
 import 'package:my_app/repository/teacher_repository.dart';
+import 'package:my_app/screens/booking_calendar_screen.dart';
 import 'package:my_app/screens/tutor_detail_screen.dart';
 import 'package:my_app/widgets/custom_button.dart';
 import 'package:my_app/widgets/rating.dart';
@@ -52,6 +53,15 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
   @override
   Widget build(BuildContext context) {
     teacherRepository = context.watch<TeacherRepository>();
+    // teacherRepository.tutorList.sort((t1, t2) {
+    //   if (t1.rating == null) {
+    //     return 1;
+    //   } else if (t2.rating == null) {
+    //     return -1;
+    //   } else {
+    //     return t2.rating!.compareTo(t1.rating!);
+    //   }
+    // });
     // TODO: implement build
     return Column(
       children: [
@@ -183,6 +193,20 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
                 ManageFavoriteTutorRequest.manageFavoriteTutor(
                     tokens.access?.token ?? '', tutorApi.userId ?? '');
                 tutorApi.isFavorite = !tutorApi.isFavorite!;
+
+                if (tutorApi.isFavorite!) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Added to favorite'),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Removed from favorite'),
+                    ),
+                  );
+                }
               });
             },
             icon: tutorApi.isFavorite!
@@ -200,11 +224,11 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
             foregroundColor: MaterialStateProperty.all(Colors.white),
           ),
           onPressed: () {
-            // Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) =>
-            //             BookingCalendarScreen(teacher: teacher)));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        BookingCalendarScreen(tutorApi: tutorApi)));
           },
           icon: const Icon(
             Icons.calendar_month,

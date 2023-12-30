@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:my_app/network/models/tokens.dart';
 import 'package:my_app/network/network_request/tutor/search_filter_tutor_request.dart';
 import 'package:my_app/repository/teacher_repository.dart';
@@ -50,27 +49,27 @@ class TutorListScreenState extends State<TutorListScreen> {
             children: [
               _buildHeaderText(),
               _buildSearchTextField(),
-              _buildSelectDropDown(
-                hint: 'Sort by rating/favorite',
-                options: <ValueItem>[
-                  const ValueItem(
-                      label: 'Ascending rating', value: 'ascendingRating'),
-                  const ValueItem(
-                      label: 'Descending rating', value: 'descendingRating'),
-                  const ValueItem(
-                      label: 'Ascending favorite', value: 'ascendingFavorite'),
-                  const ValueItem(
-                      label: 'Descending favorite',
-                      value: 'descendingFavorite'),
-                ],
-                selectionType: SelectionType.single,
-                onOptionSelected: (options) {
-                  setState(() {
-                    teacherRepository
-                        .sortTeacherByRatingAndFavorite(options.first.value);
-                  });
-                },
-              ),
+              // _buildSelectDropDown(
+              //   hint: 'Sort by rating/favorite',
+              //   options: <ValueItem>[
+              //     const ValueItem(
+              //         label: 'Ascending rating', value: 'ascendingRating'),
+              //     const ValueItem(
+              //         label: 'Descending rating', value: 'descendingRating'),
+              //     const ValueItem(
+              //         label: 'Ascending favorite', value: 'ascendingFavorite'),
+              //     const ValueItem(
+              //         label: 'Descending favorite',
+              //         value: 'descendingFavorite'),
+              //   ],
+              //   selectionType: SelectionType.single,
+              //   onOptionSelected: (options) {
+              //     setState(() {
+              //       teacherRepository
+              //           .sortTeacherByRatingAndFavorite(options.first.value);
+              //     });
+              //   },
+              // ),
               _buildFilterButtons(),
               _buildRecommendTutors(),
             ],
@@ -118,46 +117,28 @@ class TutorListScreenState extends State<TutorListScreen> {
     await future.then((value) {
       setState(() {
         teacherRepository.tutorList = value;
+        teacherRepository.update();
       });
     });
   }
 
-  Widget _buildSelectDropDown({
-    required String hint,
-    required List<ValueItem> options,
-    required SelectionType selectionType,
-    required onOptionSelected,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: MultiSelectDropDown(
-        hint: hint,
-        showClearIcon: false,
-        hintStyle: const TextStyle(fontSize: 15, color: Colors.black45),
-        onOptionSelected: onOptionSelected,
-        options: options,
-        selectionType: selectionType,
-        dropdownHeight: 200,
-        optionTextStyle: const TextStyle(fontSize: 15),
-        selectedOptionIcon: const Icon(Icons.check_circle),
-      ),
-    );
-  }
-
   Widget _buildFilterButtons() {
-    return const Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Select available tutoring time:',
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
+    return const Padding(
+      padding: EdgeInsets.only(top: 20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Select available tutoring time:',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
           ),
-        ),
-        FilterButtonList(),
-      ],
+          FilterButtonList(),
+        ],
+      ),
     );
   }
 

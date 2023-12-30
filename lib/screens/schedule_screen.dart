@@ -88,7 +88,7 @@ class ScheduleScreenState extends State<ScheduleScreen> {
           Padding(
             padding: const EdgeInsets.all(10),
             child: Text(
-              '${list.length * 25 ~/ 60} hours  ${list.length * 25 % 60} minutes',
+              '86 hours 40 minutes',
               style: const TextStyle(
                   fontSize: 20, color: Colors.red, fontWeight: FontWeight.bold),
             ),

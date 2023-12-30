@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/network/models/tutor_api.dart';
 
-class UserApi extends ChangeNotifier{
+class UserApi extends ChangeNotifier {
   String? id;
   String? email;
   String? name;
@@ -17,7 +17,7 @@ class UserApi extends ChangeNotifier{
   String? requireNote;
   String? level;
   List<LearnTopics>? learnTopics;
-  // List<Null>? testPreparations;
+  List<TestPreparations>? testPreparations;
   bool? isPhoneActivated;
   int? timezone;
   ReferralInfo? referralInfo;
@@ -43,7 +43,7 @@ class UserApi extends ChangeNotifier{
       this.requireNote,
       this.level,
       this.learnTopics,
-      // this.testPreparations,
+      this.testPreparations,
       this.isPhoneActivated,
       this.timezone,
       this.referralInfo,
@@ -64,9 +64,8 @@ class UserApi extends ChangeNotifier{
     language = json['language'];
     birthday = json['birthday'];
     isActivated = json['isActivated'];
-    tutorApi = json['tutorInfo'] != null
-        ? TutorApi.fromJson(json['tutorInfo'])
-        : null;
+    tutorApi =
+        json['tutorInfo'] != null ? TutorApi.fromJson(json['tutorInfo']) : null;
     walletInfo = json['walletInfo'] != null
         ? WalletInfo.fromJson(json['walletInfo'])
         : null;
@@ -78,12 +77,12 @@ class UserApi extends ChangeNotifier{
         learnTopics!.add(LearnTopics.fromJson(v));
       });
     }
-    // if (json['testPreparations'] != null) {
-    //   testPreparations = <Null>[];
-    //   json['testPreparations'].forEach((v) {
-    //     testPreparations!.add(new Null.fromJson(v));
-    //   });
-    // }
+    if (json['testPreparations'] != null) {
+      testPreparations = <TestPreparations>[];
+      json['testPreparations'].forEach((v) {
+        testPreparations!.add(TestPreparations.fromJson(v));
+      });
+    }
     isPhoneActivated = json['isPhoneActivated'];
     timezone = json['timezone'];
     referralInfo = json['referralInfo'] != null
@@ -123,10 +122,10 @@ class UserApi extends ChangeNotifier{
     if (learnTopics != null) {
       data['learnTopics'] = learnTopics!.map((v) => v.toJson()).toList();
     }
-    // if (this.testPreparations != null) {
-    //   data['testPreparations'] =
-    //       this.testPreparations!.map((v) => v.toJson()).toList();
-    // }
+    if (this.testPreparations != null) {
+      data['testPreparations'] =
+          this.testPreparations!.map((v) => v.toJson()).toList();
+    }
     data['isPhoneActivated'] = isPhoneActivated;
     data['timezone'] = timezone;
     if (referralInfo != null) {
@@ -171,6 +170,28 @@ class LearnTopics {
   LearnTopics({this.id, this.key, this.name});
 
   LearnTopics.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    key = json['key'];
+    name = json['name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['key'] = key;
+    data['name'] = name;
+    return data;
+  }
+}
+
+class TestPreparations {
+  int? id;
+  String? key;
+  String? name;
+
+  TestPreparations({this.id, this.key, this.name});
+
+  TestPreparations.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     key = json['key'];
     name = json['name'];

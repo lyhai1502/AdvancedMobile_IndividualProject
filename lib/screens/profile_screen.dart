@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:my_app/network/models/tokens.dart';
 import 'package:my_app/network/models/user_api.dart';
 import 'package:my_app/network/network_request/user/get_user_info_request.dart';
@@ -112,7 +113,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                   setState(() {
                     Random random = Random();
                     String randomAvatarApi =
-                        "https://xsgames.co/randomusers/assets/avatars/female/${random.nextInt(20)}.jpg";
+                        "https://xsgames.co/randomusers/assets/avatars/male/${random.nextInt(20)}.jpg";
                     userApi.avatar = randomAvatarApi;
                   });
                 },
@@ -137,8 +138,10 @@ class ProfileScreenState extends State<ProfileScreen> {
       _buildTextField('Name', nameController),
       _buildTextField('Country', countryController),
       _buildTextField('Phone number', phoneNumberController),
-      _buildTextField('Birthday', birthdayController),
-      _buildTextField('My level', levelController),
+      _buildBirthdayPicker('Birthday', birthdayController, context),
+      _buildMyLevelDropDown('My level', levelController),
+      _buildWanttoLearnMultiDropDown(
+          'Want to learn', userApi.learnTopics, userApi.testPreparations),
       _buildTextField('Study schedule', studyScheduleController),
     ]);
   }
@@ -196,7 +199,9 @@ class ProfileScreenState extends State<ProfileScreen> {
               birthdayController.text,
               levelController.text,
               studyScheduleController.text,
-              userApi.avatar);
+              userApi.avatar,
+              null,
+              null);
 
           CoolAlert.show(
             confirmBtnText: 'OK',
@@ -209,4 +214,156 @@ class ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+}
+
+Widget _buildWanttoLearnMultiDropDown(String label,
+    List<LearnTopics>? learnTopics, List<TestPreparations>? testPreparations) {
+  Map<String, String> learnTopics0 = {
+    'english-for-kids': 'English for Kids',
+    'business-english': 'Business English',
+    'conversational-english': 'Conversational English',
+  };
+  Map<String, String> testPreparations0 = {
+    'starters': 'STARTERS',
+    'movers': 'MOVERS',
+    'flyers': 'FLYERS',
+    'ket': 'KET',
+    'pet': 'PET',
+    'ielts': 'IELTS',
+    'toefl': 'TOEFL',
+    'toeic': 'TOEIC',
+  };
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 10),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        MultiSelectDropDown(
+          hint: 'Select topics',
+          showClearIcon: true,
+          hintStyle: const TextStyle(fontSize: 15, color: Colors.black45),
+          onOptionSelected: (List<ValueItem<dynamic>> selected) {
+            testPreparations = [];
+            for (var element in selected) {
+              if (learnTopics0.containsKey(element.value)) {
+                learnTopics.add(LearnTopics(
+                    key: element.value, name: learnTopics0[element.value]));
+              } else {
+                testPreparations!.add(TestPreparations(
+                    key: element.value,
+                    name: testPreparations0[element.value]));
+              }
+            }
+          },
+          selectedOptions: [
+            for (var item in learnTopics!)
+              ValueItem(label: item.name!, value: item.key),
+            for (var item in testPreparations!)
+              ValueItem(label: item.name!, value: item.key)
+          ],
+          options: [
+            for (var item in learnTopics0.entries)
+              ValueItem(label: item.value, value: item.key),
+            for (var item in testPreparations0.entries)
+              ValueItem(label: item.value, value: item.key)
+          ],
+          selectionType: SelectionType.multi,
+          selectedOptionTextColor: Colors.blue,
+          dropdownHeight: 550,
+          optionTextStyle: const TextStyle(fontSize: 15),
+          selectedOptionIcon: const Icon(Icons.check_circle),
+        )
+      ],
+    ),
+  );
+}
+
+Widget _buildMyLevelDropDown(String label, TextEditingController controller) {
+  Map<String, String> levels = {
+    'Pre A1 (Beginner)': 'BEGINNER',
+    'A1 (Higher Beginner)': 'HIGHER_BEGINNER',
+    'A2 (Pre-Intermediate)': 'PRE_INTERMEDIATE',
+    'B1 (Intermediate)': 'INTERMEDIATE',
+    'B2 (Upper-Intermediate)': 'UPPER_INTERMEDIATE',
+    'C1 (Advanced)': 'ADVANCED',
+    'C2 (Proficiency)': 'PROFICIENCY',
+  };
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 10),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        DropdownButtonFormField<String>(
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+          ),
+          value: controller.text,
+          onChanged: (String? newValue) {
+            controller.text = newValue!;
+          },
+          items: levels.entries.map((MapEntry<String, String> entry) {
+            return DropdownMenuItem<String>(
+              value: entry.value,
+              child: Text(entry.key),
+            );
+          }).toList(),
+        )
+      ],
+    ),
+  );
+}
+
+Widget _buildBirthdayPicker(
+    String label, TextEditingController controller, BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 10),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+          ),
+          onTap: () async {
+            DateTime? date = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(1900),
+              lastDate: DateTime(2100),
+            );
+            controller.text = date.toString().substring(0, 10);
+          },
+        ),
+      ],
+    ),
+  );
 }

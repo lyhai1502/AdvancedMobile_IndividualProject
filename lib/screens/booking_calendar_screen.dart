@@ -5,14 +5,16 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:my_app/model/booking.dart';
 import 'package:my_app/model/teacher.dart';
 import 'package:my_app/model/user.dart';
+import 'package:my_app/network/models/tutor_api.dart';
 import 'package:my_app/repository/booking_repository.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class BookingCalendarScreen extends StatefulWidget {
-  BookingCalendarScreen({super.key, required this.teacher});
+  BookingCalendarScreen({super.key, required this.tutorApi});
 
-  final Teacher teacher;
+  // final Teacher teacher;
+  final TutorApi tutorApi;
   User user = User();
   BookingRepository bookingRepository = BookingRepository();
 
@@ -54,7 +56,7 @@ class BookingCalendarScreenState extends State<BookingCalendarScreen> {
     Booking booking = Booking();
 
     booking.userId = widget.user.userId;
-    booking.teacher = widget.teacher;
+    // booking.teacher = widget.tutorApi.name ?? '';
     booking.bookingStart = newBooking.bookingStart;
     booking.bookingEnd =
         newBooking.bookingEnd.subtract(const Duration(minutes: 5));
@@ -117,11 +119,11 @@ class BookingCalendarScreenState extends State<BookingCalendarScreen> {
     widget.user = user;
     BookingRepository bookingRepository = context.watch<BookingRepository>();
     widget.bookingRepository = bookingRepository;
-    String? name = widget.teacher.name;
+    // String? name = widget.teacher.name;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(name),
+        title: Text(widget.tutorApi.name ?? ''),
       ),
       body: Column(
         children: [

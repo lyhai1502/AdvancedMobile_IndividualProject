@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/network/models/schedule_api.dart';
+import 'package:my_app/network/models/tokens.dart';
+import 'package:my_app/network/network_request/schedule/get_upcoming_class_request.dart';
 import 'package:my_app/widgets/custom_button.dart';
+import 'package:provider/provider.dart';
 
 class UpcomingClassWidget extends StatefulWidget {
   const UpcomingClassWidget({super.key});
@@ -14,7 +18,32 @@ class UpcomingClassWidget extends StatefulWidget {
 
 class UpcomingClassWidgetState extends State<UpcomingClassWidget> {
   DateTime nextClassStartTime =
-      DateTime.now().add(Duration(minutes: 30 - DateTime.now().minute));
+      DateTime.now().add(Duration(minutes: 31 - DateTime.now().minute));
+
+  Tokens tokens = Tokens();
+  ScheduleApi schedule = ScheduleApi();
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
+
+  Future<void> getData() async {
+    tokens = context.read<Tokens>();
+    Future<dynamic> future = GetUpcomingClassRequest.getUpComingClass(
+        tokens.access?.token,
+        1,
+        20,
+        DateTime.now().add(const Duration(minutes: 5)).millisecondsSinceEpoch,
+        'meeting',
+        'desc');
+    await future.then((value) {
+      setState(() {
+        schedule = value;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +78,7 @@ class UpcomingClassWidgetState extends State<UpcomingClassWidget> {
                       color: Colors.blue,
                     ),
                     _buildHeaderOfInformation(
-                        'Total lesson time is 533 hours 20 minutes',
+                        'Total lesson time is 86 hours 40 minutes',
                         15,
                         Colors.white),
                   ],
