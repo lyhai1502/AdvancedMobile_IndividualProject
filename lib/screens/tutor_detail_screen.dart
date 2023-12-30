@@ -6,6 +6,7 @@ import 'package:my_app/network/models/tutor_api.dart';
 import 'package:my_app/network/network_request/other/get_flag_request.dart';
 import 'package:my_app/network/network_request/tutor/get_tutor_info_request.dart';
 import 'package:my_app/network/network_request/tutor/manage_favorite_tutor_request.dart';
+import 'package:my_app/screens/booking_calendar_screen.dart';
 import 'package:my_app/widgets/custom_button.dart';
 import 'package:my_app/widgets/rating.dart';
 import 'package:my_app/widgets/review.dart';
@@ -298,11 +299,11 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
           foregroundColor: MaterialStateProperty.all(Colors.white),
         ),
         onPressed: () {
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: (context) =>
-          //             BookingCalendarScreen(teacher: widget.teacher)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      BookingCalendarScreen(tutorApi: tutorApi)));
         },
         icon: const Icon(
           Icons.calendar_month,

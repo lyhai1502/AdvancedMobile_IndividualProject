@@ -192,16 +192,15 @@ class ProfileScreenState extends State<ProfileScreen> {
 
           // user.cloneUser(saveUser);
           UpdateUserInfoRequest.updateUserInfo(
-              tokens.access?.token,
-              nameController.text,
-              countryController.text,
-              // phoneNumberController.text,
-              birthdayController.text,
-              levelController.text,
-              studyScheduleController.text,
-              userApi.avatar,
-              null,
-              null);
+            tokens.access?.token,
+            nameController.text,
+            countryController.text,
+            // phoneNumberController.text,
+            birthdayController.text,
+            levelController.text,
+            studyScheduleController.text,
+            userApi.avatar,
+          );
 
           CoolAlert.show(
             confirmBtnText: 'OK',

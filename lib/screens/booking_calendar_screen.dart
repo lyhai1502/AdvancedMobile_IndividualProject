@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:booking_calendar/booking_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:my_app/model/booking.dart';
-import 'package:my_app/model/teacher.dart';
 import 'package:my_app/model/user.dart';
 import 'package:my_app/network/models/tutor_api.dart';
 import 'package:my_app/repository/booking_repository.dart';

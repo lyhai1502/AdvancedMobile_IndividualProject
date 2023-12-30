@@ -13,9 +13,10 @@ class UpdateUserInfoRequest {
       String? birthday,
       String? level,
       String? studySchedule,
-      String? avatar,
-      List<int>? learnTopics,
-      List<int>? testPreparations) async {
+      String? avatar
+      // List<int>? learnTopics,
+      // List<int>? testPreparations
+      ) async {
     const url = "https://sandbox.api.lettutor.com/user/info";
     final uri = Uri.parse(url);
 
@@ -31,10 +32,12 @@ class UpdateUserInfoRequest {
           "birthday": birthday ?? "",
           "level": level ?? "",
           "studySchedule": studySchedule ?? "",
-          "avatar": avatar ?? "",
-          "learnTopics": learnTopics.toString(),
-          "testPreparations": testPreparations.toString(),
+          "avatar": avatar ?? ""
+          // "learnTopics": learnTopics.toString(),
+          // "testPreparations": testPreparations.toString(),
         }));
+
+    print(response.statusCode);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final json = jsonDecode(response.body);
