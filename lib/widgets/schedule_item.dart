@@ -159,7 +159,6 @@ class ScheduleItemWidgetState extends State<ScheduleItemWidget> {
                                   context: context,
                                   type: CoolAlertType.success,
                                   text: 'Cancel class successfully!');
-                                  
                             } else {
                               CoolAlert.show(
                                   context: context,

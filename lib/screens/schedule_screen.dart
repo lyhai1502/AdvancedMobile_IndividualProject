@@ -5,6 +5,7 @@ import 'package:my_app/network/models/schedule_api.dart';
 import 'package:my_app/network/models/tokens.dart';
 import 'package:my_app/network/network_request/schedule/get_booked_class_request.dart';
 import 'package:my_app/repository/booking_repository.dart';
+import 'package:my_app/repository/schedule_repository.dart';
 import 'package:my_app/widgets/schedule_item.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +21,7 @@ class ScheduleScreen extends StatefulWidget {
 
 class ScheduleScreenState extends State<ScheduleScreen> {
   Tokens tokens = Tokens();
-  List<ScheduleApi> scheduleList = [];
+  ScheduleRepository scheduleRepository = ScheduleRepository();
   bool _isLoading = true;
   int currentPage = 1;
 
@@ -37,7 +38,7 @@ class ScheduleScreenState extends State<ScheduleScreen> {
         tokens.access?.token, currentPage, 2, null, 'meeting', 'asc');
     await future.then((value) {
       setState(() {
-        scheduleList = value;
+        scheduleRepository.scheduleList = value;
         _isLoading = false;
       });
     });
@@ -82,19 +83,7 @@ class ScheduleScreenState extends State<ScheduleScreen> {
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 20),
           ),
-          const Text(
-            'Total study hours',
-            style: TextStyle(
-                fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(10),
-            child: Text(
-              '86 hours 40 minutes',
-              style: TextStyle(
-                  fontSize: 20, color: Colors.red, fontWeight: FontWeight.bold),
-            ),
-          ),
+
           // const Text(
           //   'Latest book',
           //   style: TextStyle(
@@ -176,7 +165,7 @@ class ScheduleScreenState extends State<ScheduleScreen> {
           else
             Column(
               children: [
-                for (ScheduleApi schedule in scheduleList)
+                for (ScheduleApi schedule in scheduleRepository.scheduleList)
                   ScheduleItemWidget(scheduleApi: schedule)
               ],
             )
@@ -211,7 +200,7 @@ class ScheduleScreenState extends State<ScheduleScreen> {
         IconButton(
           onPressed: () {
             setState(() {
-              if (scheduleList.length == 2) currentPage++;
+              if (scheduleRepository.scheduleList.length == 2) currentPage++;
               getData();
             });
           },

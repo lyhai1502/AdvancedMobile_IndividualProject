@@ -17,11 +17,14 @@ class UpcomingClassWidget extends StatefulWidget {
 }
 
 class UpcomingClassWidgetState extends State<UpcomingClassWidget> {
-  DateTime nextClassStartTime =
-      DateTime.now().add(Duration(minutes: 31 - DateTime.now().minute));
-
   Tokens tokens = Tokens();
   ScheduleApi schedule = ScheduleApi();
+  int totalHours = 0;
+  late final startPeriodTimestamp;
+  late final formattedStartTimestamp;
+  late final formattedEndTimestamp;
+
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -30,65 +33,79 @@ class UpcomingClassWidgetState extends State<UpcomingClassWidget> {
   }
 
   Future<void> getData() async {
+    _isLoading = true;
     tokens = context.read<Tokens>();
-    Future<dynamic> future = GetUpcomingClassRequest.getUpComingClass(
-        tokens.access?.token,
-        1,
-        20,
-        DateTime.now().add(const Duration(minutes: 5)).millisecondsSinceEpoch,
-        'meeting',
-        'desc');
+    Future<dynamic> future =
+        GetUpcomingClassRequest.getUpComingClass(tokens.access?.token);
     await future.then((value) {
       setState(() {
         schedule = value;
       });
     });
+
+    Future<dynamic> future2 =
+        GetUpcomingClassRequest.getTotalHours(tokens.access?.token);
+    await future2.then((value) {
+      setState(() {
+        totalHours = value;
+      });
+    });
+    _isLoading = false;
+
+    startPeriodTimestamp = schedule.scheduleDetailInfo?.startPeriodTimestamp;
+    formattedStartTimestamp = DateFormat('E, d MMM yy HH:mm')
+        .format(DateTime.fromMillisecondsSinceEpoch(startPeriodTimestamp!));
+
+    final endPeriodTimestamp = schedule.scheduleDetailInfo?.endPeriodTimestamp;
+    formattedEndTimestamp = DateFormat('HH:mm')
+        .format(DateTime.fromMillisecondsSinceEpoch(endPeriodTimestamp!));
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Row(
-      children: [
-        Expanded(
-          child: SizedBox(
-            height: 250,
-            child: Card(
-              color: Colors.white10,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Column(
-                  children: [
-                    _buildHeaderOfInformation(
-                        'Upcoming lesson', 25, Colors.white),
-                    const Padding(padding: EdgeInsets.only(top: 15)),
-                    _buildHeaderOfInformation(
-                        '${DateFormat('MMM d, h:mm a').format(nextClassStartTime)} - ${DateFormat.jm().format(nextClassStartTime.add(const Duration(minutes: 30)))}',
-                        18,
-                        Colors.white),
-                    _buildHeaderOfInformation(
-                        '(class time: 00:10:49)', 15, Colors.greenAccent),
-                    const Padding(padding: EdgeInsets.only(top: 15)),
-                    CustomButtonWidget(
-                      content: 'Enter lesson room',
-                      function: () {
-                        Navigator.pushNamed(context, '/VideoCall');
-                      },
-                      color: Colors.blue,
+    return !_isLoading
+        ? Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 250,
+                  child: Card(
+                    color: Color.fromARGB(255, 0, 38, 255),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 20),
+                      child: Column(
+                        children: [
+                          _buildHeaderOfInformation(
+                              'Upcoming lesson', 25, Colors.white),
+                          const Padding(padding: EdgeInsets.only(top: 15)),
+                          _buildHeaderOfInformation(
+                              '$formattedStartTimestamp - $formattedEndTimestamp',
+                              18,
+                              Colors.white),
+                          _buildRemaningTime(),
+                          const Padding(padding: EdgeInsets.only(top: 15)),
+                          CustomButtonWidget(
+                            content: 'Enter lesson room',
+                            function: () {
+                              Navigator.pushNamed(context, '/VideoCall');
+                            },
+                            color: Colors.blue,
+                          ),
+                          _buildTotalHour(totalHours)
+                        ],
+                      ),
                     ),
-                    _buildHeaderOfInformation(
-                        'Total lesson time is 86 hours 40 minutes',
-                        15,
-                        Colors.white),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          ),
-        )
-      ],
-    );
+              )
+            ],
+          )
+        : const Center(
+            child: CircularProgressIndicator(
+            color: Colors.blue,
+          ));
   }
 
   Widget _buildHeaderOfInformation(String header, double size, Color color) {
@@ -99,6 +116,34 @@ class UpcomingClassWidgetState extends State<UpcomingClassWidget> {
         fontWeight: FontWeight.bold,
         color: color,
       ),
+    );
+  }
+
+  Widget _buildRemaningTime() {
+    Duration remainingTime =
+        DateTime.fromMillisecondsSinceEpoch(startPeriodTimestamp!)
+            .difference(DateTime.now());
+    int hours = remainingTime.inHours;
+    int minutes = remainingTime.inMinutes.remainder(60);
+    int seconds = remainingTime.inSeconds.remainder(60);
+    String formattedRemainingTime =
+        '$hours hours $minutes minutes $seconds seconds';
+
+    return Text('Class time: $formattedRemainingTime',
+        style: const TextStyle(
+          fontSize: 15,
+          color: Color.fromARGB(255, 0, 255, 8),
+        ));
+  }
+
+  Widget _buildTotalHour(int totalHours) {
+    String formattedTotalHours =
+        '${totalHours ~/ 60} hours ${totalHours % 60} minutes';
+
+    return Text(
+      'Total lesson time is $formattedTotalHours',
+      style: const TextStyle(
+          fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold),
     );
   }
 }

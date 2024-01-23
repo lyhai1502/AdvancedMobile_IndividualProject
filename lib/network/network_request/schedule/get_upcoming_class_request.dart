@@ -5,26 +5,40 @@ import 'package:my_app/network/models/schedule_api.dart';
 import 'package:my_app/network/response/error_response.dart';
 
 class GetUpcomingClassRequest {
-  static Future<dynamic> getUpComingClass(String? token, int page, int perPage,
-      int? dateTimeLte, String orderBy, String sortBy) async {
-    final String url;
-    if (dateTimeLte == null) {
-      url =
-          'https://sandbox.api.lettutor.com/booking/list/student?page=$page&perPage=$perPage&orderBy=$orderBy&sortBy=$sortBy';
-    } else {
-      url =
-          'https://sandbox.api.lettutor.com/booking/list/student?page=$page&perPage=$perPage&dateTimeLte=$dateTimeLte&orderBy=$orderBy&sortBy=$sortBy';
-    }
+  static Future<dynamic> getUpComingClass(String? token) async {
+    const String url = 'https://sandbox.api.lettutor.com/booking/next';
 
     final uri = Uri.parse(url);
     final response = await http.get(uri, headers: {
       "Content-Type": "application/json",
       "Authorization": "Bearer $token",
     });
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       final json = jsonDecode(response.body);
-      final scheduleApi = ScheduleApi.fromJson(json['data']['rows'][0]);
+      final scheduleApi = ScheduleApi.fromJson(json['data'][0]);
       return scheduleApi;
+    } else if (response.statusCode == 400 || response.statusCode == 401) {
+      final json = jsonDecode(response.body);
+      final message = ErrorResponse.fromJson(json);
+      return message;
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  static Future<dynamic> getTotalHours(String? token) async {
+    const String url = 'https://sandbox.api.lettutor.com/call/total';
+
+    final uri = Uri.parse(url);
+    final response = await http.get(uri, headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token",
+    });
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final json = jsonDecode(response.body);
+      return json['total'];
     } else if (response.statusCode == 400 || response.statusCode == 401) {
       final json = jsonDecode(response.body);
       final message = ErrorResponse.fromJson(json);
