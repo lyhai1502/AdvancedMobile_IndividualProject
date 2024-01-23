@@ -49,27 +49,6 @@ class TutorListScreenState extends State<TutorListScreen> {
             children: [
               _buildHeaderText(),
               _buildSearchTextField(),
-              // _buildSelectDropDown(
-              //   hint: 'Sort by rating/favorite',
-              //   options: <ValueItem>[
-              //     const ValueItem(
-              //         label: 'Ascending rating', value: 'ascendingRating'),
-              //     const ValueItem(
-              //         label: 'Descending rating', value: 'descendingRating'),
-              //     const ValueItem(
-              //         label: 'Ascending favorite', value: 'ascendingFavorite'),
-              //     const ValueItem(
-              //         label: 'Descending favorite',
-              //         value: 'descendingFavorite'),
-              //   ],
-              //   selectionType: SelectionType.single,
-              //   onOptionSelected: (options) {
-              //     setState(() {
-              //       teacherRepository
-              //           .sortTeacherByRatingAndFavorite(options.first.value);
-              //     });
-              //   },
-              // ),
               _buildFilterButtons(),
               _buildRecommendTutors(),
             ],
@@ -104,8 +83,6 @@ class TutorListScreenState extends State<TutorListScreen> {
       onChanged: (value) {
         setState(() {
           getSearchData();
-          // teacherRepository.findByNameOrNation(searchTutorController.text);
-          // print(value);
         });
       },
     );

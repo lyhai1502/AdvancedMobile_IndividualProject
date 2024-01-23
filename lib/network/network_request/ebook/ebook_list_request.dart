@@ -3,15 +3,14 @@ import 'dart:core';
 import 'dart:math';
 
 import 'package:http/http.dart' as http;
-import 'package:my_app/network/models/tutor_api.dart';
-import 'package:my_app/network/network_request/tutor/get_tutor_info_request.dart';
+import 'package:my_app/network/models/course_api.dart';
 import 'package:my_app/network/response/error_response.dart';
 
-class TutorListRequest {
-  static Future<dynamic> getTutorListPagination(
+class EbookListRequest {
+  static Future<dynamic> getEbookList(
       String? token, int perPage, int page) async {
     final url =
-        "https://sandbox.api.lettutor.com/tutor/more?perPage=$perPage&page=$page";
+        "https://sandbox.api.lettutor.com/e-book?page=$page&size=$perPage";
     final uri = Uri.parse(url);
 
     final response = await http.get(uri, headers: {
@@ -19,20 +18,15 @@ class TutorListRequest {
       "Authorization": "Bearer $token",
     });
 
-    List<TutorApi> tutorsList = [];
+    List<CourseApi> courseList = [];
     if (response.statusCode == 200 || response.statusCode == 201) {
       final json = jsonDecode(response.body);
-      for (var i = 0; i < min(perPage, json['tutors']['rows'].length); i++) {
-        final tutorApi = TutorApi.fromJson(json['tutors']['rows'][i]);
-        Future<dynamic> newTutor =
-            GetTutorInfoRequest.getTutorInfo(token, tutorApi.userId);
-        await newTutor.then((value) {
-          tutorApi.isFavorite = value.isFavorite;
-        });
-        tutorsList.add(tutorApi);
+      for (var i = 0; i < min(perPage, json['data']['rows'].length); i++) {
+        final courseApi = CourseApi.fromJson(json['data']['rows'][i]);
+        courseList.add(courseApi);
       }
 
-      return tutorsList;
+      return courseList;
     } else if (response.statusCode == 400 || response.statusCode == 401) {
       final json = jsonDecode(response.body);
       final message = ErrorResponse.fromJson(json);

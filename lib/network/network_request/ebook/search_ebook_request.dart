@@ -6,11 +6,11 @@ import 'package:http/http.dart' as http;
 import 'package:my_app/network/models/course_api.dart';
 import 'package:my_app/network/response/error_response.dart';
 
-class CourseListRequest {
-  static Future<dynamic> getCourseList(
-      String? token, int perPage, int page) async {
+class SearchEbookRequest {
+  static Future<dynamic> searchEbook(
+      String? token, int perPage, int page, String keyword) async {
     final url =
-        "https://sandbox.api.lettutor.com/course?page=$page&size=$perPage";
+        "https://sandbox.api.lettutor.com/e-book?page=$page&size=$perPage&q=$keyword";
     final uri = Uri.parse(url);
 
     final response = await http.get(uri, headers: {
@@ -21,11 +21,10 @@ class CourseListRequest {
     List<CourseApi> courseList = [];
     if (response.statusCode == 200 || response.statusCode == 201) {
       final json = jsonDecode(response.body);
-      for (var i = 0; i < min(perPage, json['data']['rows'].length); i++) {
+      for (var i = 0; i < min(json['data']['count'], perPage); i++) {
         final courseApi = CourseApi.fromJson(json['data']['rows'][i]);
         courseList.add(courseApi);
       }
-
       return courseList;
     } else if (response.statusCode == 400 || response.statusCode == 401) {
       final json = jsonDecode(response.body);

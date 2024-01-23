@@ -259,7 +259,9 @@ class LoginScreenState extends State<LoginScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _buildSocialButton('lib/assets/icons/facebook.png', () {}),
+        _buildSocialButton('lib/assets/icons/facebook.png', () {
+          _loginWithFacebook();
+        }),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 5),
         ),
@@ -335,3 +337,7 @@ class LoginScreenState extends State<LoginScreen> {
     }
   }
 }
+
+// ...
+
+void _loginWithFacebook() async {}

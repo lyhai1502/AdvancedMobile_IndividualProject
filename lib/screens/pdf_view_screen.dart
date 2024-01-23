@@ -45,7 +45,10 @@ class _PdfViewScreenState extends State<PdfViewScreen> {
           ? PDFView(
               filePath: path!,
             )
-          : const Center(child: CircularProgressIndicator()),
+          : const Center(
+              child: CircularProgressIndicator(
+              color: Colors.blue,
+            )),
     );
   }
 }

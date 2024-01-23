@@ -45,6 +45,26 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
     await future.then((value) {
       setState(() {
         teacherRepository.tutorList = value;
+        teacherRepository.tutorList.sort(
+            (a, b) => a.isFavorite == true && b.isFavorite == false ? -1 : 1);
+
+        teacherRepository.tutorList.sort((a, b) {
+          if (a.isFavorite! && !b.isFavorite!) {
+            return -1;
+          } else if (!a.isFavorite! && b.isFavorite!) {
+            return 1;
+          } else {
+            if (a.rating != null && b.rating != null) {
+              return a.rating!.compareTo(b.rating!);
+            } else if (a.rating != null) {
+              return -1;
+            } else if (b.rating != null) {
+              return 1;
+            } else {
+              return 0;
+            }
+          }
+        });
         _isLoading = false;
       });
     });
@@ -53,70 +73,79 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
   @override
   Widget build(BuildContext context) {
     teacherRepository = context.watch<TeacherRepository>();
-    // teacherRepository.tutorList.sort((t1, t2) {
-    //   if (t1.rating == null) {
-    //     return 1;
-    //   } else if (t2.rating == null) {
-    //     return -1;
-    //   } else {
-    //     return t2.rating!.compareTo(t1.rating!);
-    //   }
-    // });
     // TODO: implement build
-    return Column(
-      children: [
-        _buildPaginationButtons(),
-        !_isLoading
-            ? Center(
-                child: Column(children: [
-                  for (TutorApi tutor in teacherRepository.tutorList)
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => TutorDetailScreen(
-                                      tutorId: tutor.userId,
-                                      feedbacks: tutor.feedback,
-                                    )));
-                      },
-                      child: Card(
-                        child: Container(
-                          padding: const EdgeInsets.all(15),
-                          child: Column(
-                            children: [
-                              _buildAvatar(tutor.avatar),
-                              _buildName(tutor.name),
-                              _buildNation(tutor.country),
-                              if (tutor.rating != null)
-                                RatingWidget(rating: tutor.rating as double)
-                              else
-                                const Text("No rating"),
-                              _buildSpecialities(tutor.specialties != null
-                                  ? tutor.specialties!
-                                      .split(',')
-                                      .map((s) => s.trim())
-                                      .toList()
-                                  : []),
-                              _buildDescription(tutor.bio),
-                              _buildButtons(tutor),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 5),
+    return !(teacherRepository.tutorList.isEmpty && _isLoading == false)
+        ? Column(
+            children: [
+              _buildPaginationButtons(),
+              !_isLoading
+                  ? Center(
+                      child: Column(children: [
+                        for (TutorApi tutor in teacherRepository.tutorList)
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => TutorDetailScreen(
+                                            tutorId: tutor.userId,
+                                            feedbacks: tutor.feedback,
+                                          )));
+                            },
+                            child: Card(
+                              child: Container(
+                                padding: const EdgeInsets.all(15),
+                                child: Column(
+                                  children: [
+                                    _buildAvatar(tutor.avatar),
+                                    _buildName(tutor.name),
+                                    _buildNation(tutor.country),
+                                    if (tutor.rating != null)
+                                      RatingWidget(
+                                          rating: tutor.rating as double)
+                                    else
+                                      const Text("No rating"),
+                                    _buildSpecialities(tutor.specialties != null
+                                        ? tutor.specialties!
+                                            .split(',')
+                                            .map((s) => s.trim())
+                                            .toList()
+                                        : []),
+                                    _buildDescription(tutor.bio),
+                                    _buildButtons(tutor),
+                                    const Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 5),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ],
+                            ),
                           ),
-                        ),
+                      ]),
+                    )
+                  : const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.blue,
                       ),
-                    ),
-                ]),
-              )
-            : const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.blue,
+                    )
+            ],
+          )
+        : const Center(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
                 ),
-              )
-      ],
-    );
+                Text('Sorry we can\'t find any tutor',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red,
+                    )),
+              ],
+            ),
+          );
   }
 
   Widget _buildAvatar(String? avatarUrl) {
@@ -267,8 +296,7 @@ class TutorListItemWidgetState extends State<TutorListItemWidget> {
         IconButton(
           onPressed: () {
             setState(() {
-              // teacherRepository.nextPage();
-              currentPage++;
+              if (teacherRepository.tutorList.length == 9) currentPage++;
               getData();
             });
           },

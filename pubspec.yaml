@@ -49,6 +49,8 @@ dependencies:
   cached_network_image: ^3.3.0
   flutter_pdfview:
   path_provider: ^2.1.1
+  flutter_facebook_auth:
+  url_launcher:
 
 dev_dependencies:
   flutter_test:

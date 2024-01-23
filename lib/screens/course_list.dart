@@ -4,6 +4,9 @@ import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:my_app/network/models/course_api.dart';
 import 'package:my_app/network/models/tokens.dart';
 import 'package:my_app/network/network_request/course/course_list_request.dart';
+import 'package:my_app/network/network_request/course/search_course_request.dart';
+import 'package:my_app/network/network_request/ebook/ebook_list_request.dart';
+import 'package:my_app/network/network_request/ebook/search_ebook_request.dart';
 import 'package:my_app/repository/course_repository.dart';
 import 'package:my_app/screens/course_detail.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +22,10 @@ class CourseListScreen extends StatefulWidget {
 
 class CourseScreenWidgetState extends State<CourseListScreen> {
   final CourseRepository courseRepository = CourseRepository();
+  final TextEditingController searchCourseController = TextEditingController();
   Tokens tokens = Tokens();
+  int currentPage = 1;
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -28,13 +34,27 @@ class CourseScreenWidgetState extends State<CourseListScreen> {
   }
 
   Future<void> getData() async {
+    _isLoading = true;
     tokens = context.read<Tokens>();
 
     Future<dynamic> future =
-        CourseListRequest.getCourseList(tokens.access?.token, 9, 1);
+        CourseListRequest.getCourseList(tokens.access?.token, 9, currentPage);
     await future.then((value) {
       setState(() {
         courseRepository.courseList = value;
+        courseRepository.update();
+        _isLoading = false;
+      });
+    });
+
+    _isLoading = true;
+    Future<dynamic> future2 =
+        EbookListRequest.getEbookList(tokens.access?.token, 9, currentPage);
+    await future2.then((value) {
+      setState(() {
+        courseRepository.ebookList = value;
+        courseRepository.update();
+        _isLoading = false;
       });
     });
   }
@@ -116,9 +136,41 @@ class CourseScreenWidgetState extends State<CourseListScreen> {
   }
 
   Widget _buildSearchTextField() {
-    return const CupertinoSearchTextField(
+    return CupertinoSearchTextField(
       placeholder: 'Search courses',
+      controller: searchCourseController,
+      onChanged: (value) {
+        setState(() {
+          getSearchData();
+        });
+      },
     );
+  }
+
+  Future<void> getSearchData() async {
+    Future<dynamic> future = SearchCourseRequest.searchCourse(
+        context.read<Tokens>().access?.token,
+        9,
+        1,
+        searchCourseController.text);
+    await future.then((value) {
+      setState(() {
+        courseRepository.courseList = value;
+        courseRepository.update();
+      });
+    });
+
+    Future<dynamic> future2 = SearchEbookRequest.searchEbook(
+        context.read<Tokens>().access?.token,
+        9,
+        1,
+        searchCourseController.text);
+    await future2.then((value) {
+      setState(() {
+        courseRepository.ebookList = value;
+        courseRepository.update();
+      });
+    });
   }
 
   Widget _buildMultiSelectDropDown({
@@ -157,7 +209,7 @@ class CourseScreenWidgetState extends State<CourseListScreen> {
 
   Widget _buildTabBarView() {
     return SizedBox(
-      height: 3900,
+      height: 220 + 700 * courseRepository.courseList.length.toDouble(),
       child: DefaultTabController(
         initialIndex: 0,
         length: 3,
@@ -198,9 +250,43 @@ class CourseScreenWidgetState extends State<CourseListScreen> {
             Expanded(
               child: TabBarView(
                 children: [
-                  _buildCourseList(),
-                  _buildCourseList(),
-                  _buildCourseList(),
+                  courseRepository.courseList.isEmpty && _isLoading == false
+                      ? const Stack(alignment: Alignment.topCenter, children: [
+                          Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Text('Sorry we can\'t find any courses',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red,
+                                )),
+                          ),
+                        ])
+                      : _buildCourseList(),
+                  courseRepository.courseList.isEmpty && _isLoading == false
+                      ? const Stack(alignment: Alignment.topCenter, children: [
+                          Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Text('Sorry we can\'t find any courses',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red,
+                                )),
+                          ),
+                        ])
+                      : _buildEbookList(),
+                  const Stack(alignment: Alignment.topCenter, children: [
+                    Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Text('Sorry we can\'t find any interactive e-book',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
+                          )),
+                    ),
+                  ])
                 ],
               ),
             ),
@@ -211,84 +297,187 @@ class CourseScreenWidgetState extends State<CourseListScreen> {
   }
 
   Widget _buildCourseList() {
-    return Column(
-      children: [
-        for (CourseApi course in courseRepository.courseList)
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          CourseDetailScreen(courseId: course.id)));
-            },
-            child: Card(
-              margin: const EdgeInsets.only(top: 20),
-              elevation: 0,
-              shape: const RoundedRectangleBorder(
-                side: BorderSide(color: Colors.grey),
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-              ),
-              child: SizedBox(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(12),
-                          topRight: Radius.circular(12),
-                        ),
-                        child: Image.network(
-                          course.imageUrl ?? '',
-                          width: 400,
-                          height: 200,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+    return !_isLoading
+        ? Column(
+            children: [
+              _buildPaginationButtons(),
+              for (CourseApi course in courseRepository.courseList)
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                CourseDetailScreen(courseId: course.id)));
+                  },
+                  child: Card(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    elevation: 0,
+                    shape: const RoundedRectangleBorder(
+                      side: BorderSide(color: Colors.grey),
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),
-                    const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-                    Container(
-                      margin: const EdgeInsets.all(30),
+                    child: SizedBox(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            course.name ?? '',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                          Center(
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(12),
+                                topRight: Radius.circular(12),
+                              ),
+                              child: Image.network(
+                                course.imageUrl ?? '',
+                                width: 400,
+                                height: 200,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                           const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 5),
-                          ),
-                          Text(
-                            course.description ?? '',
-                            style: const TextStyle(
-                              color: Colors.black54,
-                              fontSize: 15,
+                              padding: EdgeInsets.symmetric(vertical: 5)),
+                          Container(
+                            margin: const EdgeInsets.all(30),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  course.name ?? '',
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 5),
+                                ),
+                                Text(
+                                  course.description ?? '',
+                                  style: const TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 15),
+                                ),
+                                Text(
+                                  '${courseLevel(course.level)}  •  ${course.topics?.length} Lessons',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 15),
-                          ),
-                          Text(
-                            '${courseLevel(course.level)}  •  ${course.topics?.length} Lessons',
-                            style: const TextStyle(
-                              fontSize: 16,
-                            ),
-                          ),
+                          )
                         ],
                       ),
-                    )
-                  ],
+                    ),
+                  ),
                 ),
-              ),
+            ],
+          )
+        : const Padding(
+            padding: EdgeInsets.all(1.0),
+            child: Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                CircularProgressIndicator(
+                  color: Colors.blue,
+                )
+              ],
             ),
-          ),
-      ],
-    );
+          );
+  }
+
+  Widget _buildEbookList() {
+    return !_isLoading
+        ? Column(
+            children: [
+              _buildPaginationButtons(),
+              for (CourseApi course in courseRepository.ebookList)
+                GestureDetector(
+                  onTap: () {},
+                  child: Card(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    elevation: 0,
+                    shape: const RoundedRectangleBorder(
+                      side: BorderSide(color: Colors.grey),
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                    ),
+                    child: SizedBox(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Center(
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(12),
+                                topRight: Radius.circular(12),
+                              ),
+                              child: Image.network(
+                                course.imageUrl ?? '',
+                                width: 400,
+                                height: 200,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 5)),
+                          Container(
+                            margin: const EdgeInsets.all(30),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  course.name ?? '',
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 5),
+                                ),
+                                Text(
+                                  course.description ?? '',
+                                  style: const TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 15),
+                                ),
+                                Text(
+                                  courseLevel(course.level),
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          )
+        : const Padding(
+            padding: EdgeInsets.all(1.0),
+            child: Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                CircularProgressIndicator(
+                  color: Colors.blue,
+                )
+              ],
+            ),
+          );
   }
 
   String courseLevel(String? courseLevel) {
@@ -304,5 +493,41 @@ class CourseScreenWidgetState extends State<CourseListScreen> {
       default:
         return 'Unknown';
     }
+  }
+
+  Widget _buildPaginationButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        IconButton(
+          onPressed: () {
+            setState(() {
+              if (currentPage > 1) {
+                currentPage--;
+                getData();
+              }
+            });
+          },
+          icon: const Icon(Icons.arrow_back_ios),
+        ),
+        Text(
+          '$currentPage',
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            setState(() {
+              if (courseRepository.courseList.length == 9) currentPage++;
+              getData();
+            });
+          },
+          icon: const Icon(Icons.arrow_forward_ios),
+        ),
+      ],
+    );
   }
 }

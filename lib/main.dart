@@ -5,7 +5,6 @@ import 'package:my_app/model/user.dart';
 import 'package:my_app/network/models/tokens.dart';
 import 'package:my_app/repository/booking_repository.dart';
 import 'package:my_app/repository/user_repository.dart';
-import 'package:my_app/screens/course_learn_detail.dart';
 import 'package:my_app/screens/course_list.dart';
 import 'package:my_app/screens/history_screen.dart';
 import 'package:my_app/screens/home.dart';
@@ -70,7 +69,6 @@ class MyAppState extends State<MyApp> {
             '/Home': (context) => const HomeScreen(),
             '/TutorList': (context) => const TutorListScreen(),
             '/CourseList': (context) => const CourseListScreen(),
-            '/CourseLearnDetail': (context) => const CourseLearnDetailScreen(),
             '/Schedule': (context) => const ScheduleScreen(),
             '/History': (context) => const HistoryScreen(),
             '/Profile': (context) => const ProfileScreen(),

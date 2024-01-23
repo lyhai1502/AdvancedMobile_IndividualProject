@@ -7,10 +7,8 @@ class Tokens extends ChangeNotifier {
   Tokens({this.access, this.refresh});
 
   Tokens.fromJson(Map<String, dynamic> json) {
-    access =
-        json['access'] != null ? Access.fromJson(json['access']) : null;
-    refresh =
-        json['refresh'] != null ? Access.fromJson(json['refresh']) : null;
+    access = json['access'] != null ? Access.fromJson(json['access']) : null;
+    refresh = json['refresh'] != null ? Access.fromJson(json['refresh']) : null;
   }
 
   Map<String, dynamic> toJson() {

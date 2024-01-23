@@ -9,6 +9,7 @@ class CourseRepository extends ChangeNotifier {
   List<Teacher> filter = [];
 
   List<CourseApi> courseList = [];
+  List<CourseApi> ebookList = [];
   String filterName = 'All';
 
   void update() {
