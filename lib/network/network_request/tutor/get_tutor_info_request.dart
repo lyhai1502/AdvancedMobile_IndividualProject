@@ -16,6 +16,7 @@ class GetTutorInfoRequest {
     if (response.statusCode == 200 || response.statusCode == 201) {
       final json = jsonDecode(response.body);
       final TutorApi tutorApi = TutorApi.fromJson2(json);
+
       return tutorApi;
     } else if (response.statusCode == 400 || response.statusCode == 401) {
       final json = jsonDecode(response.body);

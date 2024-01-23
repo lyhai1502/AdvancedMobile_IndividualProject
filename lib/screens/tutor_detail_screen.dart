@@ -1,5 +1,7 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flick_video_player/flick_video_player.dart';
+import 'package:my_app/network/models/course_api.dart';
 import 'package:my_app/network/models/feed_back.dart';
 import 'package:my_app/network/models/tokens.dart';
 import 'package:my_app/network/models/tutor_api.dart';
@@ -7,6 +9,7 @@ import 'package:my_app/network/network_request/other/get_flag_request.dart';
 import 'package:my_app/network/network_request/tutor/get_tutor_info_request.dart';
 import 'package:my_app/network/network_request/tutor/manage_favorite_tutor_request.dart';
 import 'package:my_app/screens/booking_calendar_screen.dart';
+import 'package:my_app/screens/course_detail.dart';
 import 'package:my_app/widgets/custom_button.dart';
 import 'package:my_app/widgets/rating.dart';
 import 'package:my_app/widgets/review.dart';
@@ -236,6 +239,9 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
             ? tutorApi.specialties!.split(',').map((s) => s.trim()).toList()
             : []),
         const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+        _buildHeaderOfInformation('Suggested Courses'),
+        _buildSuggestionsCourses(tutorApi.courses),
+        const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
         _buildHeaderOfInformation('Interests'),
         Padding(
             padding: const EdgeInsets.all(5),
@@ -329,4 +335,42 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
               )
             ],
           ));
+
+  Widget _buildSuggestionsCourses(List<CourseApi>? courses) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        children: [
+          for (var i = 0; i < courses!.length; i++)
+            Row(
+              children: [
+                Text('${courses[i].name}:  '),
+                _buildCourseLink(courses[i].id ?? '')
+              ],
+            )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCourseLink(String courseId) {
+    return RichText(
+      text: TextSpan(
+        text: 'Link',
+        recognizer: TapGestureRecognizer()
+          ..onTap = () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        CourseDetailScreen(courseId: courseId)));
+          },
+        style: const TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.bold,
+          color: Colors.blueAccent,
+        ),
+      ),
+    );
+  }
 }

@@ -22,6 +22,7 @@ class HistoryScreenState extends State<HistoryScreen> {
   Tokens tokens = Tokens();
   List<ScheduleApi> scheduleList = [];
   bool _isLoading = true;
+  int currentPage = 1;
 
   @override
   void initState() {
@@ -30,11 +31,12 @@ class HistoryScreenState extends State<HistoryScreen> {
   }
 
   Future<void> getData() async {
+    _isLoading = true;
     tokens = context.read<Tokens>();
     Future<dynamic> future = GetBookedClassRequest.getBookedClass(
         tokens.access?.token,
-        1,
-        20,
+        currentPage,
+        9,
         DateTime.now().millisecondsSinceEpoch,
         'meeting',
         'desc');
@@ -86,8 +88,9 @@ class HistoryScreenState extends State<HistoryScreen> {
             style: TextStyle(fontSize: 17, color: Colors.black),
           ),
           const Padding(
-            padding: EdgeInsets.symmetric(vertical: 20),
+            padding: EdgeInsets.symmetric(vertical: 10),
           ),
+          _buildPaginationButtons(),
           if (_isLoading)
             const Center(
               child: CircularProgressIndicator(
@@ -103,6 +106,42 @@ class HistoryScreenState extends State<HistoryScreen> {
             )
         ]),
       ),
+    );
+  }
+
+  Widget _buildPaginationButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        IconButton(
+          onPressed: () {
+            setState(() {
+              if (currentPage > 1) {
+                currentPage--;
+                getData();
+              }
+            });
+          },
+          icon: const Icon(Icons.arrow_back_ios),
+        ),
+        Text(
+          '$currentPage',
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            setState(() {
+              if (scheduleList.length == 9) currentPage++;
+              getData();
+            });
+          },
+          icon: const Icon(Icons.arrow_forward_ios),
+        ),
+      ],
     );
   }
 }

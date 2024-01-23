@@ -1,9 +1,14 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/network/models/schedule_api.dart';
+import 'package:my_app/network/models/tokens.dart';
 import 'package:my_app/network/network_request/other/get_flag_request.dart';
+import 'package:my_app/network/network_request/schedule/cancel_booked_class_request.dart';
+import 'package:my_app/network/response/sucess_response.dart';
 import 'package:my_app/widgets/custom_button.dart';
+import 'package:provider/provider.dart';
 
 class ScheduleItemWidget extends StatefulWidget {
   const ScheduleItemWidget({Key? key, required this.scheduleApi})
@@ -19,6 +24,14 @@ class ScheduleItemWidget extends StatefulWidget {
 }
 
 class ScheduleItemWidgetState extends State<ScheduleItemWidget> {
+  Tokens tokens = Tokens();
+
+  @override
+  void initState() {
+    tokens = context.read<Tokens>();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -127,7 +140,36 @@ class ScheduleItemWidgetState extends State<ScheduleItemWidget> {
                     ),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    CoolAlert.show(
+                        confirmBtnText: 'OK',
+                        context: context,
+                        type: CoolAlertType.confirm,
+                        text: 'Are you sure to delete this schedule?',
+                        onConfirmBtnTap: () async {
+                          Future<dynamic> future =
+                              CancelBookedClassRequest.cancelBookedClass(
+                                  tokens.access?.token,
+                                  widget.scheduleApi.id ?? '');
+
+                          await future.then((value) {
+                            if (value is SuccessResponse) {
+                              CoolAlert.show(
+                                  context: context,
+                                  type: CoolAlertType.success,
+                                  text: 'Cancel class successfully!');
+                                  
+                            } else {
+                              CoolAlert.show(
+                                  context: context,
+                                  type: CoolAlertType.error,
+                                  text: value.message ?? '');
+                            }
+                          });
+                        });
+                  });
+                },
                 child: const Text(
                   "Cancel",
                   style: TextStyle(color: Colors.white),

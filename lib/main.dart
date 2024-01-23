@@ -49,7 +49,6 @@ class MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => user),
         ChangeNotifierProvider(create: (context) => bookingRepository),
         ChangeNotifierProvider(create: (context) => currentToken),
-        Provider(create: (context) => themeData)
       ],
       child: MaterialApp(
           theme: ThemeData(

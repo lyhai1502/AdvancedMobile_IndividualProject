@@ -1,3 +1,4 @@
+import 'package:my_app/network/models/course_api.dart';
 import 'package:my_app/network/models/feed_back.dart';
 
 class TutorApi {
@@ -22,6 +23,7 @@ class TutorApi {
   double? avgRating;
   int? totalFeedback;
   List<FeedBack>? feedback;
+  List<CourseApi>? courses;
 
   TutorApi(
       {this.name,
@@ -44,7 +46,8 @@ class TutorApi {
       this.isFavorite,
       this.avgRating,
       this.totalFeedback,
-      this.feedback});
+      this.feedback,
+      this.courses});
 
   TutorApi.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -93,6 +96,12 @@ class TutorApi {
     isNative = json['isNative'];
     youtubeVideoId = json['youtubeVideoId'];
     userId = json['User']['id'];
+    if (json['User']['courses'] != null) {
+      courses = <CourseApi>[];
+      json['User']['courses'].forEach((v) {
+        courses!.add(CourseApi.fromJson(v));
+      });
+    }
     isFavorite = json['isFavorite'];
     if (avgRating is int) {
       avgRating = json['avgRating'];

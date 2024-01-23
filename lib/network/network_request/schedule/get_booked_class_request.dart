@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:http/http.dart' as http;
 import 'package:my_app/network/models/schedule_api.dart';
@@ -10,10 +11,10 @@ class GetBookedClassRequest {
     final String url;
     if (dateTimeLte == null) {
       url =
-          'https://sandbox.api.lettutor.com/booking/list/student?page=$page&perPage=$perPage&orderBy=$orderBy&sortBy=$sortBy';
+          'https://sandbox.api.lettutor.com/booking/list/student?page=$page&perPage=$perPage&inFuture=1&orderBy=$orderBy&sortBy=$sortBy';
     } else {
       url =
-          'https://sandbox.api.lettutor.com/booking/list/student?page=$page&perPage=$perPage&dateTimeLte=$dateTimeLte&orderBy=$orderBy&sortBy=$sortBy';
+          'https://sandbox.api.lettutor.com/booking/list/student?page=$page&perPage=$perPage&inFuture=0&dateTimeLte=$dateTimeLte&orderBy=$orderBy&sortBy=$sortBy';
     }
 
     final uri = Uri.parse(url);
@@ -24,7 +25,7 @@ class GetBookedClassRequest {
     List<ScheduleApi> scheduleList = [];
     if (response.statusCode == 200 || response.statusCode == 201) {
       final json = jsonDecode(response.body);
-      for (var i = 0; i < perPage; i++) {
+      for (var i = 0; i < min(json['data']['count'], perPage); i++) {
         final scheduleApi = ScheduleApi.fromJson(json['data']['rows'][i]);
         scheduleList.add(scheduleApi);
       }

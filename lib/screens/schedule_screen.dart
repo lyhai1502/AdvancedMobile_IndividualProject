@@ -22,6 +22,7 @@ class ScheduleScreenState extends State<ScheduleScreen> {
   Tokens tokens = Tokens();
   List<ScheduleApi> scheduleList = [];
   bool _isLoading = true;
+  int currentPage = 1;
 
   @override
   void initState() {
@@ -30,9 +31,10 @@ class ScheduleScreenState extends State<ScheduleScreen> {
   }
 
   Future<void> getData() async {
+    _isLoading = true;
     tokens = context.read<Tokens>();
     Future<dynamic> future = GetBookedClassRequest.getBookedClass(
-        tokens.access?.token, 1, 20, null, 'meeting', 'desc');
+        tokens.access?.token, currentPage, 2, null, 'meeting', 'asc');
     await future.then((value) {
       setState(() {
         scheduleList = value;
@@ -85,16 +87,13 @@ class ScheduleScreenState extends State<ScheduleScreen> {
             style: TextStyle(
                 fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black),
           ),
-          Padding(
-            padding: const EdgeInsets.all(10),
+          const Padding(
+            padding: EdgeInsets.all(10),
             child: Text(
               '86 hours 40 minutes',
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 20, color: Colors.red, fontWeight: FontWeight.bold),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
           ),
           // const Text(
           //   'Latest book',
@@ -167,6 +166,7 @@ class ScheduleScreenState extends State<ScheduleScreen> {
           // const Padding(
           //   padding: EdgeInsets.symmetric(vertical: 20),
           // ),
+          _buildPaginationButtons(),
           if (_isLoading)
             const Center(
               child: CircularProgressIndicator(
@@ -182,6 +182,42 @@ class ScheduleScreenState extends State<ScheduleScreen> {
             )
         ]),
       ),
+    );
+  }
+
+  Widget _buildPaginationButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        IconButton(
+          onPressed: () {
+            setState(() {
+              if (currentPage > 1) {
+                currentPage--;
+                getData();
+              }
+            });
+          },
+          icon: const Icon(Icons.arrow_back_ios),
+        ),
+        Text(
+          '$currentPage',
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            setState(() {
+              if (scheduleList.length == 2) currentPage++;
+              getData();
+            });
+          },
+          icon: const Icon(Icons.arrow_forward_ios),
+        ),
+      ],
     );
   }
 }
