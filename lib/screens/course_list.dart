@@ -35,7 +35,6 @@ class CourseScreenWidgetState extends State<CourseListScreen> {
 
   Future<void> getData() async {
     _isLoading = true;
-    tokens = context.read<Tokens>();
 
     Future<dynamic> future =
         CourseListRequest.getCourseList(tokens.access?.token, 9, currentPage);
@@ -183,9 +182,7 @@ class CourseScreenWidgetState extends State<CourseListScreen> {
       hint: hint,
       hintStyle: const TextStyle(fontSize: 18, color: Colors.black45),
       showClearIcon: true,
-      onOptionSelected: (options) {
-        debugPrint(options.toString());
-      },
+      onOptionSelected: (options) {},
       options: options,
       maxItems: maxItems,
       selectionType: selectionType,

@@ -53,7 +53,7 @@ class UpcomingClassWidgetState extends State<UpcomingClassWidget> {
     _isLoading = false;
 
     startPeriodTimestamp = schedule.scheduleDetailInfo?.startPeriodTimestamp;
-    formattedStartTimestamp = DateFormat('E, d MMM yy HH:mm')
+    formattedStartTimestamp = DateFormat('E, d MMM yyyy HH:mm')
         .format(DateTime.fromMillisecondsSinceEpoch(startPeriodTimestamp!));
 
     final endPeriodTimestamp = schedule.scheduleDetailInfo?.endPeriodTimestamp;

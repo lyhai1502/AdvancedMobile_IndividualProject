@@ -37,8 +37,6 @@ class UpdateUserInfoRequest {
           // "testPreparations": testPreparations.toString(),
         }));
 
-    print(response.statusCode);
-
     if (response.statusCode == 200 || response.statusCode == 201) {
       final json = jsonDecode(response.body);
       final UserApi userApi = UserApi.fromJson(json['user']);

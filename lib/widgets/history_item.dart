@@ -12,19 +12,12 @@ class HistoryItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime scheduleDate = DateTime.parse(
-        scheduleApi.scheduleDetailInfo?.scheduleInfo?.date ?? '');
-    scheduleDate = DateTime(
-      scheduleDate.year,
-      scheduleDate.month,
-      scheduleDate.day,
-      int.parse(
-          scheduleApi.scheduleDetailInfo?.startPeriod?.split(':')[0] ?? ''),
-      int.parse(
-          scheduleApi.scheduleDetailInfo?.startPeriod?.split(':')[1] ?? ''),
-    );
+    final startPeriodTimestamp =
+        scheduleApi.scheduleDetailInfo?.startPeriodTimestamp;
+
     DateTime now = DateTime.now();
-    Duration passedTime = now.difference(scheduleDate);
+    Duration passedTime = now
+        .difference(DateTime.fromMillisecondsSinceEpoch(startPeriodTimestamp!));
 
     return Card(
       child: Container(
@@ -33,7 +26,8 @@ class HistoryItemWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              DateFormat.yMMMMd().format(scheduleDate),
+              DateFormat('E, d MMM yyyy').format(
+                  DateTime.fromMillisecondsSinceEpoch(startPeriodTimestamp!)),
               style: const TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
@@ -41,12 +35,19 @@ class HistoryItemWidget extends StatelessWidget {
               ),
             ),
             Text(
-              passedTime.inDays == 0
-                  ? ' ${passedTime.inHours} hours ${passedTime.inMinutes.remainder(60)} minutes ago'
-                  : ' ${passedTime.inDays} days ago',
+              passedTime.inDays > 0
+                  ? '${passedTime.inDays} days ago'
+                  : passedTime.inHours > 0
+                      ? '${passedTime.inHours} hours ago'
+                      : '${passedTime.inMinutes} minutes ago',
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey,
+              ),
             ),
             _buildProfileInfo(),
-            _buildMeetingDetails(),
+            _buildMeetingDetails(startPeriodTimestamp),
           ],
         ),
       ),
@@ -86,7 +87,7 @@ class HistoryItemWidget extends StatelessWidget {
                   IconButton(
                     color: Colors.blue,
                     onPressed: () {},
-                    icon: const Icon(Icons.message),
+                    icon: const Icon(Icons.messenger),
                   ),
                   RichText(
                     text: TextSpan(
@@ -94,7 +95,7 @@ class HistoryItemWidget extends StatelessWidget {
                       children: [
                         TextSpan(
                           style: const TextStyle(color: Colors.blueAccent),
-                          text: 'Edit Request',
+                          text: 'Direct Message',
                           recognizer: TapGestureRecognizer()..onTap = () {},
                         ),
                       ],
@@ -109,7 +110,7 @@ class HistoryItemWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildMeetingDetails() {
+  Widget _buildMeetingDetails(int? startPeriodTimestamp) {
     return Container(
       padding: const EdgeInsets.all(10),
       foregroundDecoration: BoxDecoration(
@@ -121,7 +122,7 @@ class HistoryItemWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Text(
-              '${scheduleApi.scheduleDetailInfo?.startPeriod ?? ''} - ${scheduleApi.scheduleDetailInfo?.endPeriod ?? ''}',
+              '${DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(startPeriodTimestamp!))} - ${DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(startPeriodTimestamp!).add(const Duration(minutes: 25)))}',
               style: const TextStyle(
                   fontSize: 20,
                   color: Colors.black,

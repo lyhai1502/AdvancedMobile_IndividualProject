@@ -7,6 +7,7 @@ import 'package:my_app/network/models/tokens.dart';
 import 'package:my_app/network/network_request/other/get_flag_request.dart';
 import 'package:my_app/network/network_request/schedule/cancel_booked_class_request.dart';
 import 'package:my_app/network/response/sucess_response.dart';
+import 'package:my_app/screens/home.dart';
 import 'package:my_app/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
@@ -26,9 +27,14 @@ class ScheduleItemWidget extends StatefulWidget {
 class ScheduleItemWidgetState extends State<ScheduleItemWidget> {
   Tokens tokens = Tokens();
 
+  late final startPeriodTimestamp;
+
   @override
   void initState() {
     tokens = context.read<Tokens>();
+    startPeriodTimestamp =
+        widget.scheduleApi.scheduleDetailInfo?.startPeriodTimestamp;
+
     super.initState();
   }
 
@@ -41,9 +47,8 @@ class ScheduleItemWidgetState extends State<ScheduleItemWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              DateFormat.yMMMMd().format(DateTime.parse(
-                  widget.scheduleApi.scheduleDetailInfo?.scheduleInfo?.date ??
-                      '')),
+              DateFormat('E, d MMM yyyy').format(
+                  DateTime.fromMillisecondsSinceEpoch(startPeriodTimestamp!)),
               style: const TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
@@ -93,7 +98,7 @@ class ScheduleItemWidgetState extends State<ScheduleItemWidget> {
                   IconButton(
                     color: Colors.blue,
                     onPressed: () {},
-                    icon: const Icon(Icons.message),
+                    icon: const Icon(Icons.edit_document),
                   ),
                   RichText(
                     text: TextSpan(
@@ -125,7 +130,7 @@ class ScheduleItemWidgetState extends State<ScheduleItemWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '${widget.scheduleApi.scheduleDetailInfo?.startPeriod ?? ''} - ${widget.scheduleApi.scheduleDetailInfo?.endPeriod ?? ''}',
+                '${DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(startPeriodTimestamp!))} - ${DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(startPeriodTimestamp!).add(const Duration(minutes: 25)))}',
                 style: const TextStyle(
                     fontSize: 20,
                     color: Colors.black,
@@ -155,6 +160,13 @@ class ScheduleItemWidgetState extends State<ScheduleItemWidget> {
 
                           await future.then((value) {
                             if (value is SuccessResponse) {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      const HomeScreen(),
+                                ),
+                              );
                               CoolAlert.show(
                                   context: context,
                                   type: CoolAlertType.success,
