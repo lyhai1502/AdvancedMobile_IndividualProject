@@ -4,18 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:my_app/model/user.dart';
 import 'package:my_app/network/models/tokens.dart';
 import 'package:my_app/repository/booking_repository.dart';
+import 'package:my_app/repository/brightness_repository.dart';
 import 'package:my_app/repository/user_repository.dart';
-import 'package:my_app/screens/course_list.dart';
-import 'package:my_app/screens/history_screen.dart';
-import 'package:my_app/screens/home.dart';
-import 'package:my_app/screens/login_screen.dart';
-import 'package:my_app/screens/profile_screen.dart';
-import 'package:my_app/screens/register_screen.dart';
-import 'package:my_app/screens/forgot_password_screem.dart';
-import 'package:my_app/screens/schedule_screen.dart';
-import 'package:my_app/screens/setting_screen.dart';
-import 'package:my_app/screens/tutor_list_screen.dart';
-import 'package:my_app/screens/video_call_screen.dart';
+import 'package:my_app/widgets/material_app.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -38,7 +29,7 @@ class MyAppState extends State<MyApp> {
   final User? user = User();
   final BookingRepository? bookingRepository = BookingRepository();
   final Tokens? currentToken = Tokens();
-  final ThemeData themeData = ThemeData();
+  BrightnessRepository? brightness = BrightnessRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -49,32 +40,9 @@ class MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => user),
         ChangeNotifierProvider(create: (context) => bookingRepository),
         ChangeNotifierProvider(create: (context) => currentToken),
+        ChangeNotifierProvider(create: (context) => brightness),
       ],
-      child: MaterialApp(
-          theme: ThemeData(
-              primarySwatch: Colors.blue,
-              appBarTheme: const AppBarTheme(
-                  iconTheme: IconThemeData(color: Colors.blue),
-                  color: Colors.white,
-                  titleTextStyle: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue) //<-- SEE HERE
-                  )),
-          routes: {
-            '/Login': (context) => const LoginScreen(),
-            '/Register': (context) => const RegisterScreen(),
-            '/ForgotPassword': (context) => const ForgotPasswordScreen(),
-            '/Home': (context) => const HomeScreen(),
-            '/TutorList': (context) => const TutorListScreen(),
-            '/CourseList': (context) => const CourseListScreen(),
-            '/Schedule': (context) => const ScheduleScreen(),
-            '/History': (context) => const HistoryScreen(),
-            '/Profile': (context) => const ProfileScreen(),
-            '/Setting': (context) => const SetttingScreen(),
-            '/VideoCall': (context) => VideoCallScreen(),
-          },
-          home: LoginScreen()),
+      child: MaterialAppWidget(),
     );
   }
 }

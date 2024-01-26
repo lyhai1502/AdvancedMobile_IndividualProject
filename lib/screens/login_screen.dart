@@ -333,7 +333,12 @@ class LoginScreenState extends State<LoginScreen> {
           confirmBtnText: 'OK',
           context: context,
           type: CoolAlertType.warning,
-          text: tokens.message);
+          text: tokens.message,
+          onConfirmBtnTap: () {
+            setState(() {
+              _isLoading = false;
+            });
+          });
     }
   }
 }

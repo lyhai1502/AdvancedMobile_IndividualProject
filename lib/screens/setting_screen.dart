@@ -5,36 +5,24 @@ import 'package:babstrap_settings_screen/babstrap_settings_screen.dart';
 import 'package:my_app/model/user.dart';
 import 'package:provider/provider.dart';
 
-class SetttingScreen extends StatelessWidget {
+class SetttingScreen extends StatefulWidget {
   const SetttingScreen({Key? key}) : super(key: key);
 
   @override
+  _SetttingScreenState createState() => _SetttingScreenState();
+}
+
+class _SetttingScreenState extends State<SetttingScreen> {
+  @override
   Widget build(BuildContext context) {
     User user = context.watch<User>();
+
     return Container(
       margin: const EdgeInsets.all(20),
       child: ListView(
         children: [
           // user card
-          SettingsGroup(
-            items: [
-              SettingsItem(
-                onTap: () {},
-                icons: Icons.dark_mode_rounded,
-                iconStyle: IconStyle(
-                  iconsColor: Colors.white,
-                  withBackground: true,
-                  backgroundColor: Colors.red,
-                ),
-                title: 'Dark mode',
-                subtitle: "Automatic",
-                trailing: Switch.adaptive(
-                  value: false,
-                  onChanged: (value) {},
-                ),
-              ),
-            ],
-          ),
+
           SettingsGroup(
             items: [
               SettingsItem(
@@ -71,7 +59,6 @@ class SetttingScreen extends StatelessWidget {
                 icons: CupertinoIcons.book,
                 title: "Becoming a tutor",
                 titleStyle: const TextStyle(
-                  color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
               ),

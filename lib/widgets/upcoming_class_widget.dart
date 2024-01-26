@@ -71,7 +71,7 @@ class UpcomingClassWidgetState extends State<UpcomingClassWidget> {
                 child: SizedBox(
                   height: 250,
                   child: Card(
-                    color: Color.fromARGB(255, 0, 38, 255),
+                    color: const Color.fromARGB(255, 0, 38, 255),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 20),
