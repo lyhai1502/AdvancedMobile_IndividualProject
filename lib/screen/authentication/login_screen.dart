@@ -2,7 +2,7 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/network/model/user_login.dart';
-import 'package:my_app/network/network_reponse/error_response.dart';
+import 'package:my_app/network/network_response/error_response.dart';
 import 'package:my_app/network/network_request/authentication/login_request.dart';
 import 'package:my_app/network/model/tokens.dart';
 import 'package:my_app/repository/user_repository.dart';

@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:my_app/api/static_api.dart';
-import 'package:my_app/network/network_reponse/error_response.dart';
-import 'package:my_app/network/network_reponse/sucess_response.dart';
+import 'package:my_app/network/network_response/error_response.dart';
+import 'package:my_app/network/network_response/sucess_response.dart';
 
 class RegisterRequest {
   static Future<dynamic> register(

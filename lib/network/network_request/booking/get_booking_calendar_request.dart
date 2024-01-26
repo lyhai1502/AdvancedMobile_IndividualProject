@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:my_app/network/model/booking_info_api.dart';
-import 'package:my_app/network/network_reponse/error_response.dart';
+import 'package:my_app/network/network_response/error_response.dart';
 
 class GetBookingCalendarRequest {
   static Future<dynamic> getBookingCalendar(

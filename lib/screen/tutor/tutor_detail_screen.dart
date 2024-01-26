@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flick_video_player/flick_video_player.dart';
@@ -330,6 +331,12 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
                 content: 'Send',
                 function: () {
                   Navigator.pop(context);
+
+                  CoolAlert.show(
+                    context: context,
+                    type: CoolAlertType.success,
+                    text: 'Report Sucessfully',
+                  );
                 },
                 color: Colors.blue,
               )
