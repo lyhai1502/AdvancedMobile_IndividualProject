@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:my_app/network/response/error_response.dart';
-import 'package:my_app/network/models/tokens.dart';
+import 'package:my_app/network/model/tokens.dart';
 
 class LoginRequest {
   static Future<dynamic> login(String email, String password) async {

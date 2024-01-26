@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/model/booking.dart';
+import 'package:my_app/network/model/teacher_api.dart';
 
 class BookingRepository extends ChangeNotifier {
   List<Booking> list = [];
@@ -44,5 +44,18 @@ class BookingRepository extends ChangeNotifier {
 
   static void sortHistoryItemByAscendingTime(List<Booking> list) {
     list.sort((a, b) => b.bookingStart.compareTo(a.bookingStart));
+  }
+}
+
+class Booking extends ChangeNotifier {
+  late String serviceId;
+  late String userId;
+  late Teacher teacher;
+  late DateTime bookingStart;
+  late DateTime bookingEnd;
+  late String request;
+
+  Booking() {
+    serviceId = DateTime.now().millisecondsSinceEpoch.toString();
   }
 }

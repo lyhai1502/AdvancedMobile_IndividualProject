@@ -53,6 +53,9 @@ dependencies:
   url_launcher:
   shared_preferences: ^2.2.2
   google_sign_in: ^6.2.1
+  jitsi_meet_flutter_sdk: ^0.1.9
+  jwt_decode: ^0.3.1
+  timer_count_down: ^2.2.0
 
 dev_dependencies:
   flutter_test:

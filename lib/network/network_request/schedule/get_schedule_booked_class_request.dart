@@ -1,31 +1,29 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:http/http.dart' as http;
-import 'package:my_app/network/model/booking_info_api.dart';
+import 'package:my_app/network/model/schedule_api.dart';
 import 'package:my_app/network/response/error_response.dart';
 
-class GetBookingCalendarRequest {
-  static Future<dynamic> getBookingCalendar(
-      String? token, String? tutorId) async {
+class GetScheduleBookedClassRequest {
+  static Future<dynamic> getScheduleBookedClass(String? token, int page,
+      int perPage, int? dateTimeLte, String orderBy, String sortBy) async {
     final String url =
-        'https://sandbox.api.lettutor.com/schedule?tutorId=$tutorId&page=0';
+        'https://sandbox.api.lettutor.com/booking/list/student?page=$page&perPage=$perPage&inFuture=1&orderBy=$orderBy&sortBy=$sortBy';
 
     final uri = Uri.parse(url);
     final response = await http.get(uri, headers: {
       "Content-Type": "application/json",
       "Authorization": "Bearer $token",
     });
-
-    List<BookingInfoApi> bookingInfoApiList = [];
+    List<ScheduleApi> scheduleList = [];
     if (response.statusCode == 200 || response.statusCode == 201) {
       final json = jsonDecode(response.body);
-      for (var i = 0; i < json['scheduleOfTutor'].length; i++) {
-        final bookingInfoApi =
-            BookingInfoApi.fromJson(json['scheduleOfTutor'][i]);
-        bookingInfoApiList.add(bookingInfoApi);
+      for (var i = 0; i < min(json['data']['count'], perPage); i++) {
+        final scheduleApi = ScheduleApi.fromJson(json['data']['rows'][i]);
+        scheduleList.add(scheduleApi);
       }
-
-      return bookingInfoApiList;
+      return scheduleList;
     } else if (response.statusCode == 400 || response.statusCode == 401) {
       final json = jsonDecode(response.body);
       final message = ErrorResponse.fromJson(json);

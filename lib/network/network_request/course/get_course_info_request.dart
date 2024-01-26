@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:core';
 
 import 'package:http/http.dart' as http;
-import 'package:my_app/network/models/course_api.dart';
+import 'package:my_app/network/model/course_api.dart';
 import 'package:my_app/network/response/error_response.dart';
 
 class CourseInfoRequest {

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:my_app/network/models/tutor_api.dart';
+import 'package:my_app/network/model/tutor_api.dart';
 import 'package:my_app/network/response/error_response.dart';
 
 class SearchFilterTutorRequest {

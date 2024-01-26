@@ -1,4 +1,4 @@
-import 'package:my_app/model/user.dart';
+import 'package:my_app/network/model/user_login.dart';
 
 class UserRepository {
   List<User> list = [];
