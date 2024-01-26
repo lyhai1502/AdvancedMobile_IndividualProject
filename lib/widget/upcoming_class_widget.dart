@@ -4,7 +4,7 @@ import 'package:my_app/network/model/schedule_api.dart';
 import 'package:my_app/network/model/tokens.dart';
 import 'package:my_app/network/network_request/schedule/get_schedule_booked_class_request.dart';
 import 'package:my_app/network/network_request/schedule/get_upcoming_class_request.dart';
-import 'package:my_app/screen/video_call_screen.dart';
+import 'package:my_app/screen/video_call/video_call_screen.dart';
 import 'package:my_app/widget/count_down_timer.dart';
 import 'package:my_app/widget/custom_button.dart';
 import 'package:provider/provider.dart';
@@ -40,10 +40,10 @@ class UpcomingClassWidgetState extends State<UpcomingClassWidget> {
     tokens = context.read<Tokens>();
     Future<dynamic> future =
         GetScheduleBookedClassRequest.getScheduleBookedClass(
-            tokens.access?.token, 1, 1, null, 'meeting', 'asc');
+            tokens.access?.token, 1, 3, null, 'meeting', 'asc');
     await future.then((value) {
       setState(() {
-        schedule = value[0];
+        schedule = value[1];
       });
     });
 

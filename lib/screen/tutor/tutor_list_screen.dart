@@ -35,7 +35,7 @@ class TutorListScreenState extends State<TutorListScreen> {
   Widget _buildTutorList() {
     return Column(
       children: [
-        const UpcomingClassWidget(),
+        UpcomingClassWidget(),
         Container(
           padding: const EdgeInsets.all(20),
           child: Column(
