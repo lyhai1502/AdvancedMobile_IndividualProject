@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/repository/brightness_repository.dart';
+import 'package:my_app/repository/language_repository.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -28,8 +29,24 @@ class AppBarWidgetState extends State<AppBarWidget> {
   @override
   Widget build(BuildContext context) {
     BrightnessRepository brightness = context.watch<BrightnessRepository>();
+    LanguageRepository language = context.watch<LanguageRepository>();
+
     return AppBar(
         actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                language.changeLanguage();
+              });
+            },
+            icon: !language.isEnglish
+                ? Image.asset(
+                    'lib/assets/icons/english_language.png',
+                  )
+                : Image.asset(
+                    'lib/assets/icons/vietnam_language.png',
+                  ),
+          ),
           IconButton(
               onPressed: () {
                 setState(() {

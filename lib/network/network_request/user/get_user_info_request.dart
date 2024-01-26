@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:my_app/network/model/user_api.dart';
-import 'package:my_app/network/response/error_response.dart';
+import 'package:my_app/network/network_reponse/error_response.dart';
 
 class GetInfoUserRequest {
   static Future<dynamic> getUserInformation(String? token) async {

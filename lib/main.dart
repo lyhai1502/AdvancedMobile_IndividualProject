@@ -6,6 +6,7 @@ import 'package:my_app/network/model/tokens.dart';
 import 'package:my_app/repository/booking_repository.dart';
 import 'package:my_app/repository/brightness_repository.dart';
 import 'package:my_app/repository/course_repository.dart';
+import 'package:my_app/repository/language_repository.dart';
 import 'package:my_app/repository/teacher_repository.dart';
 import 'package:my_app/repository/user_repository.dart';
 import 'package:my_app/widget/material_app.dart';
@@ -34,7 +35,8 @@ class MyAppState extends State<MyApp> {
 
   final BookingRepository? bookingRepository = BookingRepository();
   final Tokens? currentToken = Tokens();
-  BrightnessRepository? brightness = BrightnessRepository();
+  final BrightnessRepository? brightness = BrightnessRepository();
+  final LanguageRepository? languageRepository = LanguageRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +52,7 @@ class MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => bookingRepository),
         ChangeNotifierProvider(create: (context) => currentToken),
         ChangeNotifierProvider(create: (context) => brightness),
+        ChangeNotifierProvider(create: (context) => languageRepository),
       ],
       child: MaterialAppWidget(),
     );

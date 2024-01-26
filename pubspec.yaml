@@ -56,6 +56,8 @@ dependencies:
   jitsi_meet_flutter_sdk: ^0.1.9
   jwt_decode: ^0.3.1
   timer_count_down: ^2.2.0
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
@@ -79,6 +81,7 @@ flutter_icons:
 
 # The following section is specific to Flutter packages.
 flutter:
+  generate: true
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

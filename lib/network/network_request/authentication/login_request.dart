@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:my_app/network/response/error_response.dart';
+import 'package:my_app/api/static_api.dart';
+import 'package:my_app/network/network_reponse/error_response.dart';
 import 'package:my_app/network/model/tokens.dart';
 
 class LoginRequest {
@@ -10,7 +11,7 @@ class LoginRequest {
       "email": email,
       "password": password,
     };
-    const url = "https://sandbox.api.lettutor.com/auth/login";
+    const url = StaticApi.LOGIN_URL;
     final uri = Uri.parse(url);
 
     final response = await http.post(uri, body: jsonEncode(body), headers: {

@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:my_app/network/response/error_response.dart';
-import 'package:my_app/network/response/sucess_response.dart';
+import 'package:my_app/network/network_reponse/error_response.dart';
+import 'package:my_app/network/network_reponse/sucess_response.dart';
 
 class CancelBookedClassRequest {
   static Future<dynamic> cancelBookedClass(

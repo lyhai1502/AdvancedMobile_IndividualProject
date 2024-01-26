@@ -2,12 +2,13 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/network/model/user_login.dart';
-import 'package:my_app/network/response/error_response.dart';
+import 'package:my_app/network/network_reponse/error_response.dart';
 import 'package:my_app/network/network_request/authentication/login_request.dart';
 import 'package:my_app/network/model/tokens.dart';
 import 'package:my_app/repository/user_repository.dart';
 import 'package:my_app/widget/app_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -68,8 +69,8 @@ class LoginScreenState extends State<LoginScreen> {
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 15),
         ),
-        const Text(
-          "Say hello to your English tutors",
+        Text(
+          AppLocalizations.of(context)!.title,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 40,
@@ -80,8 +81,8 @@ class LoginScreenState extends State<LoginScreen> {
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 15),
         ),
-        const Text(
-          "Become fluent faster through one on one video chat lessons tailored to your goals.",
+        Text(
+          AppLocalizations.of(context)!.description,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 17,
@@ -100,7 +101,8 @@ class LoginScreenState extends State<LoginScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildTextField('Email', 'mail@example.com'),
+        _buildTextField(
+            AppLocalizations.of(context)!.emailLogin, 'mail@example.com'),
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 8),
         ),
@@ -139,7 +141,7 @@ class LoginScreenState extends State<LoginScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Password'.toUpperCase(),
+          AppLocalizations.of(context)!.passwordLogin.toUpperCase(),
           style: const TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.bold,
@@ -174,7 +176,7 @@ class LoginScreenState extends State<LoginScreen> {
   Widget _buildForgotPasswordLink() {
     return RichText(
       text: TextSpan(
-        text: 'Forgot password?',
+        text: AppLocalizations.of(context)!.forgotPassword,
         recognizer: TapGestureRecognizer()
           ..onTap = () {
             Navigator.pushNamed(context, '/ForgotPassword');
@@ -197,31 +199,6 @@ class LoginScreenState extends State<LoginScreen> {
           Expanded(
             child: ElevatedButton(
                 onPressed: () {
-                  // if (userRepository.isLoginSucess(
-                  //     emailController.text, passwordController.text)) {
-                  //   user.cloneUser(
-                  //       userRepository.getUserByEmail(emailController.text));
-                  //   Navigator.pushNamed(context, '/Home');
-                  //   CoolAlert.show(
-                  //     confirmBtnText: 'OK',
-                  //     context: context,
-                  //     type: CoolAlertType.success,
-                  //     text: 'Login successfully!',
-                  //   );
-                  // } else {
-                  //   CoolAlert.show(
-                  //     confirmBtnText: 'OK',
-                  //     context: context,
-                  //     type: CoolAlertType.warning,
-                  //     text: 'Your email or password is incorrect',
-                  //   );
-                  // }
-                  // userTokenApi = await UserTokenApi()
-                  //     .login(emailController.text, passwordController.text);
-
-                  // if (kDebugMode) {
-                  //   print(userTokenApi.user != null);
-                  // }
                   setState(() {
                     _isLoading = true;
                     loginRequest(currentTokens);
@@ -235,7 +212,8 @@ class LoginScreenState extends State<LoginScreen> {
                   foregroundColor: MaterialStateProperty.all(Colors.white),
                 ),
                 child: !_isLoading
-                    ? Text('Login'.toUpperCase())
+                    ? Text(
+                        AppLocalizations.of(context)!.loginButton.toUpperCase())
                     : const SizedBox(
                         width: 20,
                         height: 20,
@@ -250,9 +228,9 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildContinueWithText() {
-    return const Padding(
+    return Padding(
         padding: EdgeInsets.symmetric(vertical: 10),
-        child: Text('Or continue with'));
+        child: Text(AppLocalizations.of(context)!.orContinueWith));
   }
 
   Widget _buildSocialButtons() {
@@ -295,13 +273,13 @@ class LoginScreenState extends State<LoginScreen> {
           text: TextSpan(
             style: const TextStyle(color: Colors.black),
             children: [
-              const TextSpan(text: 'Not a member yet?   '),
+              TextSpan(text: AppLocalizations.of(context)!.notAMemberYet),
               TextSpan(
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.blueAccent,
                 ),
-                text: 'Sign up',
+                text: AppLocalizations.of(context)!.registerButton,
                 recognizer: TapGestureRecognizer()
                   ..onTap = () => Navigator.pushNamed(context, '/Register'),
               ),

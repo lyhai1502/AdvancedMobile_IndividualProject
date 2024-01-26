@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:my_app/network/model/schedule_api.dart';
 import 'package:my_app/network/model/tokens.dart';
 import 'package:my_app/network/network_request/schedule/get_schedule_booked_class_request.dart';
-import 'package:my_app/repository/booking_repository.dart';
 import 'package:my_app/repository/schedule_repository.dart';
 import 'package:my_app/screen/schedule/schedule_item.dart';
 import 'package:provider/provider.dart';
@@ -45,8 +44,6 @@ class ScheduleScreenState extends State<ScheduleScreen> {
 
   @override
   Widget build(BuildContext context) {
-    BookingRepository bookingRepository = context.watch<BookingRepository>();
-
     // TODO: implement build
     return SingleChildScrollView(
       child: Container(

@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:http/http.dart' as http;
 import 'package:my_app/network/model/schedule_api.dart';
-import 'package:my_app/network/response/error_response.dart';
+import 'package:my_app/network/network_reponse/error_response.dart';
 
 class GetHistoryBookedClassRequest {
   static Future<dynamic> getHistoryBookedClass(String? token, int page, int perPage,

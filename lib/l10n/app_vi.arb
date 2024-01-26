@@ -1,0 +1,11 @@
+{
+  "title": "Hãy gửi lời chào đến gia sư tiếng Anh của bạn",
+  "description": "Phát triển kỹ năng tiếng Anh nhanh nhất bằng cách học 1 kèm 1 trực tuyến theo mục tiêu và lộ trình dành cho riêng bạn.",
+  "emailLogin": "Địa chỉ email",
+  "passwordLogin": "Mật khẩu",
+  "forgotPassword": "Quên mật khẩu?",
+  "loginButton": "Đăng nhập",
+  "orContinueWith": "Hoặc tiếp tục với",
+  "notAMemberYet": "Chưa có tài khoản?   ",
+  "registerButton": "Đăng ký"
+}

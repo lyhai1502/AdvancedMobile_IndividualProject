@@ -6,7 +6,7 @@ import 'package:my_app/network/model/schedule_api.dart';
 import 'package:my_app/network/model/tokens.dart';
 import 'package:my_app/network/network_request/other/get_flag_request.dart';
 import 'package:my_app/network/network_request/schedule/cancel_booked_class_request.dart';
-import 'package:my_app/network/response/sucess_response.dart';
+import 'package:my_app/network/network_reponse/sucess_response.dart';
 import 'package:my_app/screen/home/home_screen.dart';
 import 'package:my_app/widget/custom_button.dart';
 import 'package:provider/provider.dart';

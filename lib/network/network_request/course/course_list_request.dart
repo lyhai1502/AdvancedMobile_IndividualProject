@@ -4,7 +4,7 @@ import 'dart:math';
 
 import 'package:http/http.dart' as http;
 import 'package:my_app/network/model/course_api.dart';
-import 'package:my_app/network/response/error_response.dart';
+import 'package:my_app/network/network_reponse/error_response.dart';
 
 class CourseListRequest {
   static Future<dynamic> getCourseList(

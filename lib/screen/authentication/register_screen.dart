@@ -1,7 +1,7 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/network/response/error_response.dart';
-import 'package:my_app/network/response/sucess_response.dart';
+import 'package:my_app/network/network_reponse/error_response.dart';
+import 'package:my_app/network/network_reponse/sucess_response.dart';
 import 'package:my_app/network/network_request/authentication/register_request.dart';
 import 'package:my_app/repository/user_repository.dart';
 import 'package:form_field_validator/form_field_validator.dart';

@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:my_app/network/model/tutor_api.dart';
 import 'package:my_app/network/network_request/tutor/get_tutor_info_request.dart';
-import 'package:my_app/network/response/error_response.dart';
+import 'package:my_app/network/network_reponse/error_response.dart';
 
 class TutorListRequest {
   static Future<dynamic> getTutorListPagination(

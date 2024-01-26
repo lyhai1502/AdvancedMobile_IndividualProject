@@ -1,0 +1,11 @@
+{
+  "title": "Say hello to your English tutors",
+  "description": "We are a group of English teachers who are passionate about teaching English. We have been teaching English for more than 10 years. We have taught English to students from all over the world",
+  "emailLogin": "EMAIL",
+  "passwordLogin": "PASSWORD",
+  "forgotPassword": "Forgot password?",
+  "loginButton": "Login",
+  "orContinueWith": "Or continue with",
+  "notAMemberYet": "Not a member yet?   ",
+  "registerButton": "Register"
+}
