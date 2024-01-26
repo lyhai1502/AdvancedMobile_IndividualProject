@@ -29,12 +29,14 @@ class CourseScreenWidgetState extends State<CourseListScreen> {
 
   @override
   void initState() {
-    getData();
     super.initState();
+    getData();
   }
 
   Future<void> getData() async {
     _isLoading = true;
+
+    tokens = context.read<Tokens>();
 
     Future<dynamic> future =
         CourseListRequest.getCourseList(tokens.access?.token, 9, currentPage);

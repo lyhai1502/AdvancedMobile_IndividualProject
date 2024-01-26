@@ -16,8 +16,9 @@ class HistoryItemWidget extends StatelessWidget {
         scheduleApi.scheduleDetailInfo?.startPeriodTimestamp;
 
     DateTime now = DateTime.now();
-    Duration passedTime = now
-        .difference(DateTime.fromMillisecondsSinceEpoch(startPeriodTimestamp!));
+    Duration passedTime = now.difference(
+        DateTime.fromMillisecondsSinceEpoch(startPeriodTimestamp!)
+            .add(Duration(minutes: 25)));
 
     return Card(
       child: Container(
@@ -27,7 +28,7 @@ class HistoryItemWidget extends StatelessWidget {
           children: [
             Text(
               DateFormat('E, d MMM yyyy').format(
-                  DateTime.fromMillisecondsSinceEpoch(startPeriodTimestamp!)),
+                  DateTime.fromMillisecondsSinceEpoch(startPeriodTimestamp)),
               style: const TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
@@ -122,7 +123,7 @@ class HistoryItemWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Text(
-              '${DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(startPeriodTimestamp!))} - ${DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(startPeriodTimestamp!).add(const Duration(minutes: 25)))}',
+              '${DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(startPeriodTimestamp!))} - ${DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(startPeriodTimestamp).add(const Duration(minutes: 25)))}',
               style: const TextStyle(
                   fontSize: 20,
                   color: Colors.black,
