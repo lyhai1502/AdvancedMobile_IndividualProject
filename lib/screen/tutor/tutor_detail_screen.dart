@@ -9,6 +9,7 @@ import 'package:my_app/network/model/tutor_api.dart';
 import 'package:my_app/network/network_request/other/get_flag_request.dart';
 import 'package:my_app/network/network_request/tutor/get_tutor_info_request.dart';
 import 'package:my_app/network/network_request/tutor/manage_favorite_tutor_request.dart';
+import 'package:my_app/network/network_request/tutor/report_tutor_request.dart';
 import 'package:my_app/screen/booking/booking_calendar_screen.dart';
 import 'package:my_app/screen/course/course_detail.dart';
 import 'package:my_app/widget/custom_button.dart';
@@ -330,6 +331,8 @@ class TutorDetailScreenState extends State<TutorDetailScreen> {
               CustomButtonWidget(
                 content: 'Send',
                 function: () {
+                  ReportTutorRequest.reportTutor(tokens.access?.token ?? '',
+                      tutorApi.userId ?? '', content);
                   Navigator.pop(context);
 
                   CoolAlert.show(
